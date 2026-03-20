@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-pickup-booking-and-transport-management/04-01-PLAN.md
-last_updated: "2026-03-20T17:46:22.885Z"
+stopped_at: Completed 04-pickup-booking-and-transport-management/04-02-PLAN.md
+last_updated: "2026-03-20T17:52:59.728Z"
 progress:
   total_phases: 10
   completed_phases: 3
   total_plans: 28
-  completed_plans: 19
+  completed_plans: 20
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 04 (pickup-booking-and-transport-management) — EXECUTING
-Plan: 2 of 10
+Plan: 3 of 10
 
 ## Performance Metrics
 
@@ -64,6 +64,7 @@ Plan: 2 of 10
 | Phase 03 P04 | 35 | 2 tasks | 5 files |
 | Phase 03-product-registry P05 | 15 | 2 tasks | 3 files |
 | Phase 04-pickup-booking-and-transport-management P01 | 5 | 2 tasks | 7 files |
+| Phase 04-pickup-booking-and-transport-management P02 | 236 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -117,6 +118,8 @@ Recent decisions affecting current work:
 - [Phase 04-pickup-booking-and-transport-management]: pickupLines and pickups transport_role RLS uses EXISTS subquery on transport_provider_clients JOIN transport_providers.user_id = JWT sub — matching product_materials tenant isolation pattern via parent table
 - [Phase 04-pickup-booking-and-transport-management]: Two migration files coexist: drizzle-kit (tables, enums, enable RLS, policies) + manual SQL (PU-YYYY-NNNN trigger, users.location_id FK, FORCE RLS, GRANTs, Wolt seed)
 - [Phase 04-pickup-booking-and-transport-management]: Two-leg transport cost model: transport_cost_market_to_destination_eur on transport_bookings (leg 1), transport_cost_warehouse_to_prison_eur on outbound_shipments (leg 2)
+- [Phase 04-pickup-booking-and-transport-management]: Lines encoded in FormData as lines[N][product_id]/lines[N][quantity]; parseFormDataToInput() extracts indexed entries
+- [Phase 04-pickup-booking-and-transport-management]: PickupBookingForm extracted as Client Component — page.tsx stays pure Server Component for data fetching
 
 ### Pending Todos
 
@@ -130,6 +133,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T17:46:22.881Z
-Stopped at: Completed 04-pickup-booking-and-transport-management/04-01-PLAN.md
+Last session: 2026-03-20T17:52:59.725Z
+Stopped at: Completed 04-pickup-booking-and-transport-management/04-02-PLAN.md
 Resume file: None
