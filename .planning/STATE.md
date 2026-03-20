@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-infrastructure-foundation/01-07-PLAN.md
-last_updated: "2026-03-20T10:08:07.997Z"
+stopped_at: Completed 01-infrastructure-foundation/01-05-PLAN.md
+last_updated: "2026-03-20T10:15:30.177Z"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 7
-  completed_plans: 7
+  completed_plans: 6
 ---
 
 # Project State
@@ -51,6 +51,7 @@ Plan: 7 of 7 — COMPLETE
 | Phase 01-infrastructure-foundation P04 | 5 | 1 tasks | 5 files |
 | Phase 01-infrastructure-foundation P03 | 4 | 1 tasks | 5 files |
 | Phase 01-infrastructure-foundation P07 | 3 | 2 tasks | 5 files |
+| Phase 01-infrastructure-foundation P05 | 240 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,8 @@ Recent decisions affecting current work:
 - [Phase 01-infrastructure-foundation 01-07]: PGPASSWORD moved to env: block in CI role-creation step — avoids inline shell variable flagged by security scanners
 - [Phase 01-infrastructure-foundation 01-07]: Rollback sentinel pattern in RLS tests — throw Error('ROLLBACK_SENTINEL') inside transaction then catch and swallow; clean rollback without explicit API
 - [Phase 01-infrastructure-foundation 01-07]: withRLSContext wrapper test uses dynamic import to validate production code path separately from raw set_config tests
+- [Phase 01-infrastructure-foundation]: Route group pages placed under named sub-paths (/dashboard, /overview, /home) — Next.js route groups do not segment URL paths so all root page.tsx files conflict
+- [Phase 01-infrastructure-foundation]: prisonFacilities.contact_email used (snake_case) matching schema definition — plan's contactEmail reference was incorrect Drizzle field name
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T10:05:43Z
-Stopped at: Completed 01-infrastructure-foundation/01-07-PLAN.md
+Last session: 2026-03-20T10:15:30.173Z
+Stopped at: Completed 01-infrastructure-foundation/01-05-PLAN.md
 Resume file: None
