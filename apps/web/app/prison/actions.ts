@@ -16,6 +16,7 @@ import {
   batchFlags,
   notifications,
   systemSettings,
+  processingReports,
   withRLSContext,
 } from '@repo/db'
 import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
@@ -733,4 +734,87 @@ export async function submitUnexpectedIntake(
   }
 
   return { success: true, intakeId }
+}
+
+// --- Edit Actions (AUDIT-01, AUDIT-02) ---
+
+/**
+ * Edit an intake record within 48 hours of creation.
+ * Returns { error: 'edit_locked' } if the record is older than 48 hours.
+ */
+export async function editIntakeRecord(
+  id: string,
+  updates: {
+    staff_name?: string
+    delivery_date?: Date
+    origin_market?: string
+    notes?: string
+  }
+): Promise<{ success: true } | { error: string }> {
+  const user = await requirePrisonSession()
+
+  const rows = await withRLSContext(user, async (tx) =>
+    tx
+      .select({ created_at: intakeRecords.created_at })
+      .from(intakeRecords)
+      .where(eq(intakeRecords.id, id))
+      .limit(1)
+  )
+
+  const record = rows[0]
+  if (!record) return { error: 'not_found' }
+
+  const LOCK_MS = 48 * 60 * 60 * 1000
+  if (Date.now() - record.created_at.getTime() > LOCK_MS) {
+    return { error: 'edit_locked' }
+  }
+
+  await withRLSContext(user, async (tx) =>
+    tx
+      .update(intakeRecords)
+      .set({ ...updates, updated_at: new Date() })
+      .where(eq(intakeRecords.id, id))
+  )
+
+  return { success: true }
+}
+
+/**
+ * Edit a processing report within 48 hours of creation.
+ * Returns { error: 'edit_locked' } if the report is older than 48 hours.
+ */
+export async function editProcessingReport(
+  id: string,
+  updates: {
+    staff_name?: string
+    report_date?: Date
+    notes?: string
+  }
+): Promise<{ success: true } | { error: string }> {
+  const user = await requirePrisonSession()
+
+  const rows = await withRLSContext(user, async (tx) =>
+    tx
+      .select({ created_at: processingReports.created_at })
+      .from(processingReports)
+      .where(eq(processingReports.id, id))
+      .limit(1)
+  )
+
+  const record = rows[0]
+  if (!record) return { error: 'not_found' }
+
+  const LOCK_MS = 48 * 60 * 60 * 1000
+  if (Date.now() - record.created_at.getTime() > LOCK_MS) {
+    return { error: 'edit_locked' }
+  }
+
+  await withRLSContext(user, async (tx) =>
+    tx
+      .update(processingReports)
+      .set({ ...updates, updated_at: new Date() })
+      .where(eq(processingReports.id, id))
+  )
+
+  return { success: true }
 }

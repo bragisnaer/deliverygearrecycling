@@ -6,10 +6,11 @@ import {
   intakeRecords,
   prisonFacilities,
   tenants,
+  auditLog,
   withRLSContext,
 } from '@repo/db'
 import { isPersistentProblemMarket } from '@/lib/persistent-flag'
-import { and, eq, sql } from 'drizzle-orm'
+import { and, desc, eq, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
@@ -349,4 +350,59 @@ export async function getMonthlyDiscrepancyByCountry(
   const persistentFlag = isPersistentProblemMarket(rates)
 
   return { months, persistentFlag }
+}
+
+// --- Edit Actions (AUDIT-01, AUDIT-03) ---
+
+/**
+ * Admin edit of an intake record — no 48-hour restriction (AUDIT-03).
+ * Requires reco-admin role.
+ */
+export async function editIntakeRecordAdmin(
+  id: string,
+  updates: {
+    staff_name?: string
+    delivery_date?: Date
+    origin_market?: string
+    notes?: string
+  }
+): Promise<{ success: true } | { error: string }> {
+  const user = await requireRecoAdmin()
+
+  // No 48-hour check — AUDIT-03
+  await withRLSContext(user, async (tx) =>
+    tx
+      .update(intakeRecords)
+      .set({ ...updates, updated_at: new Date() })
+      .where(eq(intakeRecords.id, id))
+  )
+
+  return { success: true }
+}
+
+/**
+ * Fetch edit history for any record from audit_log.
+ * Uses raw db (no RLS) — audit_log has no RLS policies.
+ * Filters to UPDATE actions only (INSERT/DELETE are not edits).
+ */
+export async function getEditHistory(
+  tableName: string,
+  recordId: string
+) {
+  await requireRecoAdmin()
+
+  // Use raw db — audit_log has no RLS (accessible only via application queries)
+  const entries = await db
+    .select()
+    .from(auditLog)
+    .where(
+      and(
+        eq(auditLog.table_name, tableName),
+        eq(auditLog.record_id, recordId),
+        eq(auditLog.action, 'UPDATE')
+      )
+    )
+    .orderBy(desc(auditLog.changed_at))
+
+  return entries
 }
