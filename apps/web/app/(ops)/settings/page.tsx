@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { GeneralSettingsForm } from './general-settings-form'
 import { FacilitiesTable } from './facilities-table'
 import { UsersTab } from './users-tab'
+import { BrandingTab } from './branding-tab'
 
 export default async function SettingsPage() {
   // Only reco-admin can access this page
@@ -36,6 +37,9 @@ export default async function SettingsPage() {
           <TabsTrigger value="users" className="font-mono text-[13px] font-medium">
             Users
           </TabsTrigger>
+          <TabsTrigger value="branding" className="font-mono text-[13px] font-medium">
+            Branding
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="pt-6 space-y-8">
@@ -48,6 +52,10 @@ export default async function SettingsPage() {
 
         <TabsContent value="users" className="pt-6">
           <UsersTab />
+        </TabsContent>
+
+        <TabsContent value="branding" className="pt-6">
+          <BrandingTab />
         </TabsContent>
       </Tabs>
     </div>
