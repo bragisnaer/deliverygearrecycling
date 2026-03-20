@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-infrastructure-foundation/01-08-PLAN.md
-last_updated: "2026-03-20T11:03:58.221Z"
+stopped_at: Completed 01-infrastructure-foundation/01-09-PLAN.md
+last_updated: "2026-03-20T11:06:32.533Z"
 progress:
   total_phases: 10
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -54,6 +54,7 @@ Plan: 7 of 7 — COMPLETE
 | Phase 01-infrastructure-foundation P05 | 240 | 2 tasks | 12 files |
 | Phase 01-infrastructure-foundation P06 | 15 | 2 tasks | 16 files |
 | Phase 01-infrastructure-foundation P08 | 1 | 1 tasks | 1 files |
+| Phase 01-infrastructure-foundation P09 | 77 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,7 @@ Recent decisions affecting current work:
 - [Phase 01-infrastructure-foundation]: prisonFacilities.contact_email used (snake_case) matching schema definition — plan's contactEmail reference was incorrect Drizzle field name
 - [Phase 01-infrastructure-foundation]: form.tsx created manually — base-nova shadcn style has no form component in registry; built as thin react-hook-form FormProvider wrapper
 - [Phase 01-infrastructure-foundation]: Drizzle numeric column requires string type — toFixed(4) conversion applied before DB insert for exchange_rate_eur_dkk
+- [Phase 01-infrastructure-foundation]: Synchronous fs.readdirSync used in AUTH-10 test — runs without DB connection and catches service_role violations at test time not just CI grep
 
 ### Pending Todos
 
@@ -96,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T11:03:58.218Z
-Stopped at: Completed 01-infrastructure-foundation/01-08-PLAN.md
+Last session: 2026-03-20T11:06:32.529Z
+Stopped at: Completed 01-infrastructure-foundation/01-09-PLAN.md
 Resume file: None
