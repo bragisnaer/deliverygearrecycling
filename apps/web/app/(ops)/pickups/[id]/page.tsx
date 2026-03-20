@@ -86,7 +86,7 @@ export default async function OpsPickupDetailPage({ params }: PickupDetailPagePr
           {isSubmitted && <ConfirmPickupButton pickupId={pickup.id} />}
           {isConfirmed && (
             <Link
-              href={`/transport/new?pickup_id=${pickup.id}`}
+              href={`/pickups/${pickup.id}/book-transport`}
               className="inline-flex h-9 items-center rounded-md border border-border bg-background px-4 font-mono text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
             >
               Book Transport
