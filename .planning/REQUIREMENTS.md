@@ -12,19 +12,19 @@
 - [ ] **ROUTE-01**: System resolves tenant context from subdomain hostname (e.g. `wolt.courierrecycling.com` → Wolt tenant) via Next.js `proxy.ts` without a database call
 - [x] **ROUTE-02**: Single Next.js 16 App Router deployment serves three domain contexts: `ops.courierrecycling.com`, `[client].courierrecycling.com`, `courierrecycling.com`
 - [x] **ROUTE-03**: Wildcard DNS (`*.courierrecycling.com`) routes all client subdomains to the same Vercel deployment; new client subdomain provisioning requires no DNS changes
-- [ ] **ROUTE-04**: Every database table has a `tenant_id` column; Supabase RLS policies enforce tenant isolation at the database layer on all tenant-scoped tables
-- [ ] **ROUTE-05**: `tenant_id` index exists on every tenant-scoped table (performance requirement for RLS)
+- [x] **ROUTE-04**: Every database table has a `tenant_id` column; Supabase RLS policies enforce tenant isolation at the database layer on all tenant-scoped tables
+- [x] **ROUTE-05**: `tenant_id` index exists on every tenant-scoped table (performance requirement for RLS)
 
 ### Authentication and Authorisation
 
-- [ ] **AUTH-01**: Six user roles exist: `reco-admin`, `reco`, `client`, `client-global`, `transport`, `prison`
+- [x] **AUTH-01**: Six user roles exist: `reco-admin`, `reco`, `client`, `client-global`, `transport`, `prison`
 - [ ] **AUTH-02**: Role, `tenant_id`, `location_id`, and `prison_facility_id` are injected into the Supabase JWT via a Custom Access Token Hook (stored in `app_metadata`, not `user_metadata`)
 - [ ] **AUTH-03**: Client portal users authenticate via email + password or magic link (Supabase Auth)
 - [ ] **AUTH-04**: Ops portal users (`reco-admin`, `reco`, `transport`) authenticate via email + password or magic link
 - [ ] **AUTH-05**: Prison staff login uses a stable `/prison/login?facility=X` wrapper page that issues a magic link to the facility email; sessions expire after 7 days
 - [ ] **AUTH-06**: Auth cookies are scoped to `.courierrecycling.com` (leading dot) so sessions are shared across subdomains
-- [ ] **AUTH-07**: `client` role users are locked to a specific `location_id`; they cannot see other locations or markets
-- [ ] **AUTH-08**: `reco` role has a per-user `can_view_financials` toggle (default false); financial data is hidden unless toggled on by reco-admin
+- [x] **AUTH-07**: `client` role users are locked to a specific `location_id`; they cannot see other locations or markets
+- [x] **AUTH-08**: `reco` role has a per-user `can_view_financials` toggle (default false); financial data is hidden unless toggled on by reco-admin
 - [ ] **AUTH-09**: reco-admin can invite users by email with a role assignment; can deactivate users at any time
 - [ ] **AUTH-10**: `service_role` key is never used in client-side code or exposed in any API route
 
@@ -157,8 +157,8 @@
 
 ### System Settings
 
-- [ ] **SETTINGS-01**: reco-admin can configure: exchange rate (EUR↔DKK), warehouse ageing alert threshold (default 14 days), discrepancy alert threshold (default 15%), prison facility registry
-- [ ] **SETTINGS-02**: Prison facility registry includes: facility name (used as login username), address (delivery address for transport), contact email, active flag
+- [x] **SETTINGS-01**: reco-admin can configure: exchange rate (EUR↔DKK), warehouse ageing alert threshold (default 14 days), discrepancy alert threshold (default 15%), prison facility registry
+- [x] **SETTINGS-02**: Prison facility registry includes: facility name (used as login username), address (delivery address for transport), contact email, active flag
 
 ---
 
@@ -214,20 +214,20 @@
 | ROUTE-01 | Phase 1: Infrastructure Foundation | Pending |
 | ROUTE-02 | Phase 1: Infrastructure Foundation | Complete |
 | ROUTE-03 | Phase 1: Infrastructure Foundation | Complete |
-| ROUTE-04 | Phase 1: Infrastructure Foundation | Pending |
-| ROUTE-05 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-01 | Phase 1: Infrastructure Foundation | Pending |
+| ROUTE-04 | Phase 1: Infrastructure Foundation | Complete |
+| ROUTE-05 | Phase 1: Infrastructure Foundation | Complete |
+| AUTH-01 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-02 | Phase 1: Infrastructure Foundation | Pending |
 | AUTH-03 | Phase 1: Infrastructure Foundation | Pending |
 | AUTH-04 | Phase 1: Infrastructure Foundation | Pending |
 | AUTH-05 | Phase 1: Infrastructure Foundation | Pending |
 | AUTH-06 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-07 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-08 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-07 | Phase 1: Infrastructure Foundation | Complete |
+| AUTH-08 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-09 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
 | AUTH-10 | Phase 1: Infrastructure Foundation | Pending |
-| SETTINGS-01 | Phase 1: Infrastructure Foundation | Pending |
-| SETTINGS-02 | Phase 1: Infrastructure Foundation | Pending |
+| SETTINGS-01 | Phase 1: Infrastructure Foundation | Complete |
+| SETTINGS-02 | Phase 1: Infrastructure Foundation | Complete |
 | BRAND-01 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
 | BRAND-02 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
 | BRAND-03 | Phase 2: Auth, Roles, and Tenant Branding | Pending |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-infrastructure-foundation/01-01-PLAN.md
-last_updated: "2026-03-20T09:33:17.888Z"
+stopped_at: Completed 01-infrastructure-foundation/01-02-PLAN.md
+last_updated: "2026-03-20T09:43:10.773Z"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 7
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -47,6 +47,7 @@ Plan: 2 of 7
 
 *Updated after each plan completion*
 | Phase 01-infrastructure-foundation P01 | 25 | 2 tasks | 25 files |
+| Phase 01-infrastructure-foundation P02 | 5 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -61,6 +62,8 @@ Recent decisions affecting current work:
 - [Phase 01-infrastructure-foundation]: Biome 2.x organizeImports moved to assist.actions.source; files.ignore replaced by files.includes negation patterns
 - [Phase 01-infrastructure-foundation]: shadcn/tailwind.css and tw-animate-css inlined in globals.css — Turbopack CSS style-condition imports not supported on Windows in Next.js 16.2.0
 - [Phase 01-infrastructure-foundation]: next-auth@beta used (v5.0.0-beta.30) — latest tag is still v4
+- [Phase 01-infrastructure-foundation]: Drizzle pgPolicy generates ENABLE RLS automatically; FORCE RLS added via manual migration 0001 to prevent superuser bypass
+- [Phase 01-infrastructure-foundation]: withRLSContext() wraps all tenant-scoped DB queries in a transaction that sets JWT claims via SET LOCAL set_config + SET LOCAL ROLE — the primary DB access pattern for all future phases
 
 ### Pending Todos
 
@@ -74,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T09:33:17.884Z
-Stopped at: Completed 01-infrastructure-foundation/01-01-PLAN.md
+Last session: 2026-03-20T09:43:10.770Z
+Stopped at: Completed 01-infrastructure-foundation/01-02-PLAN.md
 Resume file: None
