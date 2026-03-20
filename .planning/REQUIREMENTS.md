@@ -62,8 +62,8 @@
 
 - [x] **TRANS-01**: Transport provider registry: company name, contact details, service regions, provider type (`direct` or `consolidation`), warehouse address, `has_platform_access` flag
 - [x] **TRANS-02**: Transport providers linked to specific tenants via `transport_provider_clients` join table; providers only see pickups for linked clients
-- [ ] **TRANS-03**: reco-admin books direct transport on a confirmed pickup: select provider, select destination prison, enter transport cost (EUR), confirm pickup date
-- [ ] **TRANS-04**: reco-admin books consolidation transport: select provider, select "provider warehouse" as destination; transport cost = market→warehouse leg
+- [x] **TRANS-03**: reco-admin books direct transport on a confirmed pickup: select provider, select destination prison, enter transport cost (EUR), confirm pickup date
+- [x] **TRANS-04**: reco-admin books consolidation transport: select provider, select "provider warehouse" as destination; transport cost = market→warehouse leg
 - [ ] **TRANS-05**: Consolidation provider sees warehouse inventory: held pickups with client, market, products, pallet count, arrival date, days held
 - [ ] **TRANS-06**: Consolidation provider (or reco-admin) creates outbound shipments from warehouse: select held pickups, select destination prison, enter warehouse→prison transport cost; soft warning at 7 pallets per truck
 - [x] **TRANS-07**: Two-leg transport cost model: `transport_cost_market_to_destination_eur` (direct: market→prison; consolidation: market→warehouse) and `transport_cost_warehouse_to_prison_eur` (consolidation only); second leg allocated pro-rata by pallet count across bookings in the outbound shipment
@@ -251,8 +251,8 @@
 | PICKUP-08 | Phase 4: Pickup Booking and Transport Management | Pending |
 | TRANS-01 | Phase 4: Pickup Booking and Transport Management | Complete |
 | TRANS-02 | Phase 4: Pickup Booking and Transport Management | Complete |
-| TRANS-03 | Phase 4: Pickup Booking and Transport Management | Pending |
-| TRANS-04 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-03 | Phase 4: Pickup Booking and Transport Management | Complete |
+| TRANS-04 | Phase 4: Pickup Booking and Transport Management | Complete |
 | TRANS-05 | Phase 4: Pickup Booking and Transport Management | Pending |
 | TRANS-06 | Phase 4: Pickup Booking and Transport Management | Pending |
 | TRANS-07 | Phase 4: Pickup Booking and Transport Management | Complete |

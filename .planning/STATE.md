@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-pickup-booking-and-transport-management/04-08-PLAN.md
-last_updated: "2026-03-20T18:15:04.270Z"
+stopped_at: Completed 04-pickup-booking-and-transport-management/04-05-PLAN.md
+last_updated: "2026-03-20T18:20:03.006Z"
 progress:
   total_phases: 10
   completed_phases: 3
   total_plans: 28
-  completed_plans: 23
+  completed_plans: 24
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 04 (pickup-booking-and-transport-management) — EXECUTING
-Plan: 6 of 10
+Plan: 7 of 10
 
 ## Performance Metrics
 
@@ -68,6 +68,7 @@ Plan: 6 of 10
 | Phase 04-pickup-booking-and-transport-management P03 | 68 | 2 tasks | 13 files |
 | Phase 04-pickup-booking-and-transport-management P04 | 15 | 2 tasks | 5 files |
 | Phase 04-pickup-booking-and-transport-management P08 | 900 | 2 tasks | 3 files |
+| Phase 04-pickup-booking-and-transport-management P05 | 12 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -128,6 +129,8 @@ Recent decisions affecting current work:
 - [Phase 04-pickup-booking-and-transport-management]: updateTransportProvider deletes all existing transportProviderClients then re-inserts — simpler than diff-based update for small tenant counts
 - [Phase 04-pickup-booking-and-transport-management]: getAssignedPickups() joins transport_bookings+pickups+locations in single query; RLS handles provider isolation; no pricing/prison columns selected (TRANS-08)
 - [Phase 04-pickup-booking-and-transport-management]: Inline Server Actions used for status update buttons in detail page — avoids thin client components for simple single-field form submissions
+- [Phase 04-pickup-booking-and-transport-management]: BookTransportForm extracted as client component — React state needed for transport type toggle; page.tsx stays pure Server Component for data fetching
+- [Phase 04-pickup-booking-and-transport-management]: book-transport route at /pickups/[id]/book-transport — contextual navigation per CONTEXT decision; detail page link updated from /transport/new
 
 ### Pending Todos
 
@@ -141,6 +144,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T18:15:04.266Z
-Stopped at: Completed 04-pickup-booking-and-transport-management/04-08-PLAN.md
+Last session: 2026-03-20T18:20:03.002Z
+Stopped at: Completed 04-pickup-booking-and-transport-management/04-05-PLAN.md
 Resume file: None
