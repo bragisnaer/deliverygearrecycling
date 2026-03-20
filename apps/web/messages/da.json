@@ -1,4 +1,15 @@
 {
+  "audit": {
+    "edited": "Redigeret",
+    "edit_history": "Redigeringshistorik",
+    "no_edits": "Ingen redigeringshistorik",
+    "field": "Felt",
+    "old_value": "Gammel v\u00e6rdi",
+    "new_value": "Ny v\u00e6rdi",
+    "changed_by": "\u00c6ndret af",
+    "changed_at": "\u00c6ndret den",
+    "edit_locked": "Redigering l\u00e5st efter 48 timer"
+  },
   "intake": {
     "home": {
       "primary_cta": "Registrer Levering",
