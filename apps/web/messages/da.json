@@ -88,6 +88,19 @@
     "create": "Opret forsendelse",
     "notes": "Noter"
   },
+  "traceability": {
+    "title": "Sporbarhedsk\u00e6de",
+    "pickup": "Afhentningsanmodning",
+    "transport": "Transport",
+    "intake": "Modtagelse",
+    "wash": "Vask",
+    "pack": "Pakning",
+    "dispatch": "Forsendelse",
+    "not_available": "Ikke tilg\u00e6ngelig",
+    "unexpected": "Uventet levering",
+    "possible_dispatches": "Mulige forsendelser",
+    "direct_link": "Direkte kobling"
+  },
   "processing": {
     "title": "Behandlingsrapport",
     "staff_name": "Medarbejdernavn",
