@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, it, expect } from 'vitest'
 import { sql } from 'drizzle-orm'
 import { testDb } from './setup'
@@ -63,10 +65,28 @@ describe('Schema assertions', () => {
     expect(columns).toContain('changed_at')
   })
 
-  it('no service_role or superuser references in API routes', async () => {
-    // This is a static check — grep the codebase
-    // Implemented as a shell command check via the CI pipeline
-    // Here we just document the requirement
-    expect(true).toBe(true) // Placeholder — real check in CI grep step
+  it('no service_role or superuser references in API routes', () => {
+    const apiDir = join(__dirname, '../../../../apps/web/app/api')
+
+    function getAllFiles(dir: string): string[] {
+      const entries = readdirSync(dir, { withFileTypes: true })
+      return entries.flatMap(entry => {
+        const fullPath = join(dir, entry.name)
+        return entry.isDirectory() ? getAllFiles(fullPath) : [fullPath]
+      })
+    }
+
+    const files = getAllFiles(apiDir).filter(f => f.endsWith('.ts') || f.endsWith('.tsx'))
+    const forbidden = ['service_role', 'SUPABASE_SERVICE_ROLE', 'postgresql://postgres:postgres@']
+
+    for (const file of files) {
+      const content = readFileSync(file, 'utf-8')
+      for (const term of forbidden) {
+        expect(
+          content,
+          `Found forbidden term "${term}" in ${file}`
+        ).not.toContain(term)
+      }
+    }
   })
 })
