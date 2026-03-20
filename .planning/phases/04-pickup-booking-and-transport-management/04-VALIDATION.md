@@ -2,8 +2,8 @@
 phase: 4
 slug: pickup-booking-and-transport-management
 status: draft
-nyquist_compliant: false
-wave_0_complete: false
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-03-20
 ---
 
@@ -50,6 +50,8 @@ created: 2026-03-20
 ---
 
 ## Wave 0 Requirements
+
+> **Approach:** Test stubs are co-located with implementation in TDD tasks (Plans 02, 03, 07). Each TDD plan creates test files as part of its RED phase before implementation. This is intentional — separating stub creation into a pre-wave plan would add overhead without value since the TDD executor creates stubs immediately before writing production code.
 
 - [ ] `apps/web/app/(client)/pickups/actions.test.ts` — stubs for PICKUP-02, PICKUP-04, PICKUP-06
 - [ ] `apps/web/app/(ops)/pickups/actions.test.ts` — stubs for PICKUP-07, TRANS-10
