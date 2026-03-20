@@ -10,6 +10,7 @@ import {
   withRLSContext,
 } from '@repo/db'
 import { isPersistentProblemMarket } from '@/lib/persistent-flag'
+import { validateVoidInput } from '@/lib/void-helpers'
 import { and, desc, eq, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
@@ -85,15 +86,19 @@ export async function getIntakeQueue(
       .from(intakeRecords)
       .leftJoin(prisonFacilities, eq(prisonFacilities.id, intakeRecords.prison_facility_id))
       .leftJoin(tenants, eq(tenants.id, intakeRecords.tenant_id))
+      .where(eq(intakeRecords.voided, false))
       .orderBy(intakeRecords.created_at)
 
     if (filter === 'discrepancy') {
-      return baseQuery.where(eq(intakeRecords.discrepancy_flagged, true))
+      return baseQuery.where(
+        and(eq(intakeRecords.voided, false), eq(intakeRecords.discrepancy_flagged, true))
+      )
     }
 
     if (filter === 'quarantine') {
       return baseQuery.where(
         and(
+          eq(intakeRecords.voided, false),
           eq(intakeRecords.quarantine_flagged, true),
           eq(intakeRecords.quarantine_overridden, false)
         )
@@ -101,10 +106,12 @@ export async function getIntakeQueue(
     }
 
     if (filter === 'unexpected') {
-      return baseQuery.where(eq(intakeRecords.is_unexpected, true))
+      return baseQuery.where(
+        and(eq(intakeRecords.voided, false), eq(intakeRecords.is_unexpected, true))
+      )
     }
 
-    // 'all' or undefined — no filter
+    // 'all' or undefined — voided=false filter already applied in baseQuery
     return baseQuery
   })
 }
@@ -131,6 +138,7 @@ export async function getQuarantinedIntakes(): Promise<QuarantinedIntake[]> {
       .leftJoin(tenants, eq(tenants.id, intakeRecords.tenant_id))
       .where(
         and(
+          eq(intakeRecords.voided, false),
           eq(intakeRecords.quarantine_flagged, true),
           eq(intakeRecords.quarantine_overridden, false)
         )
@@ -350,6 +358,45 @@ export async function getMonthlyDiscrepancyByCountry(
   const persistentFlag = isPersistentProblemMarket(rates)
 
   return { months, persistentFlag }
+}
+
+// --- Void Actions (AUDIT-04) ---
+
+/**
+ * Void an intake record with a required reason.
+ * Only reco-admin can void records. Voided records are excluded from all
+ * list queries but remain visible in the audit trail (no deletion).
+ */
+export async function voidIntakeRecord(
+  id: string,
+  reason: string
+): Promise<{ success: true } | { error: string }> {
+  const user = await requireRecoAdmin()
+
+  const validation = validateVoidInput(reason)
+  if (!validation.valid) return { error: validation.error! }
+
+  const rows = await withRLSContext(user, async (tx) =>
+    tx
+      .select({ voided: intakeRecords.voided })
+      .from(intakeRecords)
+      .where(eq(intakeRecords.id, id))
+      .limit(1)
+  )
+
+  const record = rows[0]
+  if (!record) return { error: 'not_found' }
+  if (record.voided) return { error: 'already_voided' }
+
+  await withRLSContext(user, async (tx) =>
+    tx
+      .update(intakeRecords)
+      .set({ voided: true, void_reason: reason, updated_at: new Date() })
+      .where(eq(intakeRecords.id, id))
+  )
+
+  revalidatePath('/intake')
+  return { success: true }
 }
 
 // --- Edit Actions (AUDIT-01, AUDIT-03) ---
