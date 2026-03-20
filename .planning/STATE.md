@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-auth-roles-and-tenant-branding/02-04-PLAN.md
-last_updated: "2026-03-20T14:51:55.653Z"
+stopped_at: Completed 03-product-registry/03-01-PLAN.md
+last_updated: "2026-03-20T15:45:50Z"
 progress:
   total_phases: 10
   completed_phases: 2
-  total_plans: 13
-  completed_plans: 13
+  total_plans: 18
+  completed_plans: 14
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-20)
 
 **Core value:** Every delivery tracked from booking to invoice; every item from pickup to recycling or redistribution — zero uninvoiced deliveries, zero missing processing data, discrepancy rate below 10%
-**Current focus:** Phase 02 — Auth, Roles, and Tenant Branding
+**Current focus:** Phase 03 — Product Registry
 
 ## Current Position
 
-Phase: 02 (Auth, Roles, and Tenant Branding) — COMPLETE
-Plan: 4 of 4 (all plans complete)
+Phase: 03 (Product Registry) — EXECUTING
+Plan: 2 of 5
 
 ## Performance Metrics
 
@@ -98,6 +98,8 @@ Recent decisions affecting current work:
 - [Phase 02-03]: buildBrandingStyle returns undefined not empty object for no-branding case — React omits style prop, reco :root defaults apply with zero overhead
 - [Phase 02-04]: wcag-contrast score() returns 'Fail' not 'DNP' — plan interface was incorrect; 'AA Large' also rejected since it fails WCAG AA 4.5:1 for normal text
 - [Phase 02-04]: wcag-contrast has no bundled TypeScript types — declaration added at apps/web/types/wcag-contrast.d.ts
+- [Phase 03-01]: StorageClient is lazy-initialised via getStorageClient()/getProductsBucket() factories — eager module-level instantiation throws ERR_INVALID_URL when SUPABASE_URL is undefined in test environment
+- [Phase 03-01]: productsBucket renamed to getProductsBucket() factory to align with lazy-init pattern for pure path helper unit tests
 
 ### Pending Todos
 
