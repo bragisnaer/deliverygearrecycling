@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-infrastructure-foundation/01-02-PLAN.md
-last_updated: "2026-03-20T09:43:10.773Z"
+stopped_at: Completed 01-infrastructure-foundation/01-04-PLAN.md
+last_updated: "2026-03-20T09:50:38.836Z"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 7
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 01 (infrastructure-foundation) — EXECUTING
-Plan: 2 of 7
+Plan: 4 of 7
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ Plan: 2 of 7
 *Updated after each plan completion*
 | Phase 01-infrastructure-foundation P01 | 25 | 2 tasks | 25 files |
 | Phase 01-infrastructure-foundation P02 | 5 | 2 tasks | 12 files |
+| Phase 01-infrastructure-foundation P04 | 5 | 1 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -64,6 +65,10 @@ Recent decisions affecting current work:
 - [Phase 01-infrastructure-foundation]: next-auth@beta used (v5.0.0-beta.30) — latest tag is still v4
 - [Phase 01-infrastructure-foundation]: Drizzle pgPolicy generates ENABLE RLS automatically; FORCE RLS added via manual migration 0001 to prevent superuser bypass
 - [Phase 01-infrastructure-foundation]: withRLSContext() wraps all tenant-scoped DB queries in a transaction that sets JWT claims via SET LOCAL set_config + SET LOCAL ROLE — the primary DB access pattern for all future phases
+- [Phase 01-infrastructure-foundation 01-04]: getTenantFromHost() exported as pure function for independent testability; domainMode param with NEXT_PUBLIC_DOMAIN_MODE fallback enables Azure-default vs custom domain switching
+- [Phase 01-infrastructure-foundation 01-04]: ops.localhost handled by TLD check before length check — 2-part hostnames ending in .localhost parsed for subdomain before falling through to apex-domain logic
+- [Phase 01-infrastructure-foundation]: getTenantFromHost() exported as pure function for independent testability; domainMode param with NEXT_PUBLIC_DOMAIN_MODE fallback enables Azure-default vs custom domain switching
+- [Phase 01-infrastructure-foundation]: ops.localhost handled by TLD check before length check — 2-part hostnames ending in .localhost parsed for subdomain before apex-domain logic
 
 ### Pending Todos
 
@@ -77,6 +82,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T09:43:10.770Z
-Stopped at: Completed 01-infrastructure-foundation/01-02-PLAN.md
+Last session: 2026-03-20T09:50:38.833Z
+Stopped at: Completed 01-infrastructure-foundation/01-04-PLAN.md
 Resume file: None
