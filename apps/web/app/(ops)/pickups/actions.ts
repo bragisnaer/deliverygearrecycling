@@ -1,7 +1,17 @@
 'use server'
 
 import { auth } from '@/auth'
-import { db, pickups, pickupLines, locations, products, withRLSContext } from '@repo/db'
+import {
+  db,
+  pickups,
+  pickupLines,
+  locations,
+  products,
+  transportBookings,
+  transportProviders,
+  prisonFacilities,
+  withRLSContext,
+} from '@repo/db'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
@@ -192,6 +202,162 @@ export async function getPickupQueue(status?: string) {
 
     return query
   })
+}
+
+// --- Transport booking schemas ---
+
+const directTransportSchema = z.object({
+  pickup_id: z.string().uuid(),
+  transport_provider_id: z.string().uuid(),
+  prison_facility_id: z.string().uuid(),
+  transport_cost_market_to_destination_eur: z
+    .string()
+    .regex(/^\d+(\.\d{1,4})?$/, 'Invalid cost format'),
+  confirmed_pickup_date: z.string().transform((v) => new Date(v)),
+})
+
+const consolidationTransportSchema = z.object({
+  pickup_id: z.string().uuid(),
+  transport_provider_id: z.string().uuid(),
+  transport_cost_market_to_destination_eur: z
+    .string()
+    .regex(/^\d+(\.\d{1,4})?$/, 'Invalid cost format'),
+  confirmed_pickup_date: z.string().transform((v) => new Date(v)),
+})
+
+export async function bookDirectTransport(formData: FormData) {
+  const user = await requireRecoAdmin()
+
+  const raw = {
+    pickup_id: formData.get('pickup_id'),
+    transport_provider_id: formData.get('transport_provider_id'),
+    prison_facility_id: formData.get('prison_facility_id'),
+    transport_cost_market_to_destination_eur: formData.get(
+      'transport_cost_market_to_destination_eur'
+    ),
+    confirmed_pickup_date: formData.get('confirmed_pickup_date'),
+  }
+
+  const parsed = directTransportSchema.safeParse(raw)
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Invalid input' }
+  }
+
+  const data = parsed.data
+
+  // Validate pickup status is 'confirmed'
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({ id: pickups.id, status: pickups.status })
+      .from(pickups)
+      .where(eq(pickups.id, data.pickup_id))
+      .limit(1)
+  })
+
+  const pickup = rows[0]
+  if (!pickup) {
+    return { error: 'Pickup not found' }
+  }
+
+  if (pickup.status !== 'confirmed') {
+    return { error: 'Can only book transport on a confirmed pickup' }
+  }
+
+  // Insert transport booking
+  await withRLSContext(user, async (tx) => {
+    return tx.insert(transportBookings).values({
+      pickup_id: data.pickup_id,
+      transport_provider_id: data.transport_provider_id,
+      transport_type: 'direct',
+      prison_facility_id: data.prison_facility_id,
+      transport_cost_market_to_destination_eur:
+        data.transport_cost_market_to_destination_eur,
+      confirmed_pickup_date: data.confirmed_pickup_date,
+      booked_by: user.id as unknown as string,
+    })
+  })
+
+  // Update pickup status to transport_booked
+  await withRLSContext(user, async (tx) => {
+    return tx
+      .update(pickups)
+      .set({
+        status: 'transport_booked',
+        confirmed_date: data.confirmed_pickup_date,
+        updated_at: new Date(),
+      })
+      .where(eq(pickups.id, data.pickup_id))
+  })
+
+  revalidatePath('/pickups')
+  return { success: true }
+}
+
+export async function bookConsolidationTransport(formData: FormData) {
+  const user = await requireRecoAdmin()
+
+  const raw = {
+    pickup_id: formData.get('pickup_id'),
+    transport_provider_id: formData.get('transport_provider_id'),
+    transport_cost_market_to_destination_eur: formData.get(
+      'transport_cost_market_to_destination_eur'
+    ),
+    confirmed_pickup_date: formData.get('confirmed_pickup_date'),
+  }
+
+  const parsed = consolidationTransportSchema.safeParse(raw)
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Invalid input' }
+  }
+
+  const data = parsed.data
+
+  // Validate pickup status is 'confirmed'
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({ id: pickups.id, status: pickups.status })
+      .from(pickups)
+      .where(eq(pickups.id, data.pickup_id))
+      .limit(1)
+  })
+
+  const pickup = rows[0]
+  if (!pickup) {
+    return { error: 'Pickup not found' }
+  }
+
+  if (pickup.status !== 'confirmed') {
+    return { error: 'Can only book transport on a confirmed pickup' }
+  }
+
+  // Insert transport booking (prison_facility_id is null — destination is warehouse)
+  await withRLSContext(user, async (tx) => {
+    return tx.insert(transportBookings).values({
+      pickup_id: data.pickup_id,
+      transport_provider_id: data.transport_provider_id,
+      transport_type: 'consolidation',
+      prison_facility_id: null,
+      transport_cost_market_to_destination_eur:
+        data.transport_cost_market_to_destination_eur,
+      confirmed_pickup_date: data.confirmed_pickup_date,
+      booked_by: user.id as unknown as string,
+    })
+  })
+
+  // Update pickup status to transport_booked
+  await withRLSContext(user, async (tx) => {
+    return tx
+      .update(pickups)
+      .set({
+        status: 'transport_booked',
+        confirmed_date: data.confirmed_pickup_date,
+        updated_at: new Date(),
+      })
+      .where(eq(pickups.id, data.pickup_id))
+  })
+
+  revalidatePath('/pickups')
+  return { success: true }
 }
 
 export async function getPickupDetail(pickupId: string) {
