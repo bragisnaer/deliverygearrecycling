@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getProduct } from '../actions'
+import { getProduct, getCurrentComposition, getMaterials, getPricingHistory } from '../actions'
 import { ProductForm } from '../components/product-form'
 import { ProductPhotoUpload } from '../components/product-photo-upload'
+import { MaterialCompositionTable } from '../components/material-composition-table'
+import { PricingManagement } from '../components/pricing-management'
 
 interface ProductDetailPageProps {
   params: Promise<{ id: string }>
@@ -10,7 +12,12 @@ interface ProductDetailPageProps {
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { id } = await params
-  const product = await getProduct(id)
+  const [product, compositionResult, materialsResult, pricingResult] = await Promise.all([
+    getProduct(id),
+    getCurrentComposition(id),
+    getMaterials(),
+    getPricingHistory(id),
+  ])
 
   if (!product) {
     notFound()
@@ -68,29 +75,32 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       {/* Divider */}
       <hr className="border-border" />
 
-      {/* Section 3: Material Composition (placeholder) */}
+      {/* Section 3: Material Composition */}
       <section className="space-y-4">
         <h2 className="text-[16px] font-semibold">Material Composition</h2>
-        <div className="rounded-xl border border-dashed border-border py-10 text-center">
-          <p className="text-[14px] text-muted-foreground">Coming soon</p>
-          <p className="mt-1 text-[12px] text-muted-foreground">
-            Material breakdown will be implemented in the next plan.
-          </p>
-        </div>
+        <p className="text-[14px] text-muted-foreground">
+          Define the material breakdown for this product. Saving creates a new effective-dated record.
+        </p>
+        <MaterialCompositionTable
+          productId={product.id}
+          initialComposition={compositionResult.composition}
+          materials={materialsResult.materials}
+        />
       </section>
 
       {/* Divider */}
       <hr className="border-border" />
 
-      {/* Section 4: Pricing (placeholder) */}
+      {/* Section 4: Pricing */}
       <section className="space-y-4">
         <h2 className="text-[16px] font-semibold">Pricing</h2>
-        <div className="rounded-xl border border-dashed border-border py-10 text-center">
-          <p className="text-[14px] text-muted-foreground">Coming soon</p>
-          <p className="mt-1 text-[12px] text-muted-foreground">
-            Effective-dated pricing will be implemented in the next plan.
-          </p>
-        </div>
+        <p className="text-[14px] text-muted-foreground">
+          Effective-dated pricing records. Adding a new price automatically closes the previous record.
+        </p>
+        <PricingManagement
+          productId={product.id}
+          initialPricing={pricingResult.pricing}
+        />
       </section>
     </div>
   )
