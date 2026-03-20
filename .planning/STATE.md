@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-pickup-booking-and-transport-management/04-06-PLAN.md
-last_updated: "2026-03-20T18:24:55.591Z"
+stopped_at: Completed 04-pickup-booking-and-transport-management/04-07-PLAN.md
+last_updated: "2026-03-20T18:32:12.716Z"
 progress:
   total_phases: 10
   completed_phases: 3
   total_plans: 28
-  completed_plans: 25
+  completed_plans: 26
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 04 (pickup-booking-and-transport-management) — EXECUTING
-Plan: 8 of 10
+Plan: 9 of 10
 
 ## Performance Metrics
 
@@ -70,6 +70,7 @@ Plan: 8 of 10
 | Phase 04-pickup-booking-and-transport-management P08 | 900 | 2 tasks | 3 files |
 | Phase 04-pickup-booking-and-transport-management P05 | 12 | 2 tasks | 4 files |
 | Phase 04-pickup-booking-and-transport-management P06 | 227 | 2 tasks | 2 files |
+| Phase 04-pickup-booking-and-transport-management P07 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -133,6 +134,9 @@ Recent decisions affecting current work:
 - [Phase 04-pickup-booking-and-transport-management]: BookTransportForm extracted as client component — React state needed for transport type toggle; page.tsx stays pure Server Component for data fetching
 - [Phase 04-pickup-booking-and-transport-management]: book-transport route at /pickups/[id]/book-transport — contextual navigation per CONTEXT decision; detail page link updated from /transport/new
 - [Phase 04-pickup-booking-and-transport-management]: checkAndCreateAgeingAlerts wrapped in try/catch in page — alert creation failure is non-critical and must not break page render for transport role users who cannot insert notifications
+- [Phase 04-pickup-booking-and-transport-management]: calculateProRataAllocation exported as pure function — enables client-side reuse for live recalculation and isolated unit testing without DB mocking
+- [Phase 04-pickup-booking-and-transport-management]: pickup_allocations serialised as JSON string in FormData — avoids complex indexed FormData parsing for array of objects in server action
+- [Phase 04-pickup-booking-and-transport-management]: page.tsx uses auth() directly not requireAuth helper — requireAuth returns AuthResult shape incompatible with JWTClaims required by withRLSContext
 
 ### Pending Todos
 
@@ -146,6 +150,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T18:24:55.588Z
-Stopped at: Completed 04-pickup-booking-and-transport-management/04-06-PLAN.md
+Last session: 2026-03-20T18:32:12.713Z
+Stopped at: Completed 04-pickup-booking-and-transport-management/04-07-PLAN.md
 Resume file: None
