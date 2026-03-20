@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-product-registry/03-04-PLAN.md
-last_updated: "2026-03-20T16:11:42.668Z"
+stopped_at: Completed 03-product-registry/03-05-PLAN.md
+last_updated: "2026-03-20T16:18:35.964Z"
 progress:
   total_phases: 10
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 18
-  completed_plans: 17
+  completed_plans: 18
 ---
 
 # Project State
@@ -62,6 +62,7 @@ Plan: 3 of 5
 | Phase 03 P02 | 196 | 2 tasks | 4 files |
 | Phase 03 P03 | 7 | 2 tasks | 8 files |
 | Phase 03 P04 | 35 | 2 tasks | 5 files |
+| Phase 03-product-registry P05 | 15 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -110,6 +111,8 @@ Recent decisions affecting current work:
 - [Phase 03-03]: session.user.id mapped to JWTClaims.sub — next-auth stores token.sub as session.user.id; withRLSContext requires sub field
 - [Phase 03-product-registry]: Used @base-ui Combobox (not shadcn Command) for material selection — cmdk/radix-ui not installed; @base-ui ships full Combobox natively
 - [Phase 03-product-registry]: saveMaterialComposition preserves disassembly photo paths across saves by mapping material_library_id before close UPDATE
+- [Phase 03-product-registry]: insert-then-select pattern for product seeds — onConflictDoNothing().returning() returns empty on conflict (Pitfall 6)
+- [Phase 03-product-registry]: check-before-insert for product_materials and product_pricing — no unique constraint, so onConflictDoNothing is not applicable for composition/pricing idempotency
 
 ### Pending Todos
 
@@ -123,6 +126,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T16:11:42.664Z
-Stopped at: Completed 03-product-registry/03-04-PLAN.md
+Last session: 2026-03-20T16:18:35.960Z
+Stopped at: Completed 03-product-registry/03-05-PLAN.md
 Resume file: None
