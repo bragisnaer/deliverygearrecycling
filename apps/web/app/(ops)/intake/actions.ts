@@ -8,7 +8,8 @@ import {
   tenants,
   withRLSContext,
 } from '@repo/db'
-import { and, eq } from 'drizzle-orm'
+import { isPersistentProblemMarket } from '@/lib/persistent-flag'
+import { and, eq, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
@@ -194,4 +195,158 @@ export async function overrideQuarantine(
 
   revalidatePath('/intake')
   return { success: true }
+}
+
+// --- Discrepancy Dashboard Actions ---
+
+export type DiscrepancyByCountry = {
+  country: string
+  total_deliveries: number
+  flagged_count: number
+  discrepancy_rate_pct: number
+}
+
+export type DiscrepancyByProduct = {
+  product_name: string
+  total_lines: number
+  flagged_lines: number
+  discrepancy_rate_pct: number
+}
+
+export type DiscrepancyByFacility = {
+  facility_name: string
+  total_deliveries: number
+  flagged_count: number
+  discrepancy_rate_pct: number
+}
+
+export type MonthlyDiscrepancyResult = {
+  months: { month: string; rate: number }[]
+  persistentFlag: boolean
+}
+
+/**
+ * Aggregate discrepancy rates by origin market (country) over the last 6 months.
+ * Single aggregate SQL query — no N+1.
+ */
+export async function getDiscrepancyByCountry(): Promise<DiscrepancyByCountry[]> {
+  const user = await requireRecoAdmin()
+
+  return withRLSContext(user, async (tx) => {
+    const rows = await tx.execute(sql`
+      SELECT
+        ir.origin_market AS country,
+        COUNT(*)::int AS total_deliveries,
+        SUM(CASE WHEN ir.discrepancy_flagged THEN 1 ELSE 0 END)::int AS flagged_count,
+        ROUND(
+          100.0 * SUM(CASE WHEN ir.discrepancy_flagged THEN 1 ELSE 0 END)
+          / NULLIF(COUNT(*), 0),
+          1
+        )::float AS discrepancy_rate_pct
+      FROM intake_records ir
+      WHERE ir.delivered_at >= NOW() - INTERVAL '6 months'
+        AND ir.origin_market IS NOT NULL
+      GROUP BY ir.origin_market
+      ORDER BY discrepancy_rate_pct DESC
+    `)
+
+    return (rows.rows ?? rows) as unknown as DiscrepancyByCountry[]
+  })
+}
+
+/**
+ * Aggregate discrepancy rates by product over the last 6 months.
+ * Single aggregate SQL query — no N+1.
+ */
+export async function getDiscrepancyByProduct(): Promise<DiscrepancyByProduct[]> {
+  const user = await requireRecoAdmin()
+
+  return withRLSContext(user, async (tx) => {
+    const rows = await tx.execute(sql`
+      SELECT
+        p.name AS product_name,
+        COUNT(*)::int AS total_lines,
+        SUM(CASE WHEN il.discrepancy_pct IS NOT NULL AND il.discrepancy_pct > 0 THEN 1 ELSE 0 END)::int AS flagged_lines,
+        ROUND(
+          100.0 * SUM(CASE WHEN il.discrepancy_pct IS NOT NULL AND il.discrepancy_pct > 0 THEN 1 ELSE 0 END)
+          / NULLIF(COUNT(*), 0),
+          1
+        )::float AS discrepancy_rate_pct
+      FROM intake_lines il
+      JOIN intake_records ir ON ir.id = il.intake_record_id
+      JOIN products p ON p.id = il.product_id
+      WHERE ir.delivered_at >= NOW() - INTERVAL '6 months'
+      GROUP BY p.name
+      ORDER BY discrepancy_rate_pct DESC
+    `)
+
+    return (rows.rows ?? rows) as unknown as DiscrepancyByProduct[]
+  })
+}
+
+/**
+ * Aggregate discrepancy rates by prison facility over the last 6 months.
+ * Single aggregate SQL query — no N+1.
+ */
+export async function getDiscrepancyByFacility(): Promise<DiscrepancyByFacility[]> {
+  const user = await requireRecoAdmin()
+
+  return withRLSContext(user, async (tx) => {
+    const rows = await tx.execute(sql`
+      SELECT
+        pf.name AS facility_name,
+        COUNT(*)::int AS total_deliveries,
+        SUM(CASE WHEN ir.discrepancy_flagged THEN 1 ELSE 0 END)::int AS flagged_count,
+        ROUND(
+          100.0 * SUM(CASE WHEN ir.discrepancy_flagged THEN 1 ELSE 0 END)
+          / NULLIF(COUNT(*), 0),
+          1
+        )::float AS discrepancy_rate_pct
+      FROM intake_records ir
+      JOIN prison_facilities pf ON pf.id = ir.prison_facility_id
+      WHERE ir.delivered_at >= NOW() - INTERVAL '6 months'
+      GROUP BY pf.name
+      ORDER BY discrepancy_rate_pct DESC
+    `)
+
+    return (rows.rows ?? rows) as unknown as DiscrepancyByFacility[]
+  })
+}
+
+/**
+ * Fetch monthly discrepancy rates for a specific country over the last 6 months,
+ * then compute the persistent problem market flag via isPersistentProblemMarket().
+ */
+export async function getMonthlyDiscrepancyByCountry(
+  country: string
+): Promise<MonthlyDiscrepancyResult> {
+  const user = await requireRecoAdmin()
+
+  const validatedCountry = z.string().min(1).max(100).parse(country)
+
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx.execute(sql`
+      SELECT
+        to_char(date_trunc('month', ir.delivered_at), 'YYYY-MM') AS month,
+        ROUND(
+          100.0 * SUM(CASE WHEN ir.discrepancy_flagged THEN 1 ELSE 0 END)
+          / NULLIF(COUNT(*), 0),
+          1
+        )::float AS rate
+      FROM intake_records ir
+      WHERE ir.origin_market = ${validatedCountry}
+        AND ir.delivered_at >= NOW() - INTERVAL '6 months'
+      GROUP BY date_trunc('month', ir.delivered_at)
+      ORDER BY date_trunc('month', ir.delivered_at) ASC
+    `)
+  })
+
+  const months = ((rows.rows ?? rows) as { month: string; rate: number }[]).map(
+    (r) => ({ month: r.month, rate: Number(r.rate) })
+  )
+
+  const rates = months.map((m) => m.rate)
+  const persistentFlag = isPersistentProblemMarket(rates)
+
+  return { months, persistentFlag }
 }
