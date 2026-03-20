@@ -148,7 +148,7 @@ Plans:
 - [x] 06-05-PLAN.md — Wash and Pack forms: tablet-first, Danish labels, size-bucket inputs, two-tap access from prison home
 - [x] 06-06-PLAN.md — Processing pipeline view with stage derivation: awaiting/in-progress/ready-to-ship/shipped
 - [x] 06-07-PLAN.md — Outbound dispatch Drizzle schema with RLS + createDispatch/updateDispatchStatus Server Actions
-- [ ] 06-08-PLAN.md — Dispatch UI: prison read-only history, ops list/create/detail with packing list
+- [x] 06-08-PLAN.md — Dispatch UI: prison read-only history, ops list/create/detail with packing list
 - [ ] 06-09-PLAN.md — Traceability chain view: linked record path from pickup through dispatch on intake detail
 
 ### Phase 7: Financial Tracking
@@ -241,7 +241,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 3. Product Registry | 4/5 | Complete    | 2026-03-20 |
 | 4. Pickup Booking and Transport Management | 10/10 | Complete   | 2026-03-20 |
 | 5. Prison Intake and Counting | 8/8 | Complete   | 2026-03-20 |
-| 6. Prison Processing, Dispatch, and Audit Trail | 7/9 | In Progress|  |
+| 6. Prison Processing, Dispatch, and Audit Trail | 8/9 | In Progress|  |
 | 7. Financial Tracking | 0/5 | Not started | - |
 | 8. Dashboards and ESG Metrics | 0/7 | Not started | - |
 | 9. Notifications and Manuals | 0/6 | Not started | - |
