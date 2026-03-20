@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-product-registry/03-02-PLAN.md
-last_updated: "2026-03-20T16:15:00Z"
+stopped_at: Completed 03-product-registry/03-03-PLAN.md
+last_updated: "2026-03-20T16:02:34.130Z"
 progress:
   total_phases: 10
   completed_phases: 2
   total_plans: 18
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State
@@ -60,6 +60,7 @@ Plan: 3 of 5
 | Phase 02 P03 | 4 | 2 tasks | 4 files |
 | Phase 02 P04 | 341 | 2 tasks | 8 files |
 | Phase 03 P02 | 196 | 2 tasks | 4 files |
+| Phase 03 P03 | 7 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,8 @@ Recent decisions affecting current work:
 - [Phase 03-02]: product_code uniqueness enforced by partial unique index in migration SQL — Drizzle cannot express per-tenant partial unique indexes via unique()
 - [Phase 03-02]: product_materials RLS uses EXISTS subquery on parent products.tenant_id — no direct tenant_id column on product_materials; tenant isolation flows through parent product row
 - [Phase 03-02]: product_pricing has no client_role RLS policy — fail-closed; clients never see pricing even if future bug grants access
+- [Phase 03-03]: OpsNavBar extracted as client component — usePathname() requires use client; layout stays Server Component for requireAuth
+- [Phase 03-03]: session.user.id mapped to JWTClaims.sub — next-auth stores token.sub as session.user.id; withRLSContext requires sub field
 
 ### Pending Todos
 
@@ -117,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T16:15:00Z
-Stopped at: Completed 03-product-registry/03-02-PLAN.md
+Last session: 2026-03-20T16:02:34.126Z
+Stopped at: Completed 03-product-registry/03-03-PLAN.md
 Resume file: None

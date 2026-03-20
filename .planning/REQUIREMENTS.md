@@ -39,7 +39,7 @@
 ### Product Registry
 
 - [x] **PROD-01**: Each tenant has a product registry; products have: name, product code (unique per tenant), product group, processing stream (`recycling` or `reuse`), description, total weight (grams), active flag
-- [ ] **PROD-02**: Each product has up to 5 photos (Supabase Storage)
+- [x] **PROD-02**: Each product has up to 5 photos (Supabase Storage)
 - [x] **PROD-03**: Each product has one or more material composition lines: material from global material library, weight (grams), recycling cost per kg (EUR/DKK), recycling outcome enum
 - [x] **PROD-04**: Each product has client-facing pricing records with `effective_from` / `effective_to` dates (null = current); historical deliveries retain the rate active at time of delivery
 - [x] **PROD-05**: `product_materials` records have `effective_from` / `effective_to` dates to preserve historical ESG calculation accuracy when material composition changes
@@ -234,7 +234,7 @@
 | BRAND-04 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
 | BRAND-05 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
 | PROD-01 | Phase 3: Product Registry | Complete |
-| PROD-02 | Phase 3: Product Registry | Pending |
+| PROD-02 | Phase 3: Product Registry | Complete |
 | PROD-03 | Phase 3: Product Registry | Complete |
 | PROD-04 | Phase 3: Product Registry | Complete |
 | PROD-05 | Phase 3: Product Registry | Complete |
