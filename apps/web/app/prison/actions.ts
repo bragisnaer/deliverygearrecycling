@@ -2,6 +2,7 @@
 
 import { auth } from '@/auth'
 import {
+  db,
   pickups,
   pickupLines,
   locations,
@@ -11,9 +12,14 @@ import {
   outboundShipmentPickups,
   outboundShipments,
   intakeRecords,
+  intakeLines,
+  notifications,
+  systemSettings,
   withRLSContext,
 } from '@repo/db'
 import { eq, and, isNull } from 'drizzle-orm'
+import { z } from 'zod'
+import { calculateDiscrepancyPct } from '@/lib/discrepancy'
 
 // --- Types ---
 
@@ -220,4 +226,248 @@ export async function getExpectedDeliveries(): Promise<DeliveryGroup[]> {
   }
 
   return groups
+}
+
+// --- Expected Delivery Detail (single pickup) ---
+
+export type ExpectedDeliveryDetail = {
+  pickup_id: string
+  reference: string
+  client_name: string
+  tenant_id: string
+  origin_market: string
+  lines: {
+    product_id: string
+    product_name: string
+    informed_quantity: number
+  }[]
+}
+
+/**
+ * Fetches a single pickup by ID with its lines and products.
+ * Used to pre-populate the intake form for an expected delivery.
+ */
+export async function getExpectedDelivery(
+  pickupId: string
+): Promise<ExpectedDeliveryDetail | null> {
+  const user = await requirePrisonSession()
+
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        pickup_id: pickups.id,
+        reference: pickups.reference,
+        tenant_id: pickups.tenant_id,
+        client_name: tenants.name,
+        location_country: locations.country,
+        location_name: locations.name,
+      })
+      .from(pickups)
+      .innerJoin(tenants, eq(tenants.id, pickups.tenant_id))
+      .innerJoin(locations, eq(locations.id, pickups.location_id))
+      .where(eq(pickups.id, pickupId))
+      .limit(1)
+  })
+
+  if (rows.length === 0) return null
+
+  const row = rows[0]!
+
+  const lineRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        product_id: pickupLines.product_id,
+        product_name: products.name,
+        quantity: pickupLines.quantity,
+      })
+      .from(pickupLines)
+      .leftJoin(products, eq(products.id, pickupLines.product_id))
+      .where(eq(pickupLines.pickup_id, pickupId))
+  })
+
+  return {
+    pickup_id: row.pickup_id,
+    reference: row.reference,
+    client_name: row.client_name,
+    tenant_id: row.tenant_id,
+    origin_market: `${row.location_name} (${row.location_country})`,
+    lines: lineRows.map((l) => ({
+      product_id: l.product_id,
+      product_name: l.product_name ?? 'Unknown product',
+      informed_quantity: l.quantity,
+    })),
+  }
+}
+
+// --- Submit Intake ---
+
+const intakeLineSchema = z.object({
+  product_id: z.string().uuid(),
+  actual_quantity: z.coerce.number().int().min(0),
+  informed_quantity: z.coerce.number().int().min(0).optional(),
+  batch_lot_number: z.string().optional(),
+})
+
+const submitIntakeSchema = z.object({
+  pickup_id: z.string().uuid().optional(),
+  staff_name: z.string().min(1, 'staff_name is required'),
+  delivery_date: z.string().min(1, 'delivery_date is required'),
+  origin_market: z.string().optional(),
+  notes: z.string().optional(),
+  lines: z
+    .array(intakeLineSchema)
+    .min(1, 'At least one product line is required'),
+})
+
+/**
+ * Submits an intake form: validates, calculates discrepancies, inserts
+ * intake_record + intake_lines, notifies reco-admin if discrepancies found,
+ * and updates pickup status to 'intake_registered'.
+ */
+export async function submitIntake(
+  formData: FormData
+): Promise<{ success: true; intakeId: string } | { error: string }> {
+  const user = await requirePrisonSession()
+
+  const facilityId = user.facility_id
+  if (!facilityId) {
+    return { error: 'Prison session missing facility_id' }
+  }
+
+  // Parse indexed lines from FormData: lines[N][field]
+  const linesMap = new Map<
+    number,
+    {
+      product_id?: string
+      actual_quantity?: string
+      informed_quantity?: string
+      batch_lot_number?: string
+    }
+  >()
+
+  for (const [key, value] of formData.entries()) {
+    const match = key.match(/^lines\[(\d+)\]\[(\w+)\]$/)
+    if (match) {
+      const idx = parseInt(match[1]!, 10)
+      const field = match[2]!
+      const existing = linesMap.get(idx) ?? {}
+      linesMap.set(idx, { ...existing, [field]: value as string })
+    }
+  }
+
+  const rawLines = Array.from(linesMap.values())
+
+  const rawInput = {
+    pickup_id: formData.get('pickup_id') as string | undefined,
+    staff_name: formData.get('staff_name') as string,
+    delivery_date: formData.get('delivery_date') as string,
+    origin_market: formData.get('origin_market') as string | undefined,
+    notes: formData.get('notes') as string | undefined,
+    lines: rawLines,
+  }
+
+  const parsed = submitIntakeSchema.safeParse(rawInput)
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Validation failed' }
+  }
+
+  const input = parsed.data
+
+  // Read discrepancy threshold from system_settings (default 15)
+  let threshold = 15
+  try {
+    const settings = await db.select().from(systemSettings).limit(1)
+    if (settings.length > 0 && settings[0]) {
+      threshold = settings[0].discrepancy_alert_threshold_pct
+    }
+  } catch {
+    // Non-critical — fall back to default 15
+  }
+
+  // Calculate discrepancy per line
+  const processedLines = input.lines.map((line) => {
+    const pct = calculateDiscrepancyPct(
+      line.actual_quantity,
+      line.informed_quantity ?? null
+    )
+    return {
+      ...line,
+      discrepancy_pct: pct,
+    }
+  })
+
+  const discrepancy_flagged = processedLines.some(
+    (l) => l.discrepancy_pct !== null && l.discrepancy_pct > threshold
+  )
+
+  // Insert intake_record + intake_lines in a single withRLSContext transaction
+  let intakeId: string
+
+  try {
+    const result = await withRLSContext(user, async (tx) => {
+      const [record] = await tx
+        .insert(intakeRecords)
+        .values({
+          prison_facility_id: facilityId,
+          pickup_id: input.pickup_id ?? null,
+          tenant_id: user.tenant_id!,
+          staff_name: input.staff_name,
+          delivery_date: new Date(input.delivery_date),
+          origin_market: input.origin_market ?? null,
+          is_unexpected: !input.pickup_id,
+          discrepancy_flagged,
+          submitted_by: user.id ?? null,
+        })
+        .returning({ id: intakeRecords.id, reference: intakeRecords.reference })
+
+      if (!record) throw new Error('Failed to insert intake record')
+
+      await tx.insert(intakeLines).values(
+        processedLines.map((line) => ({
+          intake_record_id: record.id,
+          product_id: line.product_id,
+          informed_quantity: line.informed_quantity ?? null,
+          actual_quantity: line.actual_quantity,
+          batch_lot_number: line.batch_lot_number ?? null,
+          discrepancy_pct: line.discrepancy_pct !== null
+            ? line.discrepancy_pct.toFixed(2)
+            : null,
+        }))
+      )
+
+      // Update pickup status to 'intake_registered'
+      if (input.pickup_id) {
+        await tx
+          .update(pickups)
+          .set({ status: 'intake_registered', updated_at: new Date() })
+          .where(eq(pickups.id, input.pickup_id))
+      }
+
+      return record
+    })
+
+    intakeId = result.id
+
+    // Insert discrepancy notification for reco-admin (non-blocking)
+    if (discrepancy_flagged) {
+      try {
+        await withRLSContext(user, async (tx) => {
+          return tx.insert(notifications).values({
+            type: 'discrepancy_detected',
+            title: `Discrepancy detected in intake`,
+            body: `Intake at facility ${facilityId} has discrepancies exceeding ${threshold}%.`,
+            entity_type: 'intake_record',
+            entity_id: intakeId,
+          })
+        })
+      } catch {
+        // Non-blocking — notification failure must not break intake submission
+      }
+    }
+  } catch (err) {
+    console.error('submitIntake error:', err)
+    return { error: 'Failed to submit intake' }
+  }
+
+  return { success: true, intakeId }
 }
