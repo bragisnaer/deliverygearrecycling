@@ -291,3 +291,140 @@ describe('submitPickupRequest (PICKUP-01, PICKUP-03, PICKUP-04)', () => {
     expect(result).toEqual({ success: true, reference: 'PU-2026-0001', pickupId: 'pickup-uuid-1' })
   })
 })
+
+const PICKUP_ID = '00000000-0000-0000-0000-000000000010'
+
+describe('cancelPickupAsClient', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.resetModules()
+  })
+
+  it('Test 1 (24h rule — cancel allowed): returns success when confirmed_date is 48h from now', async () => {
+    const confirmedDate = new Date(Date.now() + 48 * 60 * 60 * 1000)
+
+    let callCount = 0
+    vi.mocked(withRLSContext).mockImplementation(async (_claims, fn) => {
+      callCount++
+      if (callCount === 1) {
+        // Fetch pickup
+        const tx = {
+          select: vi.fn().mockReturnValue({
+            from: vi.fn().mockReturnValue({
+              where: vi.fn().mockReturnValue({
+                limit: vi.fn().mockResolvedValue([
+                  { id: PICKUP_ID, status: 'confirmed', confirmed_date: confirmedDate },
+                ]),
+              }),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 2) {
+        // Update pickup
+        const tx = {
+          update: vi.fn().mockReturnValue({
+            set: vi.fn().mockReturnValue({
+              where: vi.fn().mockResolvedValue(undefined),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      return undefined
+    })
+
+    const { cancelPickupAsClient } = await import('./actions')
+    const result = await cancelPickupAsClient(PICKUP_ID)
+
+    expect(result).toEqual({ success: true })
+  })
+
+  it('Test 2 (24h rule — cancel blocked): returns error when confirmed_date is 12h from now', async () => {
+    const confirmedDate = new Date(Date.now() + 12 * 60 * 60 * 1000)
+
+    vi.mocked(withRLSContext).mockImplementationOnce(async (_claims, fn) => {
+      const tx = {
+        select: vi.fn().mockReturnValue({
+          from: vi.fn().mockReturnValue({
+            where: vi.fn().mockReturnValue({
+              limit: vi.fn().mockResolvedValue([
+                { id: PICKUP_ID, status: 'confirmed', confirmed_date: confirmedDate },
+              ]),
+            }),
+          }),
+        }),
+      }
+      return fn(tx as never)
+    })
+
+    const { cancelPickupAsClient } = await import('./actions')
+    const result = await cancelPickupAsClient(PICKUP_ID)
+
+    expect(result).toEqual({
+      error: 'Cannot cancel within 24 hours of confirmed pickup date',
+    })
+  })
+
+  it('Test 3 (cancel unconfirmed): returns success when status is submitted with no confirmed_date', async () => {
+    let callCount = 0
+    vi.mocked(withRLSContext).mockImplementation(async (_claims, fn) => {
+      callCount++
+      if (callCount === 1) {
+        // Fetch pickup — submitted, no confirmed_date
+        const tx = {
+          select: vi.fn().mockReturnValue({
+            from: vi.fn().mockReturnValue({
+              where: vi.fn().mockReturnValue({
+                limit: vi.fn().mockResolvedValue([
+                  { id: PICKUP_ID, status: 'submitted', confirmed_date: null },
+                ]),
+              }),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 2) {
+        // Update pickup
+        const tx = {
+          update: vi.fn().mockReturnValue({
+            set: vi.fn().mockReturnValue({
+              where: vi.fn().mockResolvedValue(undefined),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      return undefined
+    })
+
+    const { cancelPickupAsClient } = await import('./actions')
+    const result = await cancelPickupAsClient(PICKUP_ID)
+
+    expect(result).toEqual({ success: true })
+  })
+
+  it('Test 4 (cancel terminal status): returns error when status is delivered', async () => {
+    vi.mocked(withRLSContext).mockImplementationOnce(async (_claims, fn) => {
+      const tx = {
+        select: vi.fn().mockReturnValue({
+          from: vi.fn().mockReturnValue({
+            where: vi.fn().mockReturnValue({
+              limit: vi.fn().mockResolvedValue([
+                { id: PICKUP_ID, status: 'delivered', confirmed_date: null },
+              ]),
+            }),
+          }),
+        }),
+      }
+      return fn(tx as never)
+    })
+
+    const { cancelPickupAsClient } = await import('./actions')
+    const result = await cancelPickupAsClient(PICKUP_ID)
+
+    expect(result).toEqual({ error: 'Cannot cancel a pickup in terminal status' })
+  })
+})
