@@ -35,16 +35,16 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A Vitest RLS integration test that logs in as a tenant-A user asserts zero rows from tenant-B tables, and this test runs in CI on every deploy
   4. reco-admin can configure exchange rate, warehouse ageing threshold, discrepancy threshold, and prison facility registry in system settings
   5. JWT tokens contain role, tenant_id, location_id, and facility_id in app_metadata; service_role key is absent from all Next.js API routes
-**Plans**: TBD
+**Plans**: 7 plans
 
 Plans:
-- [ ] 01-01: Next.js 16 project setup — monorepo, Biome, TypeScript strict, Vercel deployment, wildcard DNS
-- [ ] 01-02: Supabase project setup — EU Frankfurt, initial schema migrations, tenant_id + RLS on all tables, indexes
-- [ ] 01-03: Custom Access Token Hook — JWT app_metadata injection for role, tenant_id, location_id, facility_id
-- [ ] 01-04: Middleware and proxy.ts — subdomain routing, domain context resolution, cross-domain cookie scope
-- [ ] 01-05: Route group shells — (ops) and (client) layouts with auth enforcement and server-component role guards
-- [ ] 01-06: System settings — exchange rate config, warehouse ageing threshold, discrepancy threshold, prison facility registry
-- [ ] 01-07: RLS CI test harness — tenant isolation integration tests, getUser() pattern, Biome rule for getSession()
+- [ ] 01-01-PLAN.md — Scaffold Turborepo monorepo with Next.js 16, Drizzle, shared types, Biome, shadcn/ui, Dockerfile
+- [ ] 01-02-PLAN.md — Drizzle schema: auth tables, tenants, facilities, settings, audit log with RLS policies and indexes
+- [ ] 01-03-PLAN.md — Auth.js v5 dual-provider config (Entra ID + Resend), JWT claims injection, cross-subdomain cookies
+- [ ] 01-04-PLAN.md — proxy.ts subdomain-based tenant resolution with unit tests
+- [ ] 01-05-PLAN.md — Route group shells (ops, client, public) with auth guards, sign-in page, prison login page
+- [ ] 01-06-PLAN.md — System settings UI: exchange rate, thresholds, prison facility registry with inline editing
+- [ ] 01-07-PLAN.md — RLS integration test harness, schema assertions, GitHub Actions CI pipeline
 
 ### Phase 2: Auth, Roles, and Tenant Branding
 **Goal**: All six user roles can authenticate and reach their correct portal; client portals render with tenant-specific branding
@@ -212,14 +212,14 @@ Plans:
 - [ ] 09-06: Manual editor — reco-admin in-platform markdown editor, versioned saves with audit trail
 
 ### Phase 10: Historical Data Import
-**Goal**: All historical operational data (2022–2026) is imported, flagged as imported records, and fully queryable in dashboards and reports from day one of live operations
+**Goal**: All historical operational data (2022-2026) is imported, flagged as imported records, and fully queryable in dashboards and reports from day one of live operations
 **Depends on**: Phase 9
 **Requirements**: IMPORT-01, IMPORT-02, IMPORT-03, IMPORT-04
 **Success Criteria** (what must be TRUE):
   1. reco-admin can upload a CSV or XLSX file for each of the five source datasets (pickup log, prison intake log, GreenLoop data, invoice binder, transport costs) and map columns to platform fields via a visual interface
   2. The import preview shows validation errors (missing required fields, unrecognised values, date format issues) before any records are committed
   3. After import, all imported records are visually distinguished from live records (import source badge) in all list views and exports
-  4. ESG totals and financial summaries include historical imported data and return accurate aggregates across the full 2022–2026 date range
+  4. ESG totals and financial summaries include historical imported data and return accurate aggregates across the full 2022-2026 date range
 **Plans**: TBD
 
 Plans:
@@ -232,11 +232,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure Foundation | 0/7 | Not started | - |
+| 1. Infrastructure Foundation | 0/7 | Planned | - |
 | 2. Auth, Roles, and Tenant Branding | 0/4 | Not started | - |
 | 3. Product Registry | 0/5 | Not started | - |
 | 4. Pickup Booking and Transport Management | 0/10 | Not started | - |
