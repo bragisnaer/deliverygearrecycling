@@ -12,7 +12,7 @@ reco Platform replaces a patchwork of Google Sheets, Google Forms, and email wit
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Infrastructure Foundation** - DB schema, RLS, JWT hook, subdomain routing, system settings (completed 2026-03-20)
+- [x] **Phase 1: Infrastructure Foundation** - DB schema, RLS, JWT hook, subdomain routing, system settings (completed 2026-03-20)
 - [ ] **Phase 2: Auth, Roles, and Tenant Branding** - All six roles, per-tenant branding, CSS custom properties
 - [ ] **Phase 3: Product Registry** - Per-tenant product catalogue with materials, pricing, and Wolt pre-load
 - [ ] **Phase 4: Pickup Booking and Transport Management** - Client booking form, transport booking, consolidation warehouse
@@ -56,13 +56,13 @@ Plans:
   3. A branding configuration that fails WCAG AA contrast is rejected at save time with a specific error message
   4. Prison staff can reach `ops.courierrecycling.com/prison` via a stable bookmarked page that issues a fresh magic link; the bookmark never breaks after first use
   5. reco-admin can invite a user by email, assign a role, and deactivate that user; the invited user receives an email and can set their password
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 02-01: User invitation, deactivation, and role assignment flows (all six roles)
-- [ ] 02-02: Prison login page — stable /prison/login?facility=X, 7-day session, magic link to facility email
-- [ ] 02-03: Tenant branding record — logo, favicon, colour fields, font fields with reco defaults as fallback
-- [ ] 02-04: CSS custom property injection — React style prop on wrapper, HEX validation regex, WCAG AA contrast check
+- [ ] 02-01-PLAN.md — Credentials provider, password_hash column, sign-in page update, user invite/deactivate management UI
+- [ ] 02-02-PLAN.md — Auth-aware proxy.ts with role-based post-login redirect, wrong-portal redirect, prison callbackUrl fix
+- [ ] 02-03-PLAN.md — tenant_branding schema with RLS, branding helper library, CSS variable injection in client layout
+- [ ] 02-04-PLAN.md — Branding config UI tab with live preview, WCAG AA contrast validation, saveBranding Server Action
 
 ### Phase 3: Product Registry
 **Goal**: reco-admin can manage a complete product catalogue per tenant; Wolt products are pre-loaded and ready for use in all downstream forms
