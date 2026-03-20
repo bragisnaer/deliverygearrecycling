@@ -20,6 +20,15 @@ export const processingStreamEnum = pgEnum('processing_stream', [
   'reuse',
 ])
 
+// product_category discriminator — used by processing forms to show size-bucket inputs (clothing)
+// vs. single total quantity (bag/equipment/other). ALTER TABLE + seed UPDATE in migration 0005.
+export const productCategoryEnum = pgEnum('product_category', [
+  'clothing',
+  'bag',
+  'equipment',
+  'other',
+])
+
 export const recyclingOutcomeEnum = pgEnum('recycling_outcome', [
   'recycled',
   'reprocessed',
@@ -40,6 +49,9 @@ export const products = pgTable(
     product_code: text('product_code').notNull(), // unique per tenant via DB index
     product_group: text('product_group'), // nullable — groups product versions (e.g. "Bike Bag")
     processing_stream: processingStreamEnum('processing_stream').notNull(),
+    product_category: productCategoryEnum('product_category')
+      .notNull()
+      .default('other'), // clothing → size-bucket form; bag/equipment/other → single quantity
     description: text('description'), // nullable
     weight_grams: numeric('weight_grams', { precision: 10, scale: 2 }), // nullable — Clothing has unknown weight
     active: boolean('active').notNull().default(true),
