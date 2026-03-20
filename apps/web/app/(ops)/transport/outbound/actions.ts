@@ -11,10 +11,13 @@ import {
   transportProviders,
   notifications,
   systemSettings,
+  outboundShipments,
+  outboundShipmentPickups,
   withRLSContext,
 } from '@repo/db'
 import { eq, and, inArray } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
 // --- Auth helpers ---
 
@@ -199,6 +202,177 @@ export async function updatePickupToAtWarehouse(pickupId: string) {
       .set({ status: 'at_warehouse', updated_at: new Date() })
       .where(eq(pickups.id, pickupId))
   })
+
+  revalidatePath('/transport/outbound')
+  return { success: true }
+}
+
+// --- Pro-rata allocation ---
+
+/**
+ * Pure function: distributes totalCost across pickups proportionally by pallet count.
+ * Rounding remainder is assigned to the last pickup so allocations sum exactly to totalCost.
+ */
+export function calculateProRataAllocation(
+  totalCost: string,
+  pickupAllocations: Array<{ pickupId: string; palletCount: number }>
+): Array<{ pickupId: string; palletCount: number; allocatedCostEur: string }> {
+  const total = parseFloat(totalCost)
+  const totalPallets = pickupAllocations.reduce((sum, p) => sum + p.palletCount, 0)
+
+  if (totalPallets === 0) {
+    return pickupAllocations.map((p) => ({
+      pickupId: p.pickupId,
+      palletCount: p.palletCount,
+      allocatedCostEur: (0).toFixed(4),
+    }))
+  }
+
+  const results = pickupAllocations.map((p) => ({
+    pickupId: p.pickupId,
+    palletCount: p.palletCount,
+    allocatedCostEur: ((p.palletCount / totalPallets) * total).toFixed(4),
+  }))
+
+  // Distribute rounding remainder to last item so allocations sum exactly to totalCost
+  const sumAllocated = results.reduce((sum, r) => sum + parseFloat(r.allocatedCostEur), 0)
+  const remainder = parseFloat((total - sumAllocated).toFixed(4))
+
+  if (remainder !== 0 && results.length > 0) {
+    const last = results[results.length - 1]
+    last.allocatedCostEur = (parseFloat(last.allocatedCostEur) + remainder).toFixed(4)
+  }
+
+  return results
+}
+
+// --- Outbound Shipment Schema ---
+
+const outboundShipmentSchema = z.object({
+  prison_facility_id: z.string().uuid(),
+  transport_provider_id: z.string().uuid(),
+  transport_cost_warehouse_to_prison_eur: z
+    .string()
+    .regex(/^\d+(\.\d{1,4})?$/, 'Must be a valid decimal number'),
+  pickup_allocations: z
+    .array(
+      z.object({
+        pickup_id: z.string().uuid(),
+        pallet_count: z.number().int().min(1),
+        allocated_cost_eur: z.string(),
+      })
+    )
+    .min(1),
+})
+
+// --- Outbound Shipment Actions ---
+
+export async function createOutboundShipment(formData: FormData) {
+  const user = await requireRecoAdmin()
+
+  const rawAllocations = formData.get('pickup_allocations')
+  const parsedAllocations = rawAllocations ? JSON.parse(rawAllocations as string) : []
+
+  const raw = {
+    prison_facility_id: formData.get('prison_facility_id'),
+    transport_provider_id: formData.get('transport_provider_id'),
+    transport_cost_warehouse_to_prison_eur: formData.get(
+      'transport_cost_warehouse_to_prison_eur'
+    ),
+    pickup_allocations: parsedAllocations,
+  }
+
+  const parsed = outboundShipmentSchema.parse(raw)
+
+  // Validate: sum of allocated_cost_eur must equal transport_cost_warehouse_to_prison_eur
+  const totalAllocated = parsed.pickup_allocations.reduce(
+    (sum, a) => sum + parseFloat(a.allocated_cost_eur),
+    0
+  )
+  const totalCost = parseFloat(parsed.transport_cost_warehouse_to_prison_eur)
+  if (Math.abs(totalAllocated - totalCost) > 0.01) {
+    return {
+      error: `Allocated costs (${totalAllocated.toFixed(4)}) must equal total transport cost (${totalCost.toFixed(4)})`,
+    }
+  }
+
+  const totalPalletCount = parsed.pickup_allocations.reduce(
+    (sum, a) => sum + a.pallet_count,
+    0
+  )
+
+  const pickupIds = parsed.pickup_allocations.map((a) => a.pickup_id)
+
+  const inserted = await withRLSContext(user, async (tx) => {
+    // INSERT outbound_shipments row
+    const [shipment] = await tx
+      .insert(outboundShipments)
+      .values({
+        transport_provider_id: parsed.transport_provider_id,
+        prison_facility_id: parsed.prison_facility_id,
+        transport_cost_warehouse_to_prison_eur:
+          parsed.transport_cost_warehouse_to_prison_eur,
+        total_pallet_count: totalPalletCount,
+        status: 'created',
+        created_by: user.id ?? null,
+      })
+      .returning({ id: outboundShipments.id })
+
+    // INSERT outbound_shipment_pickups rows
+    await tx.insert(outboundShipmentPickups).values(
+      parsed.pickup_allocations.map((a) => ({
+        outbound_shipment_id: shipment.id,
+        pickup_id: a.pickup_id,
+        pallet_count: a.pallet_count,
+        allocated_cost_eur: a.allocated_cost_eur,
+      }))
+    )
+
+    // UPDATE all selected pickups status to 'in_outbound_shipment'
+    await tx
+      .update(pickups)
+      .set({ status: 'in_outbound_shipment', updated_at: new Date() })
+      .where(inArray(pickups.id, pickupIds))
+
+    return shipment
+  })
+
+  revalidatePath('/transport/outbound')
+  return { success: true, shipmentId: inserted.id }
+}
+
+export async function markOutboundDelivered(shipmentId: string) {
+  const user = await requireRecoAdminOrTransport()
+
+  const validatedId = z.string().uuid().parse(shipmentId)
+
+  // UPDATE outbound_shipments SET status='delivered'
+  await withRLSContext(user, async (tx) => {
+    await tx
+      .update(outboundShipments)
+      .set({ status: 'delivered', delivered_at: new Date(), updated_at: new Date() })
+      .where(eq(outboundShipments.id, validatedId))
+  })
+
+  // SELECT all pickup_ids from outbound_shipment_pickups
+  const pickupRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({ pickup_id: outboundShipmentPickups.pickup_id })
+      .from(outboundShipmentPickups)
+      .where(eq(outboundShipmentPickups.outbound_shipment_id, validatedId))
+  })
+
+  const pickupIds = pickupRows.map((r) => r.pickup_id)
+
+  if (pickupIds.length > 0) {
+    // UPDATE pickups SET status='delivered'
+    await withRLSContext(user, async (tx) => {
+      await tx
+        .update(pickups)
+        .set({ status: 'delivered', updated_at: new Date() })
+        .where(inArray(pickups.id, pickupIds))
+    })
+  }
 
   revalidatePath('/transport/outbound')
   return { success: true }
