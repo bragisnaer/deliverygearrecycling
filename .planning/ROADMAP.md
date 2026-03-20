@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Auth, Roles, and Tenant Branding** - All six roles, per-tenant branding, CSS custom properties (completed 2026-03-20)
 - [x] **Phase 3: Product Registry** - Per-tenant product catalogue with materials, pricing, and Wolt pre-load (completed 2026-03-20)
 - [x] **Phase 4: Pickup Booking and Transport Management** - Client booking form, transport booking, consolidation warehouse (completed 2026-03-20)
-- [ ] **Phase 5: Prison Intake and Counting** - Tablet-first intake forms, discrepancy detection, batch quarantine
+- [x] **Phase 5: Prison Intake and Counting** - Tablet-first intake forms, discrepancy detection, batch quarantine (completed 2026-03-20)
 - [ ] **Phase 6: Prison Processing, Dispatch, and Audit Trail** - Wash/Pack reports, outbound dispatch, edit-in-place with audit
 - [ ] **Phase 7: Financial Tracking** - Per-delivery financial records, invoice status, two-leg cost allocation
 - [ ] **Phase 8: Dashboards and ESG Metrics** - Role-scoped dashboards, ESG calculation engine, export
@@ -126,7 +126,7 @@ Plans:
 - [x] 05-05-PLAN.md — Unexpected intake form with client dropdown, manual entry, reco-admin notification
 - [x] 05-06-PLAN.md — Batch quarantine: batch_flags lookup, server-side enforcement, ops override action
 - [x] 05-07-PLAN.md — Ops portal intake queue with status tabs, quarantine override dialog
-- [ ] 05-08-PLAN.md — Discrepancy dashboard: rates by country/product/facility, persistent problem market auto-flag
+- [x] 05-08-PLAN.md — Discrepancy dashboard: rates by country/product/facility, persistent problem market auto-flag
 
 ### Phase 6: Prison Processing, Dispatch, and Audit Trail
 **Goal**: Prison staff can submit Wash and Pack processing reports and view the full traceability chain; reco-admin can create outbound dispatch records; every editable record type has a complete, trigger-based audit trail
@@ -240,7 +240,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 2. Auth, Roles, and Tenant Branding | 3/4 | Complete    | 2026-03-20 |
 | 3. Product Registry | 4/5 | Complete    | 2026-03-20 |
 | 4. Pickup Booking and Transport Management | 10/10 | Complete   | 2026-03-20 |
-| 5. Prison Intake and Counting | 7/8 | In Progress|  |
+| 5. Prison Intake and Counting | 8/8 | Complete   | 2026-03-20 |
 | 6. Prison Processing, Dispatch, and Audit Trail | 0/9 | Not started | - |
 | 7. Financial Tracking | 0/5 | Not started | - |
 | 8. Dashboards and ESG Metrics | 0/7 | Not started | - |
