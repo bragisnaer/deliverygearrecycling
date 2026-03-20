@@ -74,9 +74,9 @@
 ### Prison Intake and Counting
 
 - [x] **INTAKE-01**: Prison staff access intake forms at `ops.courierrecycling.com/prison` via facility-pre-authenticated session; facility context is locked from login, not from form input
-- [ ] **INTAKE-02**: Incoming deliveries view shows: direct deliveries (single line), consolidated deliveries (expanded into per-pickup intake forms grouped under outbound shipment reference)
+- [x] **INTAKE-02**: Incoming deliveries view shows: direct deliveries (single line), consolidated deliveries (expanded into per-pickup intake forms grouped under outbound shipment reference)
 - [x] **INTAKE-03**: Intake form fields: staff name (free text), client (dropdown, pre-selected if linked), origin market (pre-populated if linked, editable), delivery date (defaults today), quantities per product (dynamic from client registry), batch/lot numbers (optional per product), delivery photos (optional), notes
-- [ ] **INTAKE-04**: For expected deliveries (linked to pickup request): client, origin market, and product list are pre-populated; prison staff confirms or adjusts quantities
+- [x] **INTAKE-04**: For expected deliveries (linked to pickup request): client, origin market, and product list are pre-populated; prison staff confirms or adjusts quantities
 - [ ] **INTAKE-05**: For unexpected deliveries: prison staff selects client from dropdown, enters all details manually; reco-admin receives alert
 - [ ] **INTAKE-06**: System auto-compares `actual_quantity` (intake) vs `informed_quantity` (pickup request) per product line; if any line exceeds configurable threshold (default 15%), `discrepancy_flagged` is set and reco-admin receives email + in-app notification
 - [x] **INTAKE-07**: Batch/lot numbers entered at intake are checked against `batch_flags` table; if a match exists, `quarantine_flagged` is set and both prison staff and reco-admin receive email + in-app notification; quarantined items cannot proceed without reco-admin override
@@ -260,9 +260,9 @@
 | TRANS-09 | Phase 4: Pickup Booking and Transport Management | Complete |
 | TRANS-10 | Phase 4: Pickup Booking and Transport Management | Complete |
 | INTAKE-01 | Phase 5: Prison Intake and Counting | Complete |
-| INTAKE-02 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-02 | Phase 5: Prison Intake and Counting | Complete |
 | INTAKE-03 | Phase 5: Prison Intake and Counting | Complete |
-| INTAKE-04 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-04 | Phase 5: Prison Intake and Counting | Complete |
 | INTAKE-05 | Phase 5: Prison Intake and Counting | Pending |
 | INTAKE-06 | Phase 5: Prison Intake and Counting | Pending |
 | INTAKE-07 | Phase 5: Prison Intake and Counting | Complete |
