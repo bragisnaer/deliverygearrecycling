@@ -48,6 +48,8 @@ export const intakeRecords = pgTable(
       () => users.id
     ), // nullable
     quarantine_overridden_at: timestamp('quarantine_overridden_at'), // nullable
+    voided: boolean('voided').notNull().default(false),
+    void_reason: text('void_reason'), // nullable
     notes: text('notes'), // nullable
     reference: text('reference').notNull().default(''), // overwritten by trigger → IN-YYYY-NNNN
     delivered_at: timestamp('delivered_at').notNull().defaultNow(), // Phase 7 financial linking
@@ -99,6 +101,14 @@ export const intakeRecords = pgTable(
       for: 'all',
       using: sql`true`,
       withCheck: sql`true`,
+    }),
+    // prison role UPDATE: own facility only — enables voiding records (AUDIT-04)
+    pgPolicy('intake_records_prison_update', {
+      as: 'permissive',
+      to: prisonRole,
+      for: 'update',
+      using: sql`prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true)`,
+      withCheck: sql`prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true)`,
     }),
   ]
 )
