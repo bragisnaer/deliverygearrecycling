@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     await signIn('resend', {
       email: fac.contact_email,
       redirect: false,
-      callbackUrl: '/',
+      callbackUrl: '/prison',
     })
   } catch {
     // signIn may throw a redirect; the magic link email is sent regardless
