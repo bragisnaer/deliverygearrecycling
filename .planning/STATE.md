@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-product-registry/03-01-PLAN.md
-last_updated: "2026-03-20T15:45:50Z"
+stopped_at: Completed 03-product-registry/03-02-PLAN.md
+last_updated: "2026-03-20T16:15:00Z"
 progress:
   total_phases: 10
   completed_phases: 2
   total_plans: 18
-  completed_plans: 14
+  completed_plans: 15
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 03 (Product Registry) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 
 ## Performance Metrics
 
@@ -59,6 +59,7 @@ Plan: 2 of 5
 | Phase 02 P02 | 5 | 2 tasks | 6 files |
 | Phase 02 P03 | 4 | 2 tasks | 4 files |
 | Phase 02 P04 | 341 | 2 tasks | 8 files |
+| Phase 03 P02 | 196 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,9 @@ Recent decisions affecting current work:
 - [Phase 02-04]: wcag-contrast has no bundled TypeScript types — declaration added at apps/web/types/wcag-contrast.d.ts
 - [Phase 03-01]: StorageClient is lazy-initialised via getStorageClient()/getProductsBucket() factories — eager module-level instantiation throws ERR_INVALID_URL when SUPABASE_URL is undefined in test environment
 - [Phase 03-01]: productsBucket renamed to getProductsBucket() factory to align with lazy-init pattern for pure path helper unit tests
+- [Phase 03-02]: product_code uniqueness enforced by partial unique index in migration SQL — Drizzle cannot express per-tenant partial unique indexes via unique()
+- [Phase 03-02]: product_materials RLS uses EXISTS subquery on parent products.tenant_id — no direct tenant_id column on product_materials; tenant isolation flows through parent product row
+- [Phase 03-02]: product_pricing has no client_role RLS policy — fail-closed; clients never see pricing even if future bug grants access
 
 ### Pending Todos
 
@@ -113,6 +117,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T14:44:48Z
-Stopped at: Completed 02-auth-roles-and-tenant-branding/02-04-PLAN.md
+Last session: 2026-03-20T16:15:00Z
+Stopped at: Completed 03-product-registry/03-02-PLAN.md
 Resume file: None

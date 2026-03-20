@@ -38,14 +38,14 @@
 
 ### Product Registry
 
-- [ ] **PROD-01**: Each tenant has a product registry; products have: name, product code (unique per tenant), product group, processing stream (`recycling` or `reuse`), description, total weight (grams), active flag
+- [x] **PROD-01**: Each tenant has a product registry; products have: name, product code (unique per tenant), product group, processing stream (`recycling` or `reuse`), description, total weight (grams), active flag
 - [ ] **PROD-02**: Each product has up to 5 photos (Supabase Storage)
-- [ ] **PROD-03**: Each product has one or more material composition lines: material from global material library, weight (grams), recycling cost per kg (EUR/DKK), recycling outcome enum
-- [ ] **PROD-04**: Each product has client-facing pricing records with `effective_from` / `effective_to` dates (null = current); historical deliveries retain the rate active at time of delivery
-- [ ] **PROD-05**: `product_materials` records have `effective_from` / `effective_to` dates to preserve historical ESG calculation accuracy when material composition changes
+- [x] **PROD-03**: Each product has one or more material composition lines: material from global material library, weight (grams), recycling cost per kg (EUR/DKK), recycling outcome enum
+- [x] **PROD-04**: Each product has client-facing pricing records with `effective_from` / `effective_to` dates (null = current); historical deliveries retain the rate active at time of delivery
+- [x] **PROD-05**: `product_materials` records have `effective_from` / `effective_to` dates to preserve historical ESG calculation accuracy when material composition changes
 - [x] **PROD-06**: A global `material_library` table stores canonical material names (e.g. "Polyester", "PVC", "Polypropylene"); used across all tenants for consistent naming
 - [ ] **PROD-07**: Wolt products pre-loaded at deployment: Bike Bag (2,680g), Car Bag (918g), Inner Bag (324g), Heating Plate (703g), Clothing; with full material compositions and pricing from PRD §4.10
-- [ ] **PROD-08**: Product versioning via separate records (e.g. "Bike Bag (2022)", "Bike Bag (2025)"); `product_group` field aggregates related products for dashboard reporting
+- [x] **PROD-08**: Product versioning via separate records (e.g. "Bike Bag (2022)", "Bike Bag (2025)"); `product_group` field aggregates related products for dashboard reporting
 
 ### Pickup Booking
 
@@ -233,14 +233,14 @@
 | BRAND-03 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
 | BRAND-04 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
 | BRAND-05 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
-| PROD-01 | Phase 3: Product Registry | Pending |
+| PROD-01 | Phase 3: Product Registry | Complete |
 | PROD-02 | Phase 3: Product Registry | Pending |
-| PROD-03 | Phase 3: Product Registry | Pending |
-| PROD-04 | Phase 3: Product Registry | Pending |
-| PROD-05 | Phase 3: Product Registry | Pending |
+| PROD-03 | Phase 3: Product Registry | Complete |
+| PROD-04 | Phase 3: Product Registry | Complete |
+| PROD-05 | Phase 3: Product Registry | Complete |
 | PROD-06 | Phase 3: Product Registry | Complete |
 | PROD-07 | Phase 3: Product Registry | Pending |
-| PROD-08 | Phase 3: Product Registry | Pending |
+| PROD-08 | Phase 3: Product Registry | Complete |
 | PICKUP-01 | Phase 4: Pickup Booking and Transport Management | Pending |
 | PICKUP-02 | Phase 4: Pickup Booking and Transport Management | Pending |
 | PICKUP-03 | Phase 4: Pickup Booking and Transport Management | Pending |
