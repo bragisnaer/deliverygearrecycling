@@ -43,7 +43,7 @@ importers:
         version: 16.2.0(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       next-auth:
         specifier: beta
-        version: 5.0.0-beta.30(next@16.2.0(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+        version: 5.0.0-beta.30(next@16.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       react:
         specifier: ^19.0.0
         version: 19.2.4
@@ -84,6 +84,9 @@ importers:
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
+      vitest:
+        specifier: ^3.1.0
+        version: 3.2.4(@types/node@22.19.15)(msw@2.12.13(@types/node@22.19.15)(typescript@5.9.3))(tsx@4.21.0)
 
   packages/db:
     dependencies:
@@ -114,7 +117,7 @@ importers:
     devDependencies:
       next-auth:
         specifier: beta
-        version: 5.0.0-beta.30(next@16.2.0(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+        version: 5.0.0-beta.30(next@16.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
@@ -4615,7 +4618,7 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next-auth@5.0.0-beta.30(next@16.2.0(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
+  next-auth@5.0.0-beta.30(next@16.2.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
     dependencies:
       '@auth/core': 0.41.0
       next: 16.2.0(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
