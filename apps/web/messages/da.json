@@ -1,4 +1,14 @@
 {
+  "void": {
+    "title": "Annuller post",
+    "reason_label": "Begrundelse",
+    "reason_placeholder": "Angiv begrundelse for annullering...",
+    "confirm": "Bekr\u00e6ft annullering",
+    "cancel": "Fortryd",
+    "reason_required": "Begrundelse er p\u00e5kr\u00e6vet",
+    "already_voided": "Posten er allerede annulleret",
+    "success": "Post annulleret"
+  },
   "audit": {
     "edited": "Redigeret",
     "edit_history": "Redigeringshistorik",
