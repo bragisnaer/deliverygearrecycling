@@ -27,7 +27,8 @@
       "history_tab": "Historik",
       "deliveries_tab": "Forventede Leveringer",
       "no_deliveries": "Ingen forventede leveringer i dag. Brug knappen nedenfor for at registrere en uventet levering.",
-      "no_history": "Ingen registrerede leveringer i de seneste 30 dage."
+      "no_history": "Ingen registrerede leveringer i de seneste 30 dage.",
+      "dispatch_history_cta": "Forsendelseshistorik"
     },
     "form": {
       "submit": "Indsend Opt\u00e6lling",
@@ -66,6 +67,26 @@
       "submission_failed": "Indsendelse mislykkedes. Tjek din forbindelse og pr\u00f8v igen.",
       "client_load_failed": "Kunne ikke indl\u00e6se klientlisten. Genindl\u00e6s siden."
     }
+  },
+  "dispatch": {
+    "title": "Forsendelser",
+    "history": "Forsendelseshistorik",
+    "date": "Forsendelsesdato",
+    "destination": "Destination",
+    "carrier": "Transportfirma",
+    "status": "Status",
+    "lines": "Linjer",
+    "no_dispatches": "Ingen forsendelser",
+    "created": "Oprettet",
+    "picked_up": "Afhentet",
+    "delivered": "Leveret",
+    "packing_list": "Pakkeliste",
+    "product": "Produkt",
+    "size": "Str.",
+    "sku": "SKU-kode",
+    "quantity": "Antal",
+    "create": "Opret forsendelse",
+    "notes": "Noter"
   },
   "processing": {
     "title": "Behandlingsrapport",

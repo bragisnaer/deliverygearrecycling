@@ -23,6 +23,12 @@ export default function PrisonHomePage() {
         >
           {t('processing_cta')}
         </Link>
+        <Link
+          href="/prison/dispatch"
+          className="inline-flex min-h-[48px] min-w-[280px] items-center justify-center rounded-md border-2 border-foreground bg-background px-10 py-4 font-mono text-base font-medium text-foreground transition-opacity hover:opacity-90 active:opacity-80"
+        >
+          {t('dispatch_history_cta')}
+        </Link>
       </div>
 
       {/* Tabs: Expected Deliveries + History */}

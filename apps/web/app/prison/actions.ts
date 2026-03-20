@@ -18,9 +18,12 @@ import {
   systemSettings,
   processingReports,
   processingReportLines,
+  outboundDispatches,
+  outboundDispatchLines,
+  prisonFacilities,
   withRLSContext,
 } from '@repo/db'
-import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
+import { eq, and, isNull, asc, inArray, desc, count } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { calculateDiscrepancyPct } from '@/lib/discrepancy'
@@ -959,4 +962,68 @@ export async function editProcessingReport(
   )
 
   return { success: true }
+}
+
+// --- Dispatch History Actions (DISPATCH-04) ---
+
+export type DispatchHistoryItem = {
+  id: string
+  dispatch_date: Date
+  destination: string
+  carrier: string | null
+  status: string
+  notes: string | null
+  line_count: number
+}
+
+/**
+ * Returns outbound dispatch history for the current prison facility (read-only).
+ * RLS policy on outbound_dispatches auto-filters to own facility for prison_role.
+ * Filters voided=false. Orders by dispatch_date DESC.
+ */
+export async function getDispatchHistory(): Promise<DispatchHistoryItem[]> {
+  const user = await requirePrisonSession()
+
+  // Get dispatches for this facility — RLS handles facility scoping
+  const dispatches = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        id: outboundDispatches.id,
+        dispatch_date: outboundDispatches.dispatch_date,
+        destination: outboundDispatches.destination,
+        carrier: outboundDispatches.carrier,
+        status: outboundDispatches.status,
+        notes: outboundDispatches.notes,
+      })
+      .from(outboundDispatches)
+      .where(eq(outboundDispatches.voided, false))
+      .orderBy(desc(outboundDispatches.dispatch_date))
+  })
+
+  if (dispatches.length === 0) {
+    return []
+  }
+
+  // Fetch line counts for each dispatch
+  const dispatchIds = dispatches.map((d) => d.id)
+  const lineCounts = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        outbound_dispatch_id: outboundDispatchLines.outbound_dispatch_id,
+        line_count: count(outboundDispatchLines.id),
+      })
+      .from(outboundDispatchLines)
+      .where(inArray(outboundDispatchLines.outbound_dispatch_id, dispatchIds))
+      .groupBy(outboundDispatchLines.outbound_dispatch_id)
+  })
+
+  const lineCountMap = new Map<string, number>()
+  for (const row of lineCounts) {
+    lineCountMap.set(row.outbound_dispatch_id, Number(row.line_count))
+  }
+
+  return dispatches.map((d) => ({
+    ...d,
+    line_count: lineCountMap.get(d.id) ?? 0,
+  }))
 }
