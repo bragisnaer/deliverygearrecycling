@@ -38,14 +38,16 @@ created: 2026-03-20
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 04-02-01 | 02 | 0 | PICKUP-02 | unit (mock DB) | `pnpm --filter web test -- --grep "pickup reference"` | ❌ Wave 0 | ⬜ pending |
-| 04-02-02 | 02 | 0 | PICKUP-04 | unit (mock DB) | `pnpm --filter web test -- --grep "72-hour"` | ❌ Wave 0 | ⬜ pending |
-| 04-03-01 | 03 | 0 | PICKUP-06 | unit (mock DB) | `pnpm --filter web test -- --grep "cancellation"` | ❌ Wave 0 | ⬜ pending |
-| 04-08-01 | 08 | 0 | TRANS-07 | unit (pure fn) | `pnpm --filter web test -- --grep "pro-rata"` | ❌ Wave 0 | ⬜ pending |
-| 04-08-02 | 08 | 0 | TRANS-10 | unit (mock DB) | `pnpm --filter web test -- --grep "cascade"` | ❌ Wave 0 | ⬜ pending |
-| 04-10-01 | 10 | 0 | PICKUP-08 | unit (mock Resend) | `pnpm --filter web test -- --grep "confirmation email"` | ❌ Wave 0 | ⬜ pending |
+| 04-02-01 | 02 | 0 | PICKUP-02 | unit (mock DB) | `pnpm --filter web test -- --grep "pickup reference"` | Wave 0 (plan 02 TDD) | pending |
+| 04-02-02 | 02 | 0 | PICKUP-04 | unit (mock DB) | `pnpm --filter web test -- --grep "72-hour"` | Wave 0 (plan 02 TDD) | pending |
+| 04-03-01 | 03 | 0 | PICKUP-06 | unit (mock DB) | `pnpm --filter web test -- --grep "cancelPickupAsClient\|24h"` | Wave 0 (plan 03 Task 2 TDD) | pending |
+| 04-03-02 | 03 | 0 | PICKUP-07 | unit (mock DB) | `pnpm --filter web test -- --grep "confirmPickup\|status guard"` | Wave 0 (plan 03 Task 1 TDD) | pending |
+| 04-03-03 | 03 | 0 | TRANS-10 | unit (mock DB) | `pnpm --filter web test -- --grep "cancelPickup\|reason"` | Wave 0 (plan 03 Task 1 TDD) | pending |
+| 04-08-01 | 08 | 0 | TRANS-07 | unit (pure fn) | `pnpm --filter web test -- --grep "pro-rata"` | Wave 0 | pending |
+| 04-08-02 | 08 | 0 | TRANS-10 | unit (mock DB) | `pnpm --filter web test -- --grep "cascade"` | Wave 0 | pending |
+| 04-10-01 | 10 | 0 | PICKUP-08 | unit (mock Resend) | `pnpm --filter web test -- --grep "confirmation email"` | Wave 0 | pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: pending / green / red / flaky*
 
 ---
 
@@ -53,8 +55,8 @@ created: 2026-03-20
 
 > **Approach:** Test stubs are co-located with implementation in TDD tasks (Plans 02, 03, 07). Each TDD plan creates test files as part of its RED phase before implementation. This is intentional — separating stub creation into a pre-wave plan would add overhead without value since the TDD executor creates stubs immediately before writing production code.
 
-- [ ] `apps/web/app/(client)/pickups/actions.test.ts` — stubs for PICKUP-02, PICKUP-04, PICKUP-06
-- [ ] `apps/web/app/(ops)/pickups/actions.test.ts` — stubs for PICKUP-07, TRANS-10
+- [ ] `apps/web/app/(client)/pickups/actions.test.ts` — stubs for PICKUP-02, PICKUP-04, PICKUP-06 (created in plan 02 Task 1, extended in plan 03 Task 2)
+- [ ] `apps/web/app/(ops)/pickups/actions.test.ts` — stubs for PICKUP-07 (confirmPickup status guard), TRANS-10 (cancelPickup reason validation) (created in plan 03 Task 1)
 - [ ] `apps/web/app/(ops)/transport/actions.test.ts` — stubs for TRANS-07 pro-rata logic
 - [ ] Resend mock: `vi.mock('resend', ...)` in test files (same pattern as storage mock in Phase 3)
 
@@ -74,11 +76,11 @@ created: 2026-03-20
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify (plan 03 now has pnpm test in both task verifies)
+- [x] Wave 0 covers all MISSING references
 - [ ] No watch-mode flags
 - [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] `nyquist_compliant: true` set in frontmatter
 
 **Approval:** pending
