@@ -1,6 +1,6 @@
-export type DomainContext = 'ops' | 'client' | 'public'
+export type DomainContext = "ops" | "client" | "public";
 
 export interface TenantContext {
-	context: DomainContext
-	tenantSlug: string | null
+	context: DomainContext;
+	tenantSlug: string | null;
 }
