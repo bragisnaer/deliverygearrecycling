@@ -141,7 +141,7 @@ Plans:
 **Plans**: 9 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Complete Phase 6 migration SQL (all tables, enums, triggers, RLS, GRANTs) + audit helper library
+- [x] 06-01-PLAN.md — Complete Phase 6 migration SQL (all tables, enums, triggers, RLS, GRANTs) + audit helper library
 - [ ] 06-02-PLAN.md — Edit-in-place Server Actions with 48-hour lock, EditedIndicator and EditHistoryModal components
 - [ ] 06-03-PLAN.md — Void policy: voidRecord helper, voidIntakeRecord action, VoidRecordDialog component
 - [ ] 06-04-PLAN.md — Processing report Drizzle schema with RLS, product_category enum on products
@@ -241,7 +241,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 3. Product Registry | 4/5 | Complete    | 2026-03-20 |
 | 4. Pickup Booking and Transport Management | 10/10 | Complete   | 2026-03-20 |
 | 5. Prison Intake and Counting | 8/8 | Complete   | 2026-03-20 |
-| 6. Prison Processing, Dispatch, and Audit Trail | 0/9 | Not started | - |
+| 6. Prison Processing, Dispatch, and Audit Trail | 1/9 | In Progress|  |
 | 7. Financial Tracking | 0/5 | Not started | - |
 | 8. Dashboards and ESG Metrics | 0/7 | Not started | - |
 | 9. Notifications and Manuals | 0/6 | Not started | - |

@@ -77,10 +77,10 @@
 - [x] **INTAKE-02**: Incoming deliveries view shows: direct deliveries (single line), consolidated deliveries (expanded into per-pickup intake forms grouped under outbound shipment reference)
 - [x] **INTAKE-03**: Intake form fields: staff name (free text), client (dropdown, pre-selected if linked), origin market (pre-populated if linked, editable), delivery date (defaults today), quantities per product (dynamic from client registry), batch/lot numbers (optional per product), delivery photos (optional), notes
 - [x] **INTAKE-04**: For expected deliveries (linked to pickup request): client, origin market, and product list are pre-populated; prison staff confirms or adjusts quantities
-- [ ] **INTAKE-05**: For unexpected deliveries: prison staff selects client from dropdown, enters all details manually; reco-admin receives alert
-- [ ] **INTAKE-06**: System auto-compares `actual_quantity` (intake) vs `informed_quantity` (pickup request) per product line; if any line exceeds configurable threshold (default 15%), `discrepancy_flagged` is set and reco-admin receives email + in-app notification
+- [x] **INTAKE-05**: For unexpected deliveries: prison staff selects client from dropdown, enters all details manually; reco-admin receives alert
+- [x] **INTAKE-06**: System auto-compares `actual_quantity` (intake) vs `informed_quantity` (pickup request) per product line; if any line exceeds configurable threshold (default 15%), `discrepancy_flagged` is set and reco-admin receives email + in-app notification
 - [x] **INTAKE-07**: Batch/lot numbers entered at intake are checked against `batch_flags` table; if a match exists, `quarantine_flagged` is set and both prison staff and reco-admin receive email + in-app notification; quarantined items cannot proceed without reco-admin override
-- [ ] **INTAKE-08**: Discrepancy dashboard: discrepancy rate by country, by product, by prison facility, over time; persistent problem markets auto-flagged
+- [x] **INTAKE-08**: Discrepancy dashboard: discrepancy rate by country, by product, by prison facility, over time; persistent problem markets auto-flagged
 
 ### Prison Processing
 
@@ -99,12 +99,12 @@
 
 ### Edit Policy and Audit Trail
 
-- [ ] **AUDIT-01**: All editable records support edit-in-place with full audit trail: who edited, when, which field, old value, new value
+- [x] **AUDIT-01**: All editable records support edit-in-place with full audit trail: who edited, when, which field, old value, new value
 - [ ] **AUDIT-02**: Prison staff can edit their own facility's intake records and processing reports within 48 hours of submission; records lock after 48 hours
 - [ ] **AUDIT-03**: reco-admin can edit any record at any time
-- [ ] **AUDIT-04**: No records are deleted; reco-admin can mark records as `voided` with a reason; voided records are excluded from calculations but remain in audit trail
+- [x] **AUDIT-04**: No records are deleted; reco-admin can mark records as `voided` with a reason; voided records are excluded from calculations but remain in audit trail
 - [ ] **AUDIT-05**: Visual "edited" indicator appears on any record that has been modified after initial submission, with a link to edit history
-- [ ] **AUDIT-06**: Audit log entries captured via database trigger (not application code) to ensure no log can be bypassed
+- [x] **AUDIT-06**: Audit log entries captured via database trigger (not application code) to ensure no log can be bypassed
 
 ### Financial Tracking
 
@@ -263,10 +263,10 @@
 | INTAKE-02 | Phase 5: Prison Intake and Counting | Complete |
 | INTAKE-03 | Phase 5: Prison Intake and Counting | Complete |
 | INTAKE-04 | Phase 5: Prison Intake and Counting | Complete |
-| INTAKE-05 | Phase 5: Prison Intake and Counting | Pending |
-| INTAKE-06 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-05 | Phase 5: Prison Intake and Counting | Complete |
+| INTAKE-06 | Phase 5: Prison Intake and Counting | Complete |
 | INTAKE-07 | Phase 5: Prison Intake and Counting | Complete |
-| INTAKE-08 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-08 | Phase 5: Prison Intake and Counting | Complete |
 | PROCESS-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | PROCESS-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | PROCESS-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
@@ -276,12 +276,12 @@
 | DISPATCH-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | DISPATCH-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | DISPATCH-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| AUDIT-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | AUDIT-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| AUDIT-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| AUDIT-06 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-06 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | FIN-01 | Phase 7: Financial Tracking | Pending |
 | FIN-02 | Phase 7: Financial Tracking | Pending |
 | FIN-03 | Phase 7: Financial Tracking | Pending |
