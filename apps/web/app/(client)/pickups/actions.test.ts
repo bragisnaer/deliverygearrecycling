@@ -3,14 +3,37 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 // Mock @repo/db — no real DB connection
 vi.mock('@repo/db', () => {
   return {
-    db: { transaction: vi.fn() },
+    db: {
+      transaction: vi.fn(),
+      select: vi.fn().mockReturnValue({
+        from: vi.fn().mockReturnValue({
+          where: vi.fn().mockResolvedValue([]),
+        }),
+      }),
+    },
     withRLSContext: vi.fn(),
     pickups: {},
     pickupLines: {},
     products: {},
     locations: {},
+    notifications: {},
+    users: {},
   }
 })
+
+// Mock @/lib/email
+vi.mock('@/lib/email', () => ({
+  sendEmail: vi.fn().mockResolvedValue({ success: true }),
+}))
+
+// Mock email templates
+vi.mock('@/emails/pickup-confirmation', () => ({
+  default: vi.fn().mockReturnValue(null),
+}))
+
+vi.mock('@/emails/pickup-admin-alert', () => ({
+  default: vi.fn().mockReturnValue(null),
+}))
 
 // Mock next/cache
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
@@ -23,6 +46,7 @@ vi.mock('@/auth', () => ({
   auth: vi.fn().mockResolvedValue({
     user: {
       id: 'test-user-id',
+      email: 'client@example.com',
       role: 'client',
       tenant_id: 'wolt',
       location_id: 'test-loc-id',
@@ -203,6 +227,93 @@ describe('submitPickupRequest (PICKUP-01, PICKUP-03, PICKUP-04)', () => {
     const result = await submitPickupRequest(fd)
 
     expect(result).toEqual({ error: 'At least one product must have a quantity greater than zero' })
+  })
+
+  it('Test 5: sends confirmation email on successful submission', async () => {
+    let callCount = 0
+    vi.mocked(withRLSContext).mockImplementation(async (_claims, fn) => {
+      callCount++
+      if (callCount === 1) {
+        const tx = {
+          select: vi.fn().mockReturnValue({
+            from: vi.fn().mockReturnValue({
+              where: vi.fn().mockReturnValue({
+                limit: vi.fn().mockResolvedValue([{ id: LOCATION_ID, name: 'Copenhagen HQ', address: '123 St', tenant_id: 'wolt' }]),
+              }),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 2) {
+        const tx = {
+          select: vi.fn().mockReturnValue({
+            from: vi.fn().mockReturnValue({
+              where: vi.fn().mockResolvedValue([
+                { id: PRODUCT_ID_1, weight_grams: '500.00' },
+              ]),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 3) {
+        const tx = {
+          insert: vi.fn().mockReturnValue({
+            values: vi.fn().mockReturnValue({
+              returning: vi.fn().mockResolvedValue([{ id: 'pickup-uuid-1' }]),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 4) {
+        const tx = {
+          insert: vi.fn().mockReturnValue({
+            values: vi.fn().mockResolvedValue(undefined),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 5) {
+        const tx = {
+          select: vi.fn().mockReturnValue({
+            from: vi.fn().mockReturnValue({
+              where: vi.fn().mockReturnValue({
+                limit: vi.fn().mockResolvedValue([{ reference: 'PU-2026-0001' }]),
+              }),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 6) {
+        // in-app notification insert
+        const tx = {
+          insert: vi.fn().mockReturnValue({
+            values: vi.fn().mockResolvedValue(undefined),
+          }),
+        }
+        return fn(tx as never)
+      }
+      return undefined
+    })
+
+    const { sendEmail } = await import('@/lib/email')
+    const fd = buildFormData({
+      preferred_date: new Date(Date.now() + 96 * 60 * 60 * 1000).toISOString(),
+    })
+
+    const { submitPickupRequest } = await import('./actions')
+    await submitPickupRequest(fd)
+
+    // sendEmail should have been called with the client's email for confirmation
+    expect(sendEmail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'client@example.com',
+        subject: expect.stringContaining('Pickup Request Confirmed'),
+      })
+    )
   })
 
   it('Test 4: estimated_weight_grams = SUM(product.weight_grams * quantity) + (pallet_count * 25000)', async () => {

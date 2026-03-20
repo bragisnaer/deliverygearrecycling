@@ -1,10 +1,13 @@
 'use server'
 
 import { auth } from '@/auth'
-import { db, pickups, pickupLines, products, locations, withRLSContext } from '@repo/db'
+import { db, pickups, pickupLines, products, locations, notifications, users, withRLSContext } from '@repo/db'
 import { eq, and, inArray } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { sendEmail } from '@/lib/email'
+import PickupConfirmationEmail from '@/emails/pickup-confirmation'
+import PickupAdminAlertEmail from '@/emails/pickup-admin-alert'
 
 // Terminal statuses that cannot be cancelled by client
 const CLIENT_TERMINAL_STATUSES = ['delivered', 'intake_registered', 'cancelled'] as const
@@ -204,6 +207,63 @@ export async function submitPickupRequest(formData: FormData) {
   })
 
   const reference = pickupRefRows[0]?.reference ?? ''
+
+  // Send confirmation email to client (non-blocking)
+  try {
+    if (user.email) {
+      await sendEmail({
+        to: user.email,
+        subject: `Pickup Request Confirmed — ${reference}`,
+        react: PickupConfirmationEmail({
+          reference,
+          preferredDate: preferred_date.toISOString().split('T')[0],
+          palletCount: pallet_count,
+          locationName: location.name,
+        }),
+      })
+    }
+  } catch (e) {
+    console.error('[pickup] Confirmation email failed:', e)
+  }
+
+  // Send admin alert emails (non-blocking) — query raw db to bypass client RLS
+  try {
+    const admins = await db
+      .select({ email: users.email })
+      .from(users)
+      .where(and(eq(users.role, 'reco-admin'), eq(users.active, true)))
+    for (const admin of admins) {
+      await sendEmail({
+        to: admin.email,
+        subject: `New Pickup Request — ${reference}`,
+        react: PickupAdminAlertEmail({
+          reference,
+          clientName: location.name,
+          locationName: location.name,
+          palletCount: pallet_count,
+          preferredDate: preferred_date.toISOString().split('T')[0],
+          pickupId,
+        }),
+      })
+    }
+  } catch (e) {
+    console.error('[pickup] Admin alert email failed:', e)
+  }
+
+  // Insert in-app notification for reco-admin (non-blocking)
+  try {
+    await withRLSContext(user, async (tx) => {
+      return tx.insert(notifications).values({
+        type: 'pickup_submitted',
+        title: `New pickup request: ${reference}`,
+        body: `${location.name} submitted a pickup request with ${pallet_count} pallet(s) for ${preferred_date.toISOString().split('T')[0]}`,
+        entity_type: 'pickup',
+        entity_id: pickupId,
+      })
+    })
+  } catch (e) {
+    console.error('[pickup] In-app notification failed:', e)
+  }
 
   revalidatePath('/pickups')
   return { success: true, reference, pickupId }
