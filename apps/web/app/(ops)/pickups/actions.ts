@@ -10,6 +10,8 @@ import {
   transportBookings,
   transportProviders,
   prisonFacilities,
+  outboundShipmentPickups,
+  outboundShipments,
   withRLSContext,
 } from '@repo/db'
 import { eq } from 'drizzle-orm'
@@ -407,5 +409,65 @@ export async function getPickupDetail(pickupId: string) {
       .where(eq(pickupLines.pickup_id, validatedId))
   })
 
-  return { ...pickup, lines }
+  // Fetch transport booking with provider and prison facility details
+  const bookingRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        id: transportBookings.id,
+        transport_type: transportBookings.transport_type,
+        transport_cost_market_to_destination_eur:
+          transportBookings.transport_cost_market_to_destination_eur,
+        confirmed_pickup_date: transportBookings.confirmed_pickup_date,
+        delivery_notes: transportBookings.delivery_notes,
+        proof_of_delivery_path: transportBookings.proof_of_delivery_path,
+        provider_id: transportProviders.id,
+        provider_name: transportProviders.name,
+        provider_warehouse_address: transportProviders.warehouse_address,
+        prison_facility_id: prisonFacilities.id,
+        prison_facility_name: prisonFacilities.name,
+        prison_facility_address: prisonFacilities.address,
+      })
+      .from(transportBookings)
+      .innerJoin(
+        transportProviders,
+        eq(transportProviders.id, transportBookings.transport_provider_id)
+      )
+      .leftJoin(
+        prisonFacilities,
+        eq(prisonFacilities.id, transportBookings.prison_facility_id)
+      )
+      .where(eq(transportBookings.pickup_id, validatedId))
+      .limit(1)
+  })
+
+  const booking = bookingRows[0] ?? null
+
+  // Fetch outbound shipment allocation if pickup is in one
+  let outboundAllocation: {
+    shipment_id: string
+    allocated_cost_eur: string | null
+    shipment_status: string
+  } | null = null
+
+  if (booking) {
+    const allocationRows = await withRLSContext(user, async (tx) => {
+      return tx
+        .select({
+          shipment_id: outboundShipmentPickups.outbound_shipment_id,
+          allocated_cost_eur: outboundShipmentPickups.allocated_cost_eur,
+          shipment_status: outboundShipments.status,
+        })
+        .from(outboundShipmentPickups)
+        .innerJoin(
+          outboundShipments,
+          eq(outboundShipments.id, outboundShipmentPickups.outbound_shipment_id)
+        )
+        .where(eq(outboundShipmentPickups.pickup_id, validatedId))
+        .limit(1)
+    })
+
+    outboundAllocation = allocationRows[0] ?? null
+  }
+
+  return { ...pickup, lines, booking, outboundAllocation }
 }
