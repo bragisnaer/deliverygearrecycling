@@ -28,7 +28,7 @@ export function CancelPickupDialog({ pickupId }: CancelPickupDialogProps) {
     startTransition(async () => {
       const result = await cancelPickup(pickupId, reason)
       if ('error' in result) {
-        setError(result.error)
+        setError(result.error ?? 'An error occurred')
       } else {
         setOpen(false)
         setReason('')

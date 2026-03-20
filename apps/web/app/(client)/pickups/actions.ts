@@ -6,6 +6,11 @@ import { eq, and, inArray } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
+// Terminal statuses that cannot be cancelled by client
+const CLIENT_TERMINAL_STATUSES = ['delivered', 'intake_registered', 'cancelled'] as const
+
+const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000
+
 // --- Auth helpers ---
 
 async function requireClient() {
@@ -202,4 +207,58 @@ export async function submitPickupRequest(formData: FormData) {
 
   revalidatePath('/pickups')
   return { success: true, reference, pickupId }
+}
+
+export async function cancelPickupAsClient(pickupId: string) {
+  const user = await requireClient()
+  const validatedId = z.string().uuid().parse(pickupId)
+
+  // Fetch pickup — RLS enforces tenant isolation automatically
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        id: pickups.id,
+        status: pickups.status,
+        confirmed_date: pickups.confirmed_date,
+      })
+      .from(pickups)
+      .where(eq(pickups.id, validatedId))
+      .limit(1)
+  })
+
+  const pickup = rows[0]
+  if (!pickup) {
+    return { error: 'Pickup not found' }
+  }
+
+  // Check terminal status
+  if ((CLIENT_TERMINAL_STATUSES as readonly string[]).includes(pickup.status)) {
+    return { error: 'Cannot cancel a pickup in terminal status' }
+  }
+
+  // 24h rule: if confirmed_date exists and is within 24h, block cancellation
+  if (pickup.confirmed_date) {
+    const confirmedAt = new Date(pickup.confirmed_date).getTime()
+    const now = Date.now()
+    if (confirmedAt - now <= TWENTY_FOUR_HOURS_MS) {
+      return { error: 'Cannot cancel within 24 hours of confirmed pickup date' }
+    }
+  }
+
+  // Cancel the pickup
+  await withRLSContext(user, async (tx) => {
+    return tx
+      .update(pickups)
+      .set({
+        status: 'cancelled',
+        cancellation_reason: 'Cancelled by client',
+        cancelled_at: new Date(),
+        cancelled_by: user.sub as unknown as string,
+        updated_at: new Date(),
+      })
+      .where(eq(pickups.id, validatedId))
+  })
+
+  revalidatePath('/pickups')
+  return { success: true }
 }

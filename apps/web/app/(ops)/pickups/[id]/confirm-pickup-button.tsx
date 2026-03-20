@@ -18,7 +18,7 @@ export function ConfirmPickupButton({ pickupId }: ConfirmPickupButtonProps) {
     startTransition(async () => {
       const result = await confirmPickup(pickupId)
       if ('error' in result) {
-        setError(result.error)
+        setError(result.error ?? 'An error occurred')
       } else {
         router.refresh()
       }
