@@ -30,10 +30,10 @@
 
 ### Tenant Branding
 
-- [ ] **BRAND-01**: Each tenant has a `tenant_branding` record with: logo URL, favicon URL, primary/secondary/background/text/accent colours (HEX), heading font, body font — all nullable with reco defaults as fallback
-- [ ] **BRAND-02**: Client portals inject tenant branding as CSS custom properties on a wrapper element via React `style` prop; HEX values validated against strict regex before use
-- [ ] **BRAND-03**: All components reference CSS variables exclusively; no hardcoded colours in component code
-- [ ] **BRAND-04**: Client portal with no branding configured renders identically to the ops portal (full reco visual identity)
+- [x] **BRAND-01**: Each tenant has a `tenant_branding` record with: logo URL, favicon URL, primary/secondary/background/text/accent colours (HEX), heading font, body font — all nullable with reco defaults as fallback
+- [x] **BRAND-02**: Client portals inject tenant branding as CSS custom properties on a wrapper element via React `style` prop; HEX values validated against strict regex before use
+- [x] **BRAND-03**: All components reference CSS variables exclusively; no hardcoded colours in component code
+- [x] **BRAND-04**: Client portal with no branding configured renders identically to the ops portal (full reco visual identity)
 - [ ] **BRAND-05**: Colour combinations that fail WCAG AA contrast ratios are rejected at the branding configuration step
 
 ### Product Registry
@@ -228,10 +228,10 @@
 | AUTH-10 | Phase 1: Infrastructure Foundation | Complete |
 | SETTINGS-01 | Phase 1: Infrastructure Foundation | Complete |
 | SETTINGS-02 | Phase 1: Infrastructure Foundation | Complete |
-| BRAND-01 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
-| BRAND-02 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
-| BRAND-03 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
-| BRAND-04 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
+| BRAND-01 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
+| BRAND-02 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
+| BRAND-03 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
+| BRAND-04 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
 | BRAND-05 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
 | PROD-01 | Phase 3: Product Registry | Pending |
 | PROD-02 | Phase 3: Product Registry | Pending |
