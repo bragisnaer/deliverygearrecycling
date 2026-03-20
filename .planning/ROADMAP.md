@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Infrastructure Foundation** - DB schema, RLS, JWT hook, subdomain routing, system settings (completed 2026-03-20)
 - [x] **Phase 2: Auth, Roles, and Tenant Branding** - All six roles, per-tenant branding, CSS custom properties (completed 2026-03-20)
 - [x] **Phase 3: Product Registry** - Per-tenant product catalogue with materials, pricing, and Wolt pre-load (completed 2026-03-20)
-- [ ] **Phase 4: Pickup Booking and Transport Management** - Client booking form, transport booking, consolidation warehouse
+- [x] **Phase 4: Pickup Booking and Transport Management** - Client booking form, transport booking, consolidation warehouse (completed 2026-03-20)
 - [ ] **Phase 5: Prison Intake and Counting** - Tablet-first intake forms, discrepancy detection, batch quarantine
 - [ ] **Phase 6: Prison Processing, Dispatch, and Audit Trail** - Wash/Pack reports, outbound dispatch, edit-in-place with audit
 - [ ] **Phase 7: Financial Tracking** - Per-delivery financial records, invoice status, two-leg cost allocation
@@ -104,7 +104,7 @@ Plans:
 - [x] 04-07-PLAN.md — Outbound shipment creation with pro-rata cost allocation and delivery cascade
 - [x] 04-08-PLAN.md — Transport provider portal: assigned pickups, status updates, POD upload
 - [x] 04-09-PLAN.md — Resend email integration: pickup confirmation to client, alert to reco-admin, in-app notification
-- [ ] 04-10-PLAN.md — Integration wiring: transport summary on pickup detail, delivery actions on outbound page
+- [x] 04-10-PLAN.md — Integration wiring: transport summary on pickup detail, delivery actions on outbound page
 
 ### Phase 5: Prison Intake and Counting
 **Goal**: Prison staff can register all incoming deliveries on facility tablets with Danish-language forms; discrepancies and defective batches are automatically detected and flagged
@@ -239,7 +239,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 1. Infrastructure Foundation | 9/9 | Complete   | 2026-03-20 |
 | 2. Auth, Roles, and Tenant Branding | 3/4 | Complete    | 2026-03-20 |
 | 3. Product Registry | 4/5 | Complete    | 2026-03-20 |
-| 4. Pickup Booking and Transport Management | 9/10 | In Progress|  |
+| 4. Pickup Booking and Transport Management | 10/10 | Complete   | 2026-03-20 |
 | 5. Prison Intake and Counting | 0/8 | Not started | - |
 | 6. Prison Processing, Dispatch, and Audit Trail | 0/9 | Not started | - |
 | 7. Financial Tracking | 0/5 | Not started | - |

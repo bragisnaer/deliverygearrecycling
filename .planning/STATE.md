@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-pickup-booking-and-transport-management/04-09-PLAN.md
-last_updated: "2026-03-20T18:37:48.369Z"
+stopped_at: Completed 04-pickup-booking-and-transport-management/04-10-PLAN.md
+last_updated: "2026-03-20T18:45:28.576Z"
 progress:
   total_phases: 10
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 28
-  completed_plans: 27
+  completed_plans: 28
 ---
 
 # Project State
@@ -72,6 +72,7 @@ Plan: 10 of 10
 | Phase 04-pickup-booking-and-transport-management P06 | 227 | 2 tasks | 2 files |
 | Phase 04-pickup-booking-and-transport-management P07 | 5 | 2 tasks | 4 files |
 | Phase 04-pickup-booking-and-transport-management P09 | 8 | 2 tasks | 6 files |
+| Phase 04-pickup-booking-and-transport-management P10 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -140,6 +141,8 @@ Recent decisions affecting current work:
 - [Phase 04-pickup-booking-and-transport-management]: page.tsx uses auth() directly not requireAuth helper — requireAuth returns AuthResult shape incompatible with JWTClaims required by withRLSContext
 - [Phase 04-pickup-booking-and-transport-management]: Admin email query uses raw db (not withRLSContext) — client_role RLS cannot read reco-admin users across tenants; raw db runs as service role
 - [Phase 04-pickup-booking-and-transport-management]: Email sending is non-blocking (wrapped in try/catch) — email failure must not break pickup submission
+- [Phase 04-pickup-booking-and-transport-management]: markOutboundInTransit added to outbound/actions.ts — plan required Mark In Transit button but no action existed; added with cascade to linked pickups
+- [Phase 04-pickup-booking-and-transport-management]: Status timeline uses direct vs. consolidation step arrays — consolidation shows at_warehouse/in_outbound_shipment; direct omits them
 
 ### Pending Todos
 
@@ -153,6 +156,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T18:37:48.365Z
-Stopped at: Completed 04-pickup-booking-and-transport-management/04-09-PLAN.md
+Last session: 2026-03-20T18:45:28.573Z
+Stopped at: Completed 04-pickup-booking-and-transport-management/04-10-PLAN.md
 Resume file: None
