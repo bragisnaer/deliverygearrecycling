@@ -1,0 +1,48 @@
+{
+  "intake": {
+    "home": {
+      "primary_cta": "Registrer Levering",
+      "history_tab": "Historik",
+      "deliveries_tab": "Forventede Leveringer",
+      "no_deliveries": "Ingen forventede leveringer i dag. Brug knappen nedenfor for at registrere en uventet levering.",
+      "no_history": "Ingen registrerede leveringer i de seneste 30 dage."
+    },
+    "form": {
+      "submit": "Indsend Opt\u00e6lling",
+      "staff_name": "Medarbejdernavn",
+      "delivery_date": "Leveringsdato",
+      "client": "Klient",
+      "origin_market": "Oprindelsesmarked",
+      "batch_lot_number": "Batch/Lot Nummer",
+      "notes": "Noter",
+      "photos": "Fotos",
+      "quantity": "Antal",
+      "expected": "Forventet",
+      "increase_qty": "For\u00f8g antal",
+      "decrease_qty": "Reducer antal",
+      "product": "Produkt",
+      "select_client": "V\u00e6lg klient",
+      "unexpected_delivery": "Uventet Levering",
+      "register_unexpected": "Registrer Uventet Levering"
+    },
+    "discrepancy": {
+      "above": "Forventet: {expected}. Du indtastede {actual} (+{pct}% over forventet)",
+      "below": "Forventet: {expected}. Du indtastede {actual} (-{pct}% under forventet)",
+      "summary": "En eller flere linjer afviger fra de forventede m\u00e6ngder. Opt\u00e6llingen indsendes, og reco-admin underrettes automatisk.",
+      "from_expected": "fra forventet"
+    },
+    "quarantine": {
+      "blocked": "Denne levering er karant\u00e6nep\u00e6rret p\u00e5 grund af et batchmatch. En reco-administrator skal godkende, inden du kan forts\u00e6tte.",
+      "override_label": "Godkend og frigiv"
+    },
+    "success": {
+      "title": "Levering Registreret",
+      "register_another": "Registrer en anden levering",
+      "go_home": "Tilbage til forsiden"
+    },
+    "errors": {
+      "submission_failed": "Indsendelse mislykkedes. Tjek din forbindelse og pr\u00f8v igen.",
+      "client_load_failed": "Kunne ikke indl\u00e6se klientlisten. Genindl\u00e6s siden."
+    }
+  }
+}
