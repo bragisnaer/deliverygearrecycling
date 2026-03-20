@@ -224,7 +224,7 @@
 | AUTH-06 | Phase 1: Infrastructure Foundation | Pending |
 | AUTH-07 | Phase 1: Infrastructure Foundation | Pending |
 | AUTH-08 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-09 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-09 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
 | AUTH-10 | Phase 1: Infrastructure Foundation | Pending |
 | SETTINGS-01 | Phase 1: Infrastructure Foundation | Pending |
 | SETTINGS-02 | Phase 1: Infrastructure Foundation | Pending |

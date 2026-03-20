@@ -28,7 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### Phase 1: Infrastructure Foundation
 **Goal**: The platform infrastructure is live and secure; every subsequent feature can be built on top without revisiting security or schema
 **Depends on**: Nothing (first phase)
-**Requirements**: ROUTE-01, ROUTE-02, ROUTE-03, ROUTE-04, ROUTE-05, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-09, AUTH-10, SETTINGS-01, SETTINGS-02
+**Requirements**: ROUTE-01, ROUTE-02, ROUTE-03, ROUTE-04, ROUTE-05, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-10, SETTINGS-01, SETTINGS-02
 **Success Criteria** (what must be TRUE):
   1. Visiting `wolt.courierrecycling.com`, `ops.courierrecycling.com`, and `courierrecycling.com` from the same browser resolves to the correct domain context without a database call
   2. A user logged in on one subdomain is recognised as authenticated on all other subdomains (shared cross-domain cookie)
@@ -49,7 +49,7 @@ Plans:
 ### Phase 2: Auth, Roles, and Tenant Branding
 **Goal**: All six user roles can authenticate and reach their correct portal; client portals render with tenant-specific branding
 **Depends on**: Phase 1
-**Requirements**: BRAND-01, BRAND-02, BRAND-03, BRAND-04, BRAND-05
+**Requirements**: AUTH-09, BRAND-01, BRAND-02, BRAND-03, BRAND-04, BRAND-05
 **Success Criteria** (what must be TRUE):
   1. A client portal with a branding record renders using tenant colours, logo, and fonts via CSS custom properties; no hardcoded colours exist in component code
   2. A client portal with no branding configured is visually identical to the ops portal (reco defaults applied)
