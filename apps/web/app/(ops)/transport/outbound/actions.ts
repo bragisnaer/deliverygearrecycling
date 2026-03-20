@@ -9,13 +9,14 @@ import {
   locations,
   transportBookings,
   transportProviders,
+  prisonFacilities,
   notifications,
   systemSettings,
   outboundShipments,
   outboundShipmentPickups,
   withRLSContext,
 } from '@repo/db'
-import { eq, and, inArray } from 'drizzle-orm'
+import { eq, and, inArray, or, gte } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
@@ -341,6 +342,41 @@ export async function createOutboundShipment(formData: FormData) {
   return { success: true, shipmentId: inserted.id }
 }
 
+export async function markOutboundInTransit(shipmentId: string) {
+  const user = await requireRecoAdminOrTransport()
+
+  const validatedId = z.string().uuid().parse(shipmentId)
+
+  await withRLSContext(user, async (tx) => {
+    await tx
+      .update(outboundShipments)
+      .set({ status: 'in_transit', dispatched_at: new Date(), updated_at: new Date() })
+      .where(eq(outboundShipments.id, validatedId))
+  })
+
+  // Cascade to linked pickups: in_transit
+  const pickupRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({ pickup_id: outboundShipmentPickups.pickup_id })
+      .from(outboundShipmentPickups)
+      .where(eq(outboundShipmentPickups.outbound_shipment_id, validatedId))
+  })
+
+  const pickupIds = pickupRows.map((r) => r.pickup_id)
+
+  if (pickupIds.length > 0) {
+    await withRLSContext(user, async (tx) => {
+      await tx
+        .update(pickups)
+        .set({ status: 'in_transit', updated_at: new Date() })
+        .where(inArray(pickups.id, pickupIds))
+    })
+  }
+
+  revalidatePath('/transport/outbound')
+  return { success: true }
+}
+
 export async function markOutboundDelivered(shipmentId: string) {
   const user = await requireRecoAdminOrTransport()
 
@@ -376,4 +412,74 @@ export async function markOutboundDelivered(shipmentId: string) {
 
   revalidatePath('/transport/outbound')
   return { success: true }
+}
+
+// --- Outbound Shipment List ---
+
+export async function getOutboundShipments() {
+  const user = await requireRecoAdminOrTransport()
+
+  // Active shipments: status IN ('created', 'in_transit')
+  const activeShipments = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        id: outboundShipments.id,
+        status: outboundShipments.status,
+        total_pallet_count: outboundShipments.total_pallet_count,
+        transport_cost_warehouse_to_prison_eur:
+          outboundShipments.transport_cost_warehouse_to_prison_eur,
+        created_at: outboundShipments.created_at,
+        dispatched_at: outboundShipments.dispatched_at,
+        delivered_at: outboundShipments.delivered_at,
+        provider_name: transportProviders.name,
+        prison_name: prisonFacilities.name,
+      })
+      .from(outboundShipments)
+      .innerJoin(
+        transportProviders,
+        eq(transportProviders.id, outboundShipments.transport_provider_id)
+      )
+      .innerJoin(
+        prisonFacilities,
+        eq(prisonFacilities.id, outboundShipments.prison_facility_id)
+      )
+      .where(or(eq(outboundShipments.status, 'created'), eq(outboundShipments.status, 'in_transit')))
+      .orderBy(outboundShipments.created_at)
+  })
+
+  // Completed shipments: status='delivered' in last 30 days
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  const completedShipments = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        id: outboundShipments.id,
+        status: outboundShipments.status,
+        total_pallet_count: outboundShipments.total_pallet_count,
+        transport_cost_warehouse_to_prison_eur:
+          outboundShipments.transport_cost_warehouse_to_prison_eur,
+        created_at: outboundShipments.created_at,
+        dispatched_at: outboundShipments.dispatched_at,
+        delivered_at: outboundShipments.delivered_at,
+        provider_name: transportProviders.name,
+        prison_name: prisonFacilities.name,
+      })
+      .from(outboundShipments)
+      .innerJoin(
+        transportProviders,
+        eq(transportProviders.id, outboundShipments.transport_provider_id)
+      )
+      .innerJoin(
+        prisonFacilities,
+        eq(prisonFacilities.id, outboundShipments.prison_facility_id)
+      )
+      .where(
+        and(
+          eq(outboundShipments.status, 'delivered'),
+          gte(outboundShipments.delivered_at, thirtyDaysAgo)
+        )
+      )
+      .orderBy(outboundShipments.delivered_at)
+  })
+
+  return { activeShipments, completedShipments }
 }
