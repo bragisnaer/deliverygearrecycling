@@ -88,14 +88,14 @@
 - [x] **PROCESS-02**: Processing report fields: staff name (free text), client (dropdown), activity type (Wash or Pack), product type (from client registry), quantity per size bucket (XXS–XXXL for clothing; total quantity for bags), date (defaults today), notes
 - [x] **PROCESS-03**: Processing pipeline view per facility: items at each stage (awaiting processing, in progress, ready to ship, shipped); visible to prison staff (own facility) and reco-admin (all facilities, all clients)
 - [x] **PROCESS-04**: Prison interface uses large touch targets (tablet-first), Danish language labels and instructions, minimal navigation
-- [ ] **PROCESS-05**: Full traceability chain visible: pickup request → transport → prison intake → wash → pack → dispatch
+- [x] **PROCESS-05**: Full traceability chain visible: pickup request → transport → prison intake → wash → pack → dispatch
 
 ### Prison Outbound Dispatch
 
 - [x] **DISPATCH-01**: reco-admin creates outbound dispatch records for clothing (reuse stream) leaving prison: prison facility, client, dispatch date, destination, carrier/transport provider, notes
 - [x] **DISPATCH-02**: Packing list attached to dispatch: product type, size, SKU code, quantity (one line per box/SKU combination)
 - [x] **DISPATCH-03**: Dispatch status lifecycle: `created` → `picked_up` → `delivered`
-- [ ] **DISPATCH-04**: Prison staff can view outbound dispatch history for their own facility; cannot create dispatches
+- [x] **DISPATCH-04**: Prison staff can view outbound dispatch history for their own facility; cannot create dispatches
 
 ### Edit Policy and Audit Trail
 
@@ -271,11 +271,11 @@
 | PROCESS-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | PROCESS-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | PROCESS-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
-| PROCESS-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| PROCESS-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | DISPATCH-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | DISPATCH-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | DISPATCH-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
-| DISPATCH-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| DISPATCH-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
