@@ -13,7 +13,7 @@ reco Platform replaces a patchwork of Google Sheets, Google Forms, and email wit
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Infrastructure Foundation** - DB schema, RLS, JWT hook, subdomain routing, system settings (completed 2026-03-20)
-- [ ] **Phase 2: Auth, Roles, and Tenant Branding** - All six roles, per-tenant branding, CSS custom properties
+- [x] **Phase 2: Auth, Roles, and Tenant Branding** - All six roles, per-tenant branding, CSS custom properties (completed 2026-03-20)
 - [ ] **Phase 3: Product Registry** - Per-tenant product catalogue with materials, pricing, and Wolt pre-load
 - [ ] **Phase 4: Pickup Booking and Transport Management** - Client booking form, transport booking, consolidation warehouse
 - [ ] **Phase 5: Prison Intake and Counting** - Tablet-first intake forms, discrepancy detection, batch quarantine
@@ -237,7 +237,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Infrastructure Foundation | 9/9 | Complete   | 2026-03-20 |
-| 2. Auth, Roles, and Tenant Branding | 3/4 | In Progress|  |
+| 2. Auth, Roles, and Tenant Branding | 3/4 | Complete    | 2026-03-20 |
 | 3. Product Registry | 0/5 | Not started | - |
 | 4. Pickup Booking and Transport Management | 0/10 | Not started | - |
 | 5. Prison Intake and Counting | 0/8 | Not started | - |
