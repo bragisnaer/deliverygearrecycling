@@ -13,11 +13,12 @@ import {
   outboundShipments,
   intakeRecords,
   intakeLines,
+  batchFlags,
   notifications,
   systemSettings,
   withRLSContext,
 } from '@repo/db'
-import { eq, and, isNull, asc } from 'drizzle-orm'
+import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
 import { z } from 'zod'
 import { calculateDiscrepancyPct } from '@/lib/discrepancy'
 
@@ -60,6 +61,51 @@ async function requirePrisonSession() {
     ...user,
     // JWTClaims requires sub — next-auth stores the user id as session.user.id (= token.sub)
     sub: user.id!,
+  }
+}
+
+// --- Batch Flag Check ---
+
+export type BatchFlagResult = {
+  flagged: boolean
+  flaggedBatches: { batch_lot_number: string; reason: string }[]
+}
+
+/**
+ * Checks if any of the given batch/lot numbers are in the batch_flags table (active=true).
+ * Used client-side (on blur) and referenced server-side in submitIntake.
+ */
+export async function checkBatchFlags(
+  batchNumbers: string[]
+): Promise<BatchFlagResult> {
+  const user = await requirePrisonSession()
+
+  const nonEmpty = batchNumbers.filter((b) => b.trim().length > 0)
+  if (nonEmpty.length === 0) {
+    return { flagged: false, flaggedBatches: [] }
+  }
+
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        batch_lot_number: batchFlags.batch_lot_number,
+        reason: batchFlags.reason,
+      })
+      .from(batchFlags)
+      .where(
+        and(
+          inArray(batchFlags.batch_lot_number, nonEmpty),
+          eq(batchFlags.active, true)
+        )
+      )
+  })
+
+  return {
+    flagged: rows.length > 0,
+    flaggedBatches: rows.map((r) => ({
+      batch_lot_number: r.batch_lot_number,
+      reason: r.reason,
+    })),
   }
 }
 
@@ -373,6 +419,44 @@ export async function submitIntake(
 
   const input = parsed.data
 
+  // --- Server-side batch_flags defence-in-depth (Pitfall 4) ---
+  // Extract non-empty batch numbers from parsed lines
+  const batchNumbers = input.lines
+    .map((l) => l.batch_lot_number ?? '')
+    .filter((b) => b.trim().length > 0)
+
+  if (batchNumbers.length > 0) {
+    try {
+      const flagRows = await withRLSContext(user, async (tx) => {
+        return tx
+          .select({
+            batch_lot_number: batchFlags.batch_lot_number,
+            reason: batchFlags.reason,
+          })
+          .from(batchFlags)
+          .where(
+            and(
+              inArray(batchFlags.batch_lot_number, batchNumbers),
+              eq(batchFlags.active, true)
+            )
+          )
+      })
+
+      if (flagRows.length > 0) {
+        return {
+          error: 'quarantine_blocked',
+          flaggedBatches: flagRows.map((r) => ({
+            batch_lot_number: r.batch_lot_number,
+            reason: r.reason,
+          })),
+        } as unknown as { error: string }
+      }
+    } catch {
+      // Non-critical batch check failure — allow submission to proceed
+      // (availability over strictness; server-side block is defence-in-depth)
+    }
+  }
+
   // Read discrepancy threshold from system_settings (default 15)
   let threshold = 15
   try {
@@ -416,6 +500,7 @@ export async function submitIntake(
           origin_market: input.origin_market ?? null,
           is_unexpected: !input.pickup_id,
           discrepancy_flagged,
+          quarantine_flagged: false, // batch_flags check above blocks any flagged batches before insert
           submitted_by: user.id ?? null,
         })
         .returning({ id: intakeRecords.id, reference: intakeRecords.reference })
@@ -432,6 +517,7 @@ export async function submitIntake(
           discrepancy_pct: line.discrepancy_pct !== null
             ? line.discrepancy_pct.toFixed(2)
             : null,
+          quarantine_flagged: false, // batch_flags check above blocks any flagged batches before insert
         }))
       )
 
