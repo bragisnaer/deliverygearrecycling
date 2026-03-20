@@ -98,7 +98,7 @@ Plans:
 - [x] 04-01-PLAN.md — Locations, pickups, transport, notifications schema with RLS + migration SQL with PU-YYYY-NNNN trigger
 - [x] 04-02-PLAN.md — Client pickup booking form with product quantities, auto-weight, 72h date validation, photo upload
 - [x] 04-03-PLAN.md — Pickup queue (ops + client) with status tabs, confirm/cancel actions, nav bar updates
-- [ ] 04-04-PLAN.md — Transport provider registry CRUD: list, create, edit with tenant linking
+- [x] 04-04-PLAN.md — Transport provider registry CRUD: list, create, edit with tenant linking
 - [ ] 04-05-PLAN.md — Direct and consolidation transport booking from pickup detail page
 - [ ] 04-06-PLAN.md — Consolidation warehouse inventory with colour-coded ageing and threshold alerts
 - [ ] 04-07-PLAN.md — Outbound shipment creation with pro-rata cost allocation and delivery cascade
@@ -239,7 +239,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 1. Infrastructure Foundation | 9/9 | Complete   | 2026-03-20 |
 | 2. Auth, Roles, and Tenant Branding | 3/4 | Complete    | 2026-03-20 |
 | 3. Product Registry | 4/5 | Complete    | 2026-03-20 |
-| 4. Pickup Booking and Transport Management | 3/10 | In Progress|  |
+| 4. Pickup Booking and Transport Management | 4/10 | In Progress|  |
 | 5. Prison Intake and Counting | 0/8 | Not started | - |
 | 6. Prison Processing, Dispatch, and Audit Trail | 0/9 | Not started | - |
 | 7. Financial Tracking | 0/5 | Not started | - |

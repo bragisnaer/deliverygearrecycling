@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-pickup-booking-and-transport-management/04-03-PLAN.md
-last_updated: "2026-03-20T18:03:53.568Z"
+stopped_at: Completed 04-pickup-booking-and-transport-management/04-04-PLAN.md
+last_updated: "2026-03-20T18:09:20.481Z"
 progress:
   total_phases: 10
   completed_phases: 3
   total_plans: 28
-  completed_plans: 21
+  completed_plans: 22
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 04 (pickup-booking-and-transport-management) — EXECUTING
-Plan: 4 of 10
+Plan: 5 of 10
 
 ## Performance Metrics
 
@@ -66,6 +66,7 @@ Plan: 4 of 10
 | Phase 04-pickup-booking-and-transport-management P01 | 5 | 2 tasks | 7 files |
 | Phase 04-pickup-booking-and-transport-management P02 | 236 | 2 tasks | 4 files |
 | Phase 04-pickup-booking-and-transport-management P03 | 68 | 2 tasks | 13 files |
+| Phase 04-pickup-booking-and-transport-management P04 | 15 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -122,6 +123,8 @@ Recent decisions affecting current work:
 - [Phase 04-pickup-booking-and-transport-management]: Lines encoded in FormData as lines[N][product_id]/lines[N][quantity]; parseFormDataToInput() extracts indexed entries
 - [Phase 04-pickup-booking-and-transport-management]: PickupBookingForm extracted as Client Component — page.tsx stays pure Server Component for data fetching
 - [Phase 04-pickup-booking-and-transport-management]: Client cancel uses two-step inline confirmation (no modal) — simpler UX for client self-service; CancelPickupClientButton handles confirmed_date 24h rule server-side in both page.tsx (hides button) and cancelPickupAsClient (defence in depth)
+- [Phase 04-pickup-booking-and-transport-management]: ProviderForm extracted as client component with form.watch('provider_type') for conditional warehouse address — same pattern as ProductForm
+- [Phase 04-pickup-booking-and-transport-management]: updateTransportProvider deletes all existing transportProviderClients then re-inserts — simpler than diff-based update for small tenant counts
 
 ### Pending Todos
 
@@ -135,6 +138,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T18:03:53.565Z
-Stopped at: Completed 04-pickup-booking-and-transport-management/04-03-PLAN.md
+Last session: 2026-03-20T18:09:20.478Z
+Stopped at: Completed 04-pickup-booking-and-transport-management/04-04-PLAN.md
 Resume file: None
