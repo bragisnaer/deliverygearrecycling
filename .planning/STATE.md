@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-04-PLAN.md
-last_updated: "2026-03-20T20:08:25.946Z"
+stopped_at: Completed 05-05-PLAN.md
+last_updated: "2026-03-20T20:12:27.578Z"
 progress:
   total_phases: 10
   completed_phases: 4
   total_plans: 36
-  completed_plans: 32
+  completed_plans: 33
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 05 (prison-intake-and-counting) — EXECUTING
-Plan: 5 of 8
+Plan: 6 of 8
 
 ## Performance Metrics
 
@@ -77,6 +77,7 @@ Plan: 5 of 8
 | Phase 05-prison-intake-and-counting P02 | 2 | 2 tasks | 11 files |
 | Phase 05-prison-intake-and-counting P03 | 3 | 2 tasks | 2 files |
 | Phase 05-prison-intake-and-counting P04 | 201 | 2 tasks | 6 files |
+| Phase 05 P05 | 8 | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -154,6 +155,9 @@ Recent decisions affecting current work:
 - [Phase 05-prison-intake-and-counting]: HTML <details> used for collapsible consolidated cards — @base-ui Collapsible not confirmed installed; plan explicitly offers native HTML as option
 - [Phase 05-prison-intake-and-counting]: AutoRedirect uses useRef for timeout handle to prevent stale closure and double-navigation on unmount (Pitfall 7)
 - [Phase 05-prison-intake-and-counting]: systemSettings read via raw db in intake page — prison role RLS blocks select; settings are non-sensitive
+- [Phase 05]: getClientsForIntake and getProductsForClient use raw db — prison_role RLS has no policies on tenants or products tables
+- [Phase 05]: submitUnexpectedIntake notification insert uses raw db — prison_role has no notifications INSERT policy; same pattern as Phase 4
+- [Phase 05]: Unexpected intake success redirect uses intakeId as [id] route segment — no pickup_id on unexpected deliveries
 
 ### Pending Todos
 
@@ -167,6 +171,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T20:08:25.943Z
-Stopped at: Completed 05-04-PLAN.md
+Last session: 2026-03-20T20:12:27.574Z
+Stopped at: Completed 05-05-PLAN.md
 Resume file: None
