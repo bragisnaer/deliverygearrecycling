@@ -7,11 +7,18 @@ import {
   prisonFacilities,
   tenants,
   auditLog,
+  pickups,
+  transportBookings,
+  transportProviders,
+  processingReports,
+  products,
+  outboundDispatches,
   withRLSContext,
 } from '@repo/db'
 import { isPersistentProblemMarket } from '@/lib/persistent-flag'
 import { validateVoidInput } from '@/lib/void-helpers'
-import { and, desc, eq, sql } from 'drizzle-orm'
+import { assembleTraceabilityChain, type TraceabilityChain } from '@/lib/traceability'
+import { and, desc, eq, isNull, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 
@@ -452,4 +459,199 @@ export async function getEditHistory(
     .orderBy(desc(auditLog.changed_at))
 
   return entries
+}
+
+// --- Traceability Chain (PROCESS-05) ---
+
+/**
+ * Assembles the full traceability chain for a given intake record.
+ * Accessible by both reco-admin and prison staff.
+ *
+ * Dispatch resolution:
+ *   1. Deterministic: outbound_dispatches WHERE intake_record_id = id AND voided = false
+ *   2. Fallback: outbound_dispatches WHERE prison_facility_id = intake.prison_facility_id
+ *              AND tenant_id = intake.tenant_id AND voided = false
+ *
+ * Uses raw db for cross-table reads — prison_role may lack policies on some tables.
+ */
+export async function getTraceabilityChain(intakeRecordId: string): Promise<TraceabilityChain> {
+  const session = await auth()
+  if (!session?.user) throw new Error('Unauthorized')
+
+  const validatedId = z.string().uuid().parse(intakeRecordId)
+
+  // 1. Fetch intake record
+  const intakeRows = await db
+    .select({
+      id: intakeRecords.id,
+      reference: intakeRecords.reference,
+      staff_name: intakeRecords.staff_name,
+      delivery_date: intakeRecords.delivery_date,
+      is_unexpected: intakeRecords.is_unexpected,
+      prison_facility_id: intakeRecords.prison_facility_id,
+      tenant_id: intakeRecords.tenant_id,
+      pickup_id: intakeRecords.pickup_id,
+    })
+    .from(intakeRecords)
+    .where(eq(intakeRecords.id, validatedId))
+    .limit(1)
+
+  const intake = intakeRows[0]
+  if (!intake) throw new Error('Intake record not found')
+
+  const { pickup_id, prison_facility_id, tenant_id, ...intakeData } = intake
+
+  // 2. Fetch pickup + transport_booking if pickup_id is set
+  let pickupData: TraceabilityChain['pickup'] = null
+  let transportData: TraceabilityChain['transport'] = null
+
+  if (pickup_id) {
+    const pickupRows = await db
+      .select({
+        id: pickups.id,
+        reference: pickups.reference,
+        status: pickups.status,
+        created_at: pickups.created_at,
+      })
+      .from(pickups)
+      .where(eq(pickups.id, pickup_id))
+      .limit(1)
+
+    if (pickupRows[0]) {
+      pickupData = pickupRows[0]
+
+      // Fetch transport booking for this pickup
+      const transportRows = await db
+        .select({
+          id: transportBookings.id,
+          transport_type: transportBookings.transport_type,
+          provider_name: transportProviders.name,
+        })
+        .from(transportBookings)
+        .leftJoin(transportProviders, eq(transportProviders.id, transportBookings.transport_provider_id))
+        .where(eq(transportBookings.pickup_id, pickup_id))
+        .limit(1)
+
+      if (transportRows[0]) {
+        const tb = transportRows[0]
+        // Derive a display status based on pickup status
+        const pickupStatus = pickupData.status
+        const displayStatus =
+          pickupStatus === 'delivered' || pickupStatus === 'intake_registered' ? 'delivered' : 'in_transit'
+
+        transportData = {
+          id: tb.id,
+          type: tb.transport_type,
+          provider: tb.provider_name ?? undefined,
+          status: displayStatus,
+        }
+      }
+    }
+  }
+
+  // 3. Fetch wash reports for this intake_record_id, voided = false
+  const washRows = await db
+    .select({
+      id: processingReports.id,
+      staff_name: processingReports.staff_name,
+      report_date: processingReports.report_date,
+      product_name: products.name,
+    })
+    .from(processingReports)
+    .leftJoin(products, eq(products.id, processingReports.product_id))
+    .where(
+      and(
+        eq(processingReports.intake_record_id, validatedId),
+        eq(processingReports.activity_type, 'wash'),
+        eq(processingReports.voided, false)
+      )
+    )
+    .orderBy(processingReports.created_at)
+
+  const washReports = washRows.map((r) => ({
+    id: r.id,
+    staff_name: r.staff_name,
+    report_date: r.report_date,
+    product_name: r.product_name ?? '',
+  }))
+
+  // 4. Fetch pack reports for this intake_record_id, voided = false
+  const packRows = await db
+    .select({
+      id: processingReports.id,
+      staff_name: processingReports.staff_name,
+      report_date: processingReports.report_date,
+      product_name: products.name,
+    })
+    .from(processingReports)
+    .leftJoin(products, eq(products.id, processingReports.product_id))
+    .where(
+      and(
+        eq(processingReports.intake_record_id, validatedId),
+        eq(processingReports.activity_type, 'pack'),
+        eq(processingReports.voided, false)
+      )
+    )
+    .orderBy(processingReports.created_at)
+
+  const packReports = packRows.map((r) => ({
+    id: r.id,
+    staff_name: r.staff_name,
+    report_date: r.report_date,
+    product_name: r.product_name ?? '',
+  }))
+
+  // 5. Deterministic dispatch: outbound_dispatches WHERE intake_record_id = validatedId AND voided = false
+  const directDispatchRows = await db
+    .select({
+      id: outboundDispatches.id,
+      dispatch_date: outboundDispatches.dispatch_date,
+      destination: outboundDispatches.destination,
+      status: outboundDispatches.status,
+    })
+    .from(outboundDispatches)
+    .where(
+      and(
+        eq(outboundDispatches.intake_record_id, validatedId),
+        eq(outboundDispatches.voided, false)
+      )
+    )
+    .limit(1)
+
+  const directDispatch = directDispatchRows[0] ?? null
+
+  // 6. Fallback dispatch: facility-level when no deterministic dispatch found
+  let facilityDispatches: Array<{ id: string; dispatch_date: Date; destination: string; status: string }> = []
+
+  if (!directDispatch) {
+    const fallbackRows = await db
+      .select({
+        id: outboundDispatches.id,
+        dispatch_date: outboundDispatches.dispatch_date,
+        destination: outboundDispatches.destination,
+        status: outboundDispatches.status,
+      })
+      .from(outboundDispatches)
+      .where(
+        and(
+          eq(outboundDispatches.prison_facility_id, prison_facility_id),
+          eq(outboundDispatches.tenant_id, tenant_id),
+          eq(outboundDispatches.voided, false),
+          isNull(outboundDispatches.intake_record_id)
+        )
+      )
+      .orderBy(desc(outboundDispatches.dispatch_date))
+
+    facilityDispatches = fallbackRows
+  }
+
+  return assembleTraceabilityChain({
+    intake: intakeData,
+    pickup: pickupData,
+    transport: transportData,
+    washReports,
+    packReports,
+    directDispatch,
+    facilityDispatches,
+  })
 }
