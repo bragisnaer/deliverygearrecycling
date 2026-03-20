@@ -18,15 +18,15 @@
 ### Authentication and Authorisation
 
 - [x] **AUTH-01**: Six user roles exist: `reco-admin`, `reco`, `client`, `client-global`, `transport`, `prison`
-- [ ] **AUTH-02**: Role, `tenant_id`, `location_id`, and `prison_facility_id` are injected into the Supabase JWT via a Custom Access Token Hook (stored in `app_metadata`, not `user_metadata`)
-- [ ] **AUTH-03**: Client portal users authenticate via email + password or magic link (Supabase Auth)
-- [ ] **AUTH-04**: Ops portal users (`reco-admin`, `reco`, `transport`) authenticate via email + password or magic link
-- [ ] **AUTH-05**: Prison staff login uses a stable `/prison/login?facility=X` wrapper page that issues a magic link to the facility email; sessions expire after 7 days
-- [ ] **AUTH-06**: Auth cookies are scoped to `.courierrecycling.com` (leading dot) so sessions are shared across subdomains
+- [x] **AUTH-02**: Role, `tenant_id`, `location_id`, and `prison_facility_id` are injected into the Supabase JWT via a Custom Access Token Hook (stored in `app_metadata`, not `user_metadata`)
+- [x] **AUTH-03**: Client portal users authenticate via email + password or magic link (Supabase Auth)
+- [x] **AUTH-04**: Ops portal users (`reco-admin`, `reco`, `transport`) authenticate via email + password or magic link
+- [x] **AUTH-05**: Prison staff login uses a stable `/prison/login?facility=X` wrapper page that issues a magic link to the facility email; sessions expire after 7 days
+- [x] **AUTH-06**: Auth cookies are scoped to `.courierrecycling.com` (leading dot) so sessions are shared across subdomains
 - [x] **AUTH-07**: `client` role users are locked to a specific `location_id`; they cannot see other locations or markets
 - [x] **AUTH-08**: `reco` role has a per-user `can_view_financials` toggle (default false); financial data is hidden unless toggled on by reco-admin
 - [ ] **AUTH-09**: reco-admin can invite users by email with a role assignment; can deactivate users at any time
-- [ ] **AUTH-10**: `service_role` key is never used in client-side code or exposed in any API route
+- [x] **AUTH-10**: `service_role` key is never used in client-side code or exposed in any API route
 
 ### Tenant Branding
 
@@ -217,15 +217,15 @@
 | ROUTE-04 | Phase 1: Infrastructure Foundation | Complete |
 | ROUTE-05 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-01 | Phase 1: Infrastructure Foundation | Complete |
-| AUTH-02 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-03 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-04 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-05 | Phase 1: Infrastructure Foundation | Pending |
-| AUTH-06 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-02 | Phase 1: Infrastructure Foundation | Complete |
+| AUTH-03 | Phase 1: Infrastructure Foundation | Complete |
+| AUTH-04 | Phase 1: Infrastructure Foundation | Complete |
+| AUTH-05 | Phase 1: Infrastructure Foundation | Complete |
+| AUTH-06 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-07 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-08 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-09 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
-| AUTH-10 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-10 | Phase 1: Infrastructure Foundation | Complete |
 | SETTINGS-01 | Phase 1: Infrastructure Foundation | Complete |
 | SETTINGS-02 | Phase 1: Infrastructure Foundation | Complete |
 | BRAND-01 | Phase 2: Auth, Roles, and Tenant Branding | Pending |

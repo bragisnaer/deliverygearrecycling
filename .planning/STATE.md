@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-infrastructure-foundation/01-04-PLAN.md
-last_updated: "2026-03-20T09:50:38.836Z"
+stopped_at: Completed 01-infrastructure-foundation/01-03-PLAN.md
+last_updated: "2026-03-20T10:00:39.727Z"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 7
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # Project State
@@ -49,6 +49,7 @@ Plan: 4 of 7
 | Phase 01-infrastructure-foundation P01 | 25 | 2 tasks | 25 files |
 | Phase 01-infrastructure-foundation P02 | 5 | 2 tasks | 12 files |
 | Phase 01-infrastructure-foundation P04 | 5 | 1 tasks | 5 files |
+| Phase 01-infrastructure-foundation P03 | 4 | 1 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01-infrastructure-foundation 01-04]: ops.localhost handled by TLD check before length check — 2-part hostnames ending in .localhost parsed for subdomain before falling through to apex-domain logic
 - [Phase 01-infrastructure-foundation]: getTenantFromHost() exported as pure function for independent testability; domainMode param with NEXT_PUBLIC_DOMAIN_MODE fallback enables Azure-default vs custom domain switching
 - [Phase 01-infrastructure-foundation]: ops.localhost handled by TLD check before length check — 2-part hostnames ending in .localhost parsed for subdomain before apex-domain logic
+- [Phase 01-infrastructure-foundation]: @auth/core pinned to 0.41.0 via pnpm workspace override — @auth/drizzle-adapter@1.11.1 pulls 0.41.1 which conflicts with next-auth@beta's 0.41.0; single version enforced to fix TypeScript Adapter type incompatibility
+- [Phase 01-infrastructure-foundation]: AUTH_COOKIE_DOMAIN env var overrides .courierrecycling.com cookie domain — allows Azure default domain phase before custom DNS cutover
 
 ### Pending Todos
 
@@ -82,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T09:50:38.833Z
-Stopped at: Completed 01-infrastructure-foundation/01-04-PLAN.md
+Last session: 2026-03-20T10:00:39.723Z
+Stopped at: Completed 01-infrastructure-foundation/01-03-PLAN.md
 Resume file: None
