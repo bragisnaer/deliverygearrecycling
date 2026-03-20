@@ -17,9 +17,11 @@ import {
   notifications,
   systemSettings,
   processingReports,
+  processingReportLines,
   withRLSContext,
 } from '@repo/db'
 import { eq, and, isNull, asc, inArray } from 'drizzle-orm'
+import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { calculateDiscrepancyPct } from '@/lib/discrepancy'
 
@@ -734,6 +736,146 @@ export async function submitUnexpectedIntake(
   }
 
   return { success: true, intakeId }
+}
+
+// --- Processing Actions (PROCESS-01, PROCESS-04) ---
+
+/**
+ * Returns all active tenants for the processing form client dropdown.
+ * Uses raw db (no RLS) — prison_role has no policies on tenants table.
+ */
+export async function getClientsForProcessing(): Promise<
+  { id: string; name: string }[]
+> {
+  await requirePrisonSession()
+
+  const rows = await db
+    .select({ id: tenants.id, name: tenants.name })
+    .from(tenants)
+    .where(eq(tenants.active, true))
+    .orderBy(asc(tenants.name))
+
+  return rows
+}
+
+/**
+ * Returns active products for the processing form, with product_category included
+ * so the form can toggle between size-bucket (clothing) and total-quantity (bag/other) mode.
+ * Uses raw db (no RLS) — prison_role has no products RLS policy.
+ */
+export async function getProductsForProcessing(): Promise<
+  { id: string; name: string; tenant_id: string; product_category: string }[]
+> {
+  await requirePrisonSession()
+
+  const rows = await db
+    .select({
+      id: products.id,
+      name: products.name,
+      tenant_id: products.tenant_id,
+      product_category: products.product_category,
+    })
+    .from(products)
+    .where(eq(products.active, true))
+    .orderBy(asc(products.name))
+
+  return rows
+}
+
+/**
+ * Submits a processing report (Wash or Pack) for the current prison facility.
+ * Parses size-bucket lines from FormData using indexed pattern: lines[SIZE][quantity].
+ * For non-clothing products, lines[total][quantity] maps to size_bucket=null.
+ */
+export async function submitProcessingReport(
+  formData: FormData
+): Promise<{ success: true; id: string } | { error: string }> {
+  const user = await requirePrisonSession()
+
+  const facilityId = user.facility_id
+  if (!facilityId) {
+    return { error: 'Prison session missing facility_id' }
+  }
+
+  const staffName = formData.get('staff_name') as string
+  const activityType = formData.get('activity_type') as 'wash' | 'pack'
+  const productId = formData.get('product_id') as string
+  const intakeRecordId = (formData.get('intake_record_id') as string) || null
+  const reportDate = formData.get('report_date') as string
+  const notes = (formData.get('notes') as string) || null
+  const tenantId = formData.get('tenant_id') as string
+
+  if (!staffName || !activityType || !productId || !reportDate || !tenantId) {
+    return { error: 'missing_fields' }
+  }
+
+  if (!['wash', 'pack'].includes(activityType)) {
+    return { error: 'missing_fields' }
+  }
+
+  // Parse lines from FormData: lines[XXS][quantity], lines[XS][quantity], or lines[total][quantity]
+  const lines: Array<{ size_bucket: string | null; quantity: number }> = []
+  for (const [key, value] of formData.entries()) {
+    const match = key.match(/^lines\[(\w+)\]\[quantity\]$/)
+    if (match) {
+      const bucket = match[1]!
+      const qty = parseInt(value as string, 10)
+      if (!Number.isNaN(qty) && qty > 0) {
+        lines.push({
+          size_bucket: bucket === 'total' ? null : bucket,
+          quantity: qty,
+        })
+      }
+    }
+  }
+
+  if (lines.length === 0) return { error: 'no_lines' }
+
+  try {
+    const report = await withRLSContext(user, async (tx) => {
+      const [inserted] = await tx
+        .insert(processingReports)
+        .values({
+          prison_facility_id: facilityId,
+          intake_record_id: intakeRecordId ?? null,
+          tenant_id: tenantId,
+          staff_name: staffName,
+          activity_type: activityType,
+          product_id: productId,
+          report_date: new Date(reportDate),
+          notes: notes ?? null,
+          submitted_by: user.id ?? null,
+        })
+        .returning({ id: processingReports.id })
+
+      if (!inserted) throw new Error('Failed to insert processing report')
+
+      await tx.insert(processingReportLines).values(
+        lines.map((line) => ({
+          processing_report_id: inserted.id,
+          size_bucket: line.size_bucket as
+            | 'XXS'
+            | 'XS'
+            | 'S'
+            | 'M'
+            | 'L'
+            | 'XL'
+            | 'XXL'
+            | 'XXXL'
+            | null,
+          quantity: line.quantity,
+        }))
+      )
+
+      return inserted
+    })
+
+    revalidatePath('/prison')
+    return { success: true, id: report.id }
+  } catch (err) {
+    console.error('submitProcessingReport error:', err)
+    return { error: 'Failed to submit processing report' }
+  }
 }
 
 // --- Edit Actions (AUDIT-01, AUDIT-02) ---

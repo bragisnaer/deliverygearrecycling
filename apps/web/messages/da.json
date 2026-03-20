@@ -23,6 +23,7 @@
   "intake": {
     "home": {
       "primary_cta": "Registrer Levering",
+      "processing_cta": "Registrer behandling",
       "history_tab": "Historik",
       "deliveries_tab": "Forventede Leveringer",
       "no_deliveries": "Ingen forventede leveringer i dag. Brug knappen nedenfor for at registrere en uventet levering.",
@@ -65,5 +66,22 @@
       "submission_failed": "Indsendelse mislykkedes. Tjek din forbindelse og pr\u00f8v igen.",
       "client_load_failed": "Kunne ikke indl\u00e6se klientlisten. Genindl\u00e6s siden."
     }
+  },
+  "processing": {
+    "title": "Behandlingsrapport",
+    "staff_name": "Medarbejdernavn",
+    "activity_type": "Aktivitetstype",
+    "wash": "Vask",
+    "pack": "Pakning",
+    "product": "Produkttype",
+    "client": "Klient",
+    "date": "Dato",
+    "notes": "Noter",
+    "quantity": "Antal",
+    "total_quantity": "Samlet antal",
+    "submit": "Indsend rapport",
+    "success": "Rapport indsendt",
+    "missing_fields": "Udfyld venligst alle felter",
+    "no_lines": "Angiv mindst \u00e9n m\u00e6ngde"
   }
 }
