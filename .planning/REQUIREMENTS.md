@@ -209,33 +209,116 @@
 
 ## Traceability
 
-*(To be populated during roadmap creation)*
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ROUTE-01–05 | Phase 1 | Pending |
-| AUTH-01–10 | Phase 1 | Pending |
-| BRAND-01–05 | Phase 1 | Pending |
-| PROD-01–08 | Phase 1 | Pending |
-| PICKUP-01–08 | Phase 1 | Pending |
-| TRANS-01–10 | Phase 1 | Pending |
-| INTAKE-01–08 | Phase 2 | Pending |
-| PROCESS-01–05 | Phase 2 | Pending |
-| DISPATCH-01–04 | Phase 2 | Pending |
-| AUDIT-01–06 | Phase 2 | Pending |
-| FIN-01–06 | Phase 3 | Pending |
-| ESG-01–07 | Phase 3 | Pending |
-| DASH-01–06 | Phase 3 | Pending |
-| NOTIF-01–04 | Phase 1 | Pending |
-| MANUAL-01–04 | Phase 4 | Pending |
-| IMPORT-01–04 | Phase 1–2 | Pending |
-| SETTINGS-01–02 | Phase 1 | Pending |
+| ROUTE-01 | Phase 1: Infrastructure Foundation | Pending |
+| ROUTE-02 | Phase 1: Infrastructure Foundation | Pending |
+| ROUTE-03 | Phase 1: Infrastructure Foundation | Pending |
+| ROUTE-04 | Phase 1: Infrastructure Foundation | Pending |
+| ROUTE-05 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-01 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-02 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-03 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-04 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-05 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-06 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-07 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-08 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-09 | Phase 1: Infrastructure Foundation | Pending |
+| AUTH-10 | Phase 1: Infrastructure Foundation | Pending |
+| SETTINGS-01 | Phase 1: Infrastructure Foundation | Pending |
+| SETTINGS-02 | Phase 1: Infrastructure Foundation | Pending |
+| BRAND-01 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
+| BRAND-02 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
+| BRAND-03 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
+| BRAND-04 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
+| BRAND-05 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
+| PROD-01 | Phase 3: Product Registry | Pending |
+| PROD-02 | Phase 3: Product Registry | Pending |
+| PROD-03 | Phase 3: Product Registry | Pending |
+| PROD-04 | Phase 3: Product Registry | Pending |
+| PROD-05 | Phase 3: Product Registry | Pending |
+| PROD-06 | Phase 3: Product Registry | Pending |
+| PROD-07 | Phase 3: Product Registry | Pending |
+| PROD-08 | Phase 3: Product Registry | Pending |
+| PICKUP-01 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-02 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-03 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-04 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-05 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-06 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-07 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-08 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-01 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-02 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-03 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-04 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-05 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-06 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-07 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-08 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-09 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-10 | Phase 4: Pickup Booking and Transport Management | Pending |
+| INTAKE-01 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-02 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-03 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-04 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-05 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-06 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-07 | Phase 5: Prison Intake and Counting | Pending |
+| INTAKE-08 | Phase 5: Prison Intake and Counting | Pending |
+| PROCESS-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| PROCESS-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| PROCESS-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| PROCESS-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| PROCESS-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| DISPATCH-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| DISPATCH-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| DISPATCH-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| DISPATCH-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-06 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| FIN-01 | Phase 7: Financial Tracking | Pending |
+| FIN-02 | Phase 7: Financial Tracking | Pending |
+| FIN-03 | Phase 7: Financial Tracking | Pending |
+| FIN-04 | Phase 7: Financial Tracking | Pending |
+| FIN-05 | Phase 7: Financial Tracking | Pending |
+| FIN-06 | Phase 7: Financial Tracking | Pending |
+| DASH-01 | Phase 8: Dashboards and ESG Metrics | Pending |
+| DASH-02 | Phase 8: Dashboards and ESG Metrics | Pending |
+| DASH-03 | Phase 8: Dashboards and ESG Metrics | Pending |
+| DASH-04 | Phase 8: Dashboards and ESG Metrics | Pending |
+| DASH-05 | Phase 8: Dashboards and ESG Metrics | Pending |
+| DASH-06 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-01 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-02 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-03 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-04 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-05 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-06 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-07 | Phase 8: Dashboards and ESG Metrics | Pending |
+| NOTIF-01 | Phase 9: Notifications and Manuals | Pending |
+| NOTIF-02 | Phase 9: Notifications and Manuals | Pending |
+| NOTIF-03 | Phase 9: Notifications and Manuals | Pending |
+| NOTIF-04 | Phase 9: Notifications and Manuals | Pending |
+| MANUAL-01 | Phase 9: Notifications and Manuals | Pending |
+| MANUAL-02 | Phase 9: Notifications and Manuals | Pending |
+| MANUAL-03 | Phase 9: Notifications and Manuals | Pending |
+| MANUAL-04 | Phase 9: Notifications and Manuals | Pending |
+| IMPORT-01 | Phase 10: Historical Data Import | Pending |
+| IMPORT-02 | Phase 10: Historical Data Import | Pending |
+| IMPORT-03 | Phase 10: Historical Data Import | Pending |
+| IMPORT-04 | Phase 10: Historical Data Import | Pending |
 
 **Coverage:**
 - v1 requirements: 82 total
 - Mapped to phases: 82
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-20 after initial definition*
+*Last updated: 2026-03-20 after roadmap creation*
