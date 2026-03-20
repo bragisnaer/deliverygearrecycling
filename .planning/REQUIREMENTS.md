@@ -92,18 +92,18 @@
 
 ### Prison Outbound Dispatch
 
-- [ ] **DISPATCH-01**: reco-admin creates outbound dispatch records for clothing (reuse stream) leaving prison: prison facility, client, dispatch date, destination, carrier/transport provider, notes
-- [ ] **DISPATCH-02**: Packing list attached to dispatch: product type, size, SKU code, quantity (one line per box/SKU combination)
-- [ ] **DISPATCH-03**: Dispatch status lifecycle: `created` → `picked_up` → `delivered`
+- [x] **DISPATCH-01**: reco-admin creates outbound dispatch records for clothing (reuse stream) leaving prison: prison facility, client, dispatch date, destination, carrier/transport provider, notes
+- [x] **DISPATCH-02**: Packing list attached to dispatch: product type, size, SKU code, quantity (one line per box/SKU combination)
+- [x] **DISPATCH-03**: Dispatch status lifecycle: `created` → `picked_up` → `delivered`
 - [ ] **DISPATCH-04**: Prison staff can view outbound dispatch history for their own facility; cannot create dispatches
 
 ### Edit Policy and Audit Trail
 
 - [x] **AUDIT-01**: All editable records support edit-in-place with full audit trail: who edited, when, which field, old value, new value
-- [ ] **AUDIT-02**: Prison staff can edit their own facility's intake records and processing reports within 48 hours of submission; records lock after 48 hours
-- [ ] **AUDIT-03**: reco-admin can edit any record at any time
+- [x] **AUDIT-02**: Prison staff can edit their own facility's intake records and processing reports within 48 hours of submission; records lock after 48 hours
+- [x] **AUDIT-03**: reco-admin can edit any record at any time
 - [x] **AUDIT-04**: No records are deleted; reco-admin can mark records as `voided` with a reason; voided records are excluded from calculations but remain in audit trail
-- [ ] **AUDIT-05**: Visual "edited" indicator appears on any record that has been modified after initial submission, with a link to edit history
+- [x] **AUDIT-05**: Visual "edited" indicator appears on any record that has been modified after initial submission, with a link to edit history
 - [x] **AUDIT-06**: Audit log entries captured via database trigger (not application code) to ensure no log can be bypassed
 
 ### Financial Tracking
@@ -272,15 +272,15 @@
 | PROCESS-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | PROCESS-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | PROCESS-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| DISPATCH-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| DISPATCH-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| DISPATCH-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| DISPATCH-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
+| DISPATCH-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
+| DISPATCH-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | DISPATCH-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | AUDIT-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
-| AUDIT-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| AUDIT-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
+| AUDIT-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
-| AUDIT-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| AUDIT-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-06 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | FIN-01 | Phase 7: Financial Tracking | Pending |
 | FIN-02 | Phase 7: Financial Tracking | Pending |
