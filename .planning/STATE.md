@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-infrastructure-foundation/01-09-PLAN.md
-last_updated: "2026-03-20T11:09:32.928Z"
+stopped_at: Completed 02-auth-roles-and-tenant-branding/02-01-PLAN.md
+last_updated: "2026-03-20T14:24:26.036Z"
 progress:
   total_phases: 10
   completed_phases: 1
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 13
+  completed_plans: 10
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-20)
 
 **Core value:** Every delivery tracked from booking to invoice; every item from pickup to recycling or redistribution — zero uninvoiced deliveries, zero missing processing data, discrepancy rate below 10%
-**Current focus:** Phase 01 — infrastructure-foundation
+**Current focus:** Phase 02 — Auth, Roles, and Tenant Branding
 
 ## Current Position
 
-Phase: 01 (infrastructure-foundation) — EXECUTING
-Plan: 7 of 7 — COMPLETE
+Phase: 02 (Auth, Roles, and Tenant Branding) — EXECUTING
+Plan: 1 of 4
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Plan: 7 of 7 — COMPLETE
 | Phase 01-infrastructure-foundation P06 | 15 | 2 tasks | 16 files |
 | Phase 01-infrastructure-foundation P08 | 1 | 1 tasks | 1 files |
 | Phase 01-infrastructure-foundation P09 | 77 | 1 tasks | 1 files |
+| Phase 02 P01 | 25 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,9 @@ Recent decisions affecting current work:
 - [Phase 01-infrastructure-foundation]: form.tsx created manually — base-nova shadcn style has no form component in registry; built as thin react-hook-form FormProvider wrapper
 - [Phase 01-infrastructure-foundation]: Drizzle numeric column requires string type — toFixed(4) conversion applied before DB insert for exchange_rate_eur_dkk
 - [Phase 01-infrastructure-foundation]: Synchronous fs.readdirSync used in AUTH-10 test — runs without DB connection and catches service_role violations at test time not just CI grep
+- [Phase 02-01]: authorize() returns full User object (role, tenant_id, location_id, facility_id) — required by extended next-auth User interface in types/next-auth.d.ts
+- [Phase 02-01]: DialogTrigger uses render prop pattern not asChild — codebase uses @base-ui/react/dialog not Radix UI
+- [Phase 02-01]: inviteUser wraps signIn('resend') in try/catch — next-auth throws redirect error even with redirect:false
 
 ### Pending Todos
 
@@ -98,6 +102,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T11:06:32.529Z
-Stopped at: Completed 01-infrastructure-foundation/01-09-PLAN.md
+Last session: 2026-03-20T14:24:26.032Z
+Stopped at: Completed 02-auth-roles-and-tenant-branding/02-01-PLAN.md
 Resume file: None

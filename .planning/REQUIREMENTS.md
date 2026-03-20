@@ -25,7 +25,7 @@
 - [x] **AUTH-06**: Auth cookies are scoped to `.courierrecycling.com` (leading dot) so sessions are shared across subdomains
 - [x] **AUTH-07**: `client` role users are locked to a specific `location_id`; they cannot see other locations or markets
 - [x] **AUTH-08**: `reco` role has a per-user `can_view_financials` toggle (default false); financial data is hidden unless toggled on by reco-admin
-- [ ] **AUTH-09**: reco-admin can invite users by email with a role assignment; can deactivate users at any time
+- [x] **AUTH-09**: reco-admin can invite users by email with a role assignment; can deactivate users at any time
 - [x] **AUTH-10**: `service_role` key is never used in client-side code or exposed in any API route
 
 ### Tenant Branding
@@ -224,7 +224,7 @@
 | AUTH-06 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-07 | Phase 1: Infrastructure Foundation | Complete |
 | AUTH-08 | Phase 1: Infrastructure Foundation | Complete |
-| AUTH-09 | Phase 2: Auth, Roles, and Tenant Branding | Pending |
+| AUTH-09 | Phase 2: Auth, Roles, and Tenant Branding | Complete |
 | AUTH-10 | Phase 1: Infrastructure Foundation | Complete |
 | SETTINGS-01 | Phase 1: Infrastructure Foundation | Complete |
 | SETTINGS-02 | Phase 1: Infrastructure Foundation | Complete |
