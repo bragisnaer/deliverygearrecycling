@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-03-PLAN.md
-last_updated: "2026-03-20T20:02:14.388Z"
+stopped_at: Completed 05-04-PLAN.md
+last_updated: "2026-03-20T20:08:25.946Z"
 progress:
   total_phases: 10
   completed_phases: 4
   total_plans: 36
-  completed_plans: 31
+  completed_plans: 32
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 05 (prison-intake-and-counting) — EXECUTING
-Plan: 4 of 8
+Plan: 5 of 8
 
 ## Performance Metrics
 
@@ -76,6 +76,7 @@ Plan: 4 of 8
 | Phase 05-prison-intake-and-counting P01 | 15 | 2 tasks | 9 files |
 | Phase 05-prison-intake-and-counting P02 | 2 | 2 tasks | 11 files |
 | Phase 05-prison-intake-and-counting P03 | 3 | 2 tasks | 2 files |
+| Phase 05-prison-intake-and-counting P04 | 201 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -151,6 +152,8 @@ Recent decisions affecting current work:
 - [Phase 05-prison-intake-and-counting]: Prison page.tsx is Client Component — useTranslations() from next-intl requires use client; tabs interactivity also requires client rendering
 - [Phase 05-prison-intake-and-counting]: outbound_shipments has no reference column — derived OS-{uuid_prefix_8} display reference used for consolidated shipment cards
 - [Phase 05-prison-intake-and-counting]: HTML <details> used for collapsible consolidated cards — @base-ui Collapsible not confirmed installed; plan explicitly offers native HTML as option
+- [Phase 05-prison-intake-and-counting]: AutoRedirect uses useRef for timeout handle to prevent stale closure and double-navigation on unmount (Pitfall 7)
+- [Phase 05-prison-intake-and-counting]: systemSettings read via raw db in intake page — prison role RLS blocks select; settings are non-sensitive
 
 ### Pending Todos
 
@@ -164,6 +167,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T20:02:14.384Z
-Stopped at: Completed 05-03-PLAN.md
+Last session: 2026-03-20T20:08:25.943Z
+Stopped at: Completed 05-04-PLAN.md
 Resume file: None
