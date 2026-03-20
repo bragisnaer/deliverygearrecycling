@@ -12,7 +12,9 @@ Every delivery is tracked from booking to invoice, and every item from pickup to
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Pickup booking form for client users with dynamic product list, pallet dimensions, photo upload — Validated in Phase 4: Pickup Booking and Transport Management
+- [x] Transport management: direct and consolidation modes, two-leg cost model, outbound shipment creation — Validated in Phase 4: Pickup Booking and Transport Management
+- [x] Consolidation provider warehouse inventory view and outbound shipment management — Validated in Phase 4: Pickup Booking and Transport Management
 
 ### Active
 
