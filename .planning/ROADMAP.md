@@ -116,17 +116,17 @@ Plans:
   3. An unexpected delivery can be registered manually by selecting a client from a dropdown; reco-admin receives an alert
   4. A batch number matching a flagged entry in the batch_flags table triggers a quarantine alert to both prison staff and reco-admin; the intake record cannot be committed without reco-admin override
   5. The discrepancy dashboard shows discrepancy rates by country, product, and prison facility, and auto-flags persistent problem markets
-**Plans**: TBD
+**Plans**: 8 plans
 
 Plans:
-- [ ] 05-01: Prison intake schema — intake records, intake lines, discrepancy fields, quarantine fields, batch_flags table
-- [ ] 05-02: Prison tablet layout — tablet-first shell, Danish i18n with next-intl, large touch targets, max two-tap navigation
-- [ ] 05-03: Incoming deliveries view — expected (pre-populated from transport) and unexpected (manual) delivery list
-- [ ] 05-04: Intake form — expected delivery flow with pre-population and quantity confirmation
-- [ ] 05-05: Intake form — unexpected delivery flow with client selection and manual entry
-- [ ] 05-06: Discrepancy detection — auto-compare actual vs informed quantities, configurable threshold, reco-admin notification
-- [ ] 05-07: Batch/lot quarantine — batch_flags lookup on intake, quarantine flag, reco-admin override flow
-- [ ] 05-08: Discrepancy dashboard — rates by country, product, facility, time period; persistent problem market auto-flag
+- [ ] 05-01-PLAN.md — Intake schema (intake_records, intake_lines, batch_flags) with RLS, IN-YYYY-NNNN trigger, pure utility functions, Wave 0 test stubs
+- [ ] 05-02-PLAN.md — next-intl setup, prison tablet shell layout with Danish i18n, ops nav Intake link
+- [ ] 05-03-PLAN.md — Incoming deliveries view: expected delivery card grid with direct/consolidated grouping
+- [ ] 05-04-PLAN.md — Expected intake form with pre-population, quantity spinners, discrepancy detection, success screen
+- [ ] 05-05-PLAN.md — Unexpected intake form with client dropdown, manual entry, reco-admin notification
+- [ ] 05-06-PLAN.md — Batch quarantine: batch_flags lookup, server-side enforcement, ops override action
+- [ ] 05-07-PLAN.md — Ops portal intake queue with status tabs, quarantine override dialog
+- [ ] 05-08-PLAN.md — Discrepancy dashboard: rates by country/product/facility, persistent problem market auto-flag
 
 ### Phase 6: Prison Processing, Dispatch, and Audit Trail
 **Goal**: Prison staff can submit Wash and Pack processing reports and view the full traceability chain; reco-admin can create outbound dispatch records; every editable record type has a complete, trigger-based audit trail
