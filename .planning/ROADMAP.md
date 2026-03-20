@@ -103,7 +103,7 @@ Plans:
 - [x] 04-06-PLAN.md — Consolidation warehouse inventory with colour-coded ageing and threshold alerts
 - [x] 04-07-PLAN.md — Outbound shipment creation with pro-rata cost allocation and delivery cascade
 - [x] 04-08-PLAN.md — Transport provider portal: assigned pickups, status updates, POD upload
-- [ ] 04-09-PLAN.md — Resend email integration: pickup confirmation to client, alert to reco-admin, in-app notification
+- [x] 04-09-PLAN.md — Resend email integration: pickup confirmation to client, alert to reco-admin, in-app notification
 - [ ] 04-10-PLAN.md — Integration wiring: transport summary on pickup detail, delivery actions on outbound page
 
 ### Phase 5: Prison Intake and Counting
@@ -239,7 +239,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 1. Infrastructure Foundation | 9/9 | Complete   | 2026-03-20 |
 | 2. Auth, Roles, and Tenant Branding | 3/4 | Complete    | 2026-03-20 |
 | 3. Product Registry | 4/5 | Complete    | 2026-03-20 |
-| 4. Pickup Booking and Transport Management | 8/10 | In Progress|  |
+| 4. Pickup Booking and Transport Management | 9/10 | In Progress|  |
 | 5. Prison Intake and Counting | 0/8 | Not started | - |
 | 6. Prison Processing, Dispatch, and Audit Trail | 0/9 | Not started | - |
 | 7. Financial Tracking | 0/5 | Not started | - |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-pickup-booking-and-transport-management/04-07-PLAN.md
-last_updated: "2026-03-20T18:32:12.716Z"
+stopped_at: Completed 04-pickup-booking-and-transport-management/04-09-PLAN.md
+last_updated: "2026-03-20T18:37:48.369Z"
 progress:
   total_phases: 10
   completed_phases: 3
   total_plans: 28
-  completed_plans: 26
+  completed_plans: 27
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 04 (pickup-booking-and-transport-management) — EXECUTING
-Plan: 9 of 10
+Plan: 10 of 10
 
 ## Performance Metrics
 
@@ -71,6 +71,7 @@ Plan: 9 of 10
 | Phase 04-pickup-booking-and-transport-management P05 | 12 | 2 tasks | 4 files |
 | Phase 04-pickup-booking-and-transport-management P06 | 227 | 2 tasks | 2 files |
 | Phase 04-pickup-booking-and-transport-management P07 | 5 | 2 tasks | 4 files |
+| Phase 04-pickup-booking-and-transport-management P09 | 8 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -137,6 +138,8 @@ Recent decisions affecting current work:
 - [Phase 04-pickup-booking-and-transport-management]: calculateProRataAllocation exported as pure function — enables client-side reuse for live recalculation and isolated unit testing without DB mocking
 - [Phase 04-pickup-booking-and-transport-management]: pickup_allocations serialised as JSON string in FormData — avoids complex indexed FormData parsing for array of objects in server action
 - [Phase 04-pickup-booking-and-transport-management]: page.tsx uses auth() directly not requireAuth helper — requireAuth returns AuthResult shape incompatible with JWTClaims required by withRLSContext
+- [Phase 04-pickup-booking-and-transport-management]: Admin email query uses raw db (not withRLSContext) — client_role RLS cannot read reco-admin users across tenants; raw db runs as service role
+- [Phase 04-pickup-booking-and-transport-management]: Email sending is non-blocking (wrapped in try/catch) — email failure must not break pickup submission
 
 ### Pending Todos
 
@@ -150,6 +153,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T18:32:12.713Z
-Stopped at: Completed 04-pickup-booking-and-transport-management/04-07-PLAN.md
+Last session: 2026-03-20T18:37:48.365Z
+Stopped at: Completed 04-pickup-booking-and-transport-management/04-09-PLAN.md
 Resume file: None

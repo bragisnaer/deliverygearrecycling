@@ -56,7 +56,7 @@
 - [x] **PICKUP-05**: A location can have multiple active pickup requests simultaneously (no restriction)
 - [x] **PICKUP-06**: Client can cancel a pickup up to 24 hours before confirmed pickup date; reco-admin can cancel at any time with a reason
 - [x] **PICKUP-07**: Pickup status lifecycle: `submitted` → `confirmed` → `transport_booked` → `picked_up` → `at_warehouse` (consolidation only) → `in_outbound_shipment` (consolidation only) → `in_transit` → `delivered` → `intake_registered`
-- [ ] **PICKUP-08**: On submission, reco-admin receives email + in-app notification; client submitter receives confirmation email with request ID
+- [x] **PICKUP-08**: On submission, reco-admin receives email + in-app notification; client submitter receives confirmation email with request ID
 
 ### Transport Management
 
@@ -248,7 +248,7 @@
 | PICKUP-05 | Phase 4: Pickup Booking and Transport Management | Complete |
 | PICKUP-06 | Phase 4: Pickup Booking and Transport Management | Complete |
 | PICKUP-07 | Phase 4: Pickup Booking and Transport Management | Complete |
-| PICKUP-08 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-08 | Phase 4: Pickup Booking and Transport Management | Complete |
 | TRANS-01 | Phase 4: Pickup Booking and Transport Management | Complete |
 | TRANS-02 | Phase 4: Pickup Booking and Transport Management | Complete |
 | TRANS-03 | Phase 4: Pickup Booking and Transport Management | Complete |
