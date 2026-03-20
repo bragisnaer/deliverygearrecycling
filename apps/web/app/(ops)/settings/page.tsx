@@ -3,6 +3,7 @@ import { getGeneralSettings, getFacilities } from './actions'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { GeneralSettingsForm } from './general-settings-form'
 import { FacilitiesTable } from './facilities-table'
+import { UsersTab } from './users-tab'
 
 export default async function SettingsPage() {
   // Only reco-admin can access this page
@@ -32,6 +33,9 @@ export default async function SettingsPage() {
           <TabsTrigger value="facilities" className="font-mono text-[13px] font-medium">
             Facilities
           </TabsTrigger>
+          <TabsTrigger value="users" className="font-mono text-[13px] font-medium">
+            Users
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="pt-6 space-y-8">
@@ -40,6 +44,10 @@ export default async function SettingsPage() {
 
         <TabsContent value="facilities" className="pt-6">
           <FacilitiesTable facilities={facilities} />
+        </TabsContent>
+
+        <TabsContent value="users" className="pt-6">
+          <UsersTab />
         </TabsContent>
       </Tabs>
     </div>

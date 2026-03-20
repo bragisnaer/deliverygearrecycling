@@ -1,10 +1,12 @@
 'use server'
 
-import { auth } from '@/auth'
-import { db, systemSettings, prisonFacilities } from '@repo/db'
+import { auth, signIn } from '@/auth'
+import { db, systemSettings, prisonFacilities, users } from '@repo/db'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import type { UserRole } from '@repo/types'
+import { USER_ROLES } from '@repo/types'
 
 // --- Validation Schemas ---
 
@@ -164,6 +166,81 @@ export async function restoreFacility(id: string) {
     .update(prisonFacilities)
     .set({ active: true, updated_at: new Date() })
     .where(eq(prisonFacilities.id, id))
+
+  revalidatePath('/settings')
+  return { success: true }
+}
+
+// --- User Management ---
+
+export async function getUsers() {
+  await requireRecoAdmin()
+  return db
+    .select({
+      id: users.id,
+      email: users.email,
+      role: users.role,
+      tenant_id: users.tenant_id,
+      active: users.active,
+      created_at: users.created_at,
+    })
+    .from(users)
+    .orderBy(users.email)
+}
+
+const inviteUserSchema = z.object({
+  email: z.string().email(),
+  role: z.enum(USER_ROLES as unknown as [string, ...string[]]),
+  tenant_id: z.string().nullable(),
+})
+
+export async function inviteUser(data: {
+  email: string
+  role: UserRole
+  tenant_id: string | null
+}) {
+  await requireRecoAdmin()
+  const parsed = inviteUserSchema.parse(data)
+
+  await db.insert(users).values({
+    email: parsed.email,
+    role: parsed.role as UserRole,
+    tenant_id: parsed.tenant_id,
+    active: true,
+  })
+
+  // Trigger magic link invite email — may throw a redirect error even with redirect:false
+  try {
+    await signIn('resend', { email: parsed.email, redirect: false, callbackUrl: '/dashboard' })
+  } catch {
+    // Swallow redirect errors thrown by next-auth with redirect:false
+  }
+
+  revalidatePath('/settings')
+  return { success: true }
+}
+
+export async function deactivateUser(userId: string) {
+  await requireRecoAdmin()
+  const validatedId = z.string().uuid().parse(userId)
+
+  await db
+    .update(users)
+    .set({ active: false, updated_at: new Date() })
+    .where(eq(users.id, validatedId))
+
+  revalidatePath('/settings')
+  return { success: true }
+}
+
+export async function reactivateUser(userId: string) {
+  await requireRecoAdmin()
+  const validatedId = z.string().uuid().parse(userId)
+
+  await db
+    .update(users)
+    .set({ active: true, updated_at: new Date() })
+    .where(eq(users.id, validatedId))
 
   revalidatePath('/settings')
   return { success: true }
