@@ -73,14 +73,14 @@ Plans:
   2. reco-admin can add a product with photos, material composition lines from the global material library, and effective-dated pricing records
   3. A product with material composition changed via a new effective-dated record shows the old composition for deliveries before the change date and the new composition for deliveries after — visible in the product detail view
   4. The global material library lists canonical materials (Polyester, PVC, Polypropylene, etc.) and is shared across all tenants
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 03-01: Global material library — canonical material table, seed data
-- [ ] 03-02: Product schema — product, product_groups, product_materials with effective dates, product_pricing with effective dates
-- [ ] 03-03: Product registry UI — create/edit product, photo upload (Supabase Storage), material composition management
-- [ ] 03-04: Product pricing management — effective-dated pricing records, current price display, historical rate lookup
-- [ ] 03-05: Wolt product pre-load — seed migration for all five product types with materials and pricing from PRD §4.10
+- [ ] 03-01-PLAN.md — Material library schema + Wave 0 test stubs + Supabase Storage helpers
+- [ ] 03-02-PLAN.md — Products, product_materials, product_pricing schema with RLS and migration
+- [ ] 03-03-PLAN.md — Product list page, detail page, create/edit form, photo upload UI
+- [ ] 03-04-PLAN.md — Material composition inline table + pricing management UI with effective dates
+- [ ] 03-05-PLAN.md — Wolt product seed script with all 5 products, materials, and pricing from PRD 4.10
 
 ### Phase 4: Pickup Booking and Transport Management
 **Goal**: Client users can book pickups through the platform and reco-admin can fully manage transport — replacing Google Sheets as the operational record of truth for pickup and transport workflows
