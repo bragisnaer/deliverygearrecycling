@@ -17,7 +17,7 @@ import {
   systemSettings,
   withRLSContext,
 } from '@repo/db'
-import { eq, and, isNull } from 'drizzle-orm'
+import { eq, and, isNull, asc } from 'drizzle-orm'
 import { z } from 'zod'
 import { calculateDiscrepancyPct } from '@/lib/discrepancy'
 
@@ -467,6 +467,183 @@ export async function submitIntake(
   } catch (err) {
     console.error('submitIntake error:', err)
     return { error: 'Failed to submit intake' }
+  }
+
+  return { success: true, intakeId }
+}
+
+// --- Unexpected Delivery Actions ---
+
+/**
+ * Returns all active tenants for the client selection dropdown on the
+ * unexpected delivery form.
+ * Uses raw db (no RLS) — prison_role cannot read tenants cross-tenant.
+ */
+export async function getClientsForIntake(): Promise<
+  { id: string; name: string }[]
+> {
+  await requirePrisonSession()
+
+  const rows = await db
+    .select({ id: tenants.id, name: tenants.name })
+    .from(tenants)
+    .where(eq(tenants.active, true))
+    .orderBy(asc(tenants.name))
+
+  return rows
+}
+
+/**
+ * Returns active products for a given tenant.
+ * Uses raw db (no RLS) — prison_role has no products RLS policy.
+ */
+export async function getProductsForClient(
+  tenantId: string
+): Promise<{ id: string; name: string; weight_grams: number | null }[]> {
+  await requirePrisonSession()
+
+  const rows = await db
+    .select({
+      id: products.id,
+      name: products.name,
+      weight_grams: products.weight_grams,
+    })
+    .from(products)
+    .where(and(eq(products.tenant_id, tenantId), eq(products.active, true)))
+    .orderBy(asc(products.name))
+
+  return rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    weight_grams: r.weight_grams !== null ? Number(r.weight_grams) : null,
+  }))
+}
+
+// Schema for unexpected intake submission
+const unexpectedIntakeLineSchema = z.object({
+  product_id: z.string().uuid(),
+  actual_quantity: z.coerce.number().int().min(0),
+  batch_lot_number: z.string().optional(),
+})
+
+const submitUnexpectedIntakeSchema = z.object({
+  tenant_id: z.string().min(1, 'tenant_id is required'),
+  staff_name: z.string().min(1, 'staff_name is required'),
+  delivery_date: z.string().min(1, 'delivery_date is required'),
+  origin_market: z.string().optional(),
+  notes: z.string().optional(),
+  lines: z
+    .array(unexpectedIntakeLineSchema)
+    .min(1, 'At least one product line is required'),
+})
+
+/**
+ * Submits an unexpected delivery intake form:
+ * - Creates intake_record with is_unexpected=true, pickup_id=null
+ * - Creates intake_lines with informed_quantity=null (no expected quantities)
+ * - Inserts reco-admin notification for unexpected delivery (non-blocking, raw db)
+ */
+export async function submitUnexpectedIntake(
+  formData: FormData
+): Promise<{ success: true; intakeId: string } | { error: string }> {
+  const user = await requirePrisonSession()
+
+  const facilityId = user.facility_id
+  if (!facilityId) {
+    return { error: 'Prison session missing facility_id' }
+  }
+
+  // Parse indexed lines from FormData: lines[N][field]
+  const linesMap = new Map<
+    number,
+    {
+      product_id?: string
+      actual_quantity?: string
+      batch_lot_number?: string
+    }
+  >()
+
+  for (const [key, value] of formData.entries()) {
+    const match = key.match(/^lines\[(\d+)\]\[(\w+)\]$/)
+    if (match) {
+      const idx = parseInt(match[1]!, 10)
+      const field = match[2]!
+      const existing = linesMap.get(idx) ?? {}
+      linesMap.set(idx, { ...existing, [field]: value as string })
+    }
+  }
+
+  const rawLines = Array.from(linesMap.values())
+
+  const rawInput = {
+    tenant_id: formData.get('tenant_id') as string,
+    staff_name: formData.get('staff_name') as string,
+    delivery_date: formData.get('delivery_date') as string,
+    origin_market: (formData.get('origin_market') as string) || undefined,
+    notes: (formData.get('notes') as string) || undefined,
+    lines: rawLines,
+  }
+
+  const parsed = submitUnexpectedIntakeSchema.safeParse(rawInput)
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0]?.message ?? 'Validation failed' }
+  }
+
+  const input = parsed.data
+
+  // Insert intake_record + intake_lines via withRLSContext
+  let intakeId: string
+
+  try {
+    const result = await withRLSContext(user, async (tx) => {
+      const [record] = await tx
+        .insert(intakeRecords)
+        .values({
+          prison_facility_id: facilityId,
+          pickup_id: null,
+          tenant_id: input.tenant_id,
+          staff_name: input.staff_name,
+          delivery_date: new Date(input.delivery_date),
+          origin_market: input.origin_market ?? null,
+          is_unexpected: true,
+          discrepancy_flagged: false, // No informed_quantity to compare against
+          submitted_by: user.id ?? null,
+        })
+        .returning({ id: intakeRecords.id, reference: intakeRecords.reference })
+
+      if (!record) throw new Error('Failed to insert unexpected intake record')
+
+      await tx.insert(intakeLines).values(
+        input.lines.map((line) => ({
+          intake_record_id: record.id,
+          product_id: line.product_id,
+          informed_quantity: null,
+          actual_quantity: line.actual_quantity,
+          batch_lot_number: line.batch_lot_number ?? null,
+          discrepancy_pct: null,
+        }))
+      )
+
+      return record
+    })
+
+    intakeId = result.id
+
+    // Notify reco-admin of unexpected delivery (non-blocking, raw db — prison_role cannot insert notifications)
+    try {
+      await db.insert(notifications).values({
+        type: 'unexpected_intake',
+        title: 'Uventet levering registreret',
+        body: `En uventet levering er registreret på faciliteten ${facilityId}.`,
+        entity_type: 'intake_record',
+        entity_id: intakeId,
+      })
+    } catch {
+      // Non-blocking — notification failure must not break intake submission
+    }
+  } catch (err) {
+    console.error('submitUnexpectedIntake error:', err)
+    return { error: 'Failed to submit unexpected intake' }
   }
 
   return { success: true, intakeId }
