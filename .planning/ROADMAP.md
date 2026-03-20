@@ -120,7 +120,7 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md — Intake schema (intake_records, intake_lines, batch_flags) with RLS, IN-YYYY-NNNN trigger, pure utility functions, Wave 0 test stubs
-- [ ] 05-02-PLAN.md — next-intl setup, prison tablet shell layout with Danish i18n, ops nav Intake link
+- [x] 05-02-PLAN.md — next-intl setup, prison tablet shell layout with Danish i18n, ops nav Intake link
 - [ ] 05-03-PLAN.md — Incoming deliveries view: expected delivery card grid with direct/consolidated grouping
 - [ ] 05-04-PLAN.md — Expected intake form with pre-population, quantity spinners, discrepancy detection, success screen
 - [ ] 05-05-PLAN.md — Unexpected intake form with client dropdown, manual entry, reco-admin notification
@@ -240,7 +240,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 2. Auth, Roles, and Tenant Branding | 3/4 | Complete    | 2026-03-20 |
 | 3. Product Registry | 4/5 | Complete    | 2026-03-20 |
 | 4. Pickup Booking and Transport Management | 10/10 | Complete   | 2026-03-20 |
-| 5. Prison Intake and Counting | 1/8 | In Progress|  |
+| 5. Prison Intake and Counting | 2/8 | In Progress|  |
 | 6. Prison Processing, Dispatch, and Audit Trail | 0/9 | Not started | - |
 | 7. Financial Tracking | 0/5 | Not started | - |
 | 8. Dashboards and ESG Metrics | 0/7 | Not started | - |

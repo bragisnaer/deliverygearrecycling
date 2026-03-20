@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-03-20T19:52:01.784Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-03-20T19:56:47.947Z"
 progress:
   total_phases: 10
   completed_phases: 4
   total_plans: 36
-  completed_plans: 29
+  completed_plans: 30
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 05 (prison-intake-and-counting) — EXECUTING
-Plan: 2 of 8
+Plan: 3 of 8
 
 ## Performance Metrics
 
@@ -74,6 +74,7 @@ Plan: 2 of 8
 | Phase 04-pickup-booking-and-transport-management P09 | 8 | 2 tasks | 6 files |
 | Phase 04-pickup-booking-and-transport-management P10 | 5 | 2 tasks | 4 files |
 | Phase 05-prison-intake-and-counting P01 | 15 | 2 tasks | 9 files |
+| Phase 05-prison-intake-and-counting P02 | 2 | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -145,6 +146,8 @@ Recent decisions affecting current work:
 - [Phase 04-pickup-booking-and-transport-management]: markOutboundInTransit added to outbound/actions.ts — plan required Mark In Transit button but no action existed; added with cascade to linked pickups
 - [Phase 04-pickup-booking-and-transport-management]: Status timeline uses direct vs. consolidation step arrays — consolidation shows at_warehouse/in_outbound_shipment; direct omits them
 - [Phase 05-prison-intake-and-counting]: Migration at migrations/0004_intake_trigger_rls.sql — project uses migrations/ not drizzle/migrations/manual/; IN-YYYY-NNNN uses per-year sequence matching PU-YYYY-NNNN pattern
+- [Phase 05-prison-intake-and-counting]: Prison layout uses auth() directly not requireAuth — redirects to /prison/login for both unauthenticated and wrong-role cases (requireAuth redirects to /access-denied which is wrong for tablet users)
+- [Phase 05-prison-intake-and-counting]: Prison page.tsx is Client Component — useTranslations() from next-intl requires use client; tabs interactivity also requires client rendering
 
 ### Pending Todos
 
@@ -158,6 +161,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T19:52:01.780Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-03-20T19:56:47.944Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None
