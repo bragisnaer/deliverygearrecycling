@@ -64,8 +64,8 @@ Declared values (multiples of 4 only):
 
 **Notes:**
 - Button and link text uses Consolas monospace at 14px weight 400 — consistent with reco brand identity (Consolas for CTAs/buttons/links)
-- Quantity numeral in spinner uses 24px weight 600 Aileron — large enough for glance-reading on shared facility tablets
-- Discrepancy diff badge text ("−3 fra forventet") uses 12px weight 400 Aileron in yellow warning context
+- Quantity numeral in spinner uses the existing **Heading** size (20px weight 600 Aileron) — prominent enough for glance-reading on shared facility tablets
+- Discrepancy diff badge text ("−3 fra forventet") uses the existing **Label** size (14px weight 400 Aileron) in amber warning context
 - Danish labels apply the same type scale; no separate i18n size exception
 
 ---
