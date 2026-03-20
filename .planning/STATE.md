@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-infrastructure-foundation/01-03-PLAN.md
-last_updated: "2026-03-20T10:00:39.727Z"
+stopped_at: Completed 01-infrastructure-foundation/01-07-PLAN.md
+last_updated: "2026-03-20T10:08:07.997Z"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 7
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 01 (infrastructure-foundation) — EXECUTING
-Plan: 4 of 7
+Plan: 7 of 7 — COMPLETE
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Plan: 4 of 7
 | Phase 01-infrastructure-foundation P02 | 5 | 2 tasks | 12 files |
 | Phase 01-infrastructure-foundation P04 | 5 | 1 tasks | 5 files |
 | Phase 01-infrastructure-foundation P03 | 4 | 1 tasks | 5 files |
+| Phase 01-infrastructure-foundation P07 | 3 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 01-infrastructure-foundation]: ops.localhost handled by TLD check before length check — 2-part hostnames ending in .localhost parsed for subdomain before apex-domain logic
 - [Phase 01-infrastructure-foundation]: @auth/core pinned to 0.41.0 via pnpm workspace override — @auth/drizzle-adapter@1.11.1 pulls 0.41.1 which conflicts with next-auth@beta's 0.41.0; single version enforced to fix TypeScript Adapter type incompatibility
 - [Phase 01-infrastructure-foundation]: AUTH_COOKIE_DOMAIN env var overrides .courierrecycling.com cookie domain — allows Azure default domain phase before custom DNS cutover
+- [Phase 01-infrastructure-foundation 01-07]: PGPASSWORD moved to env: block in CI role-creation step — avoids inline shell variable flagged by security scanners
+- [Phase 01-infrastructure-foundation 01-07]: Rollback sentinel pattern in RLS tests — throw Error('ROLLBACK_SENTINEL') inside transaction then catch and swallow; clean rollback without explicit API
+- [Phase 01-infrastructure-foundation 01-07]: withRLSContext wrapper test uses dynamic import to validate production code path separately from raw set_config tests
 
 ### Pending Todos
 
@@ -85,6 +89,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T10:00:39.723Z
-Stopped at: Completed 01-infrastructure-foundation/01-03-PLAN.md
+Last session: 2026-03-20T10:05:43Z
+Stopped at: Completed 01-infrastructure-foundation/01-07-PLAN.md
 Resume file: None
