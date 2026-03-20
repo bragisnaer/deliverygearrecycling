@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+/* shadcn base animations and custom variants (inlined from shadcn/tailwind.css) */
+@theme inline {
+	@keyframes accordion-down {
+		from { height: 0; }
+		to { height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto)); }
+	}
+	@keyframes accordion-up {
+		from { height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto)); }
+		to { height: 0; }
+	}
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant data-open {
+	&:where([data-state="open"]), &:where([data-open]:not([data-open="false"])) { @slot; }
+}
+@custom-variant data-closed {
+	&:where([data-state="closed"]), &:where([data-closed]:not([data-closed="false"])) { @slot; }
+}
+@custom-variant data-checked {
+	&:where([data-state="checked"]), &:where([data-checked]:not([data-checked="false"])) { @slot; }
+}
+@custom-variant data-unchecked {
+	&:where([data-state="unchecked"]), &:where([data-unchecked]:not([data-unchecked="false"])) { @slot; }
+}
+@custom-variant data-disabled {
+	&:where([data-disabled="true"]), &:where([data-disabled]:not([data-disabled="false"])) { @slot; }
+}
+@custom-variant data-active {
+	&:where([data-state="active"]), &:where([data-active]:not([data-active="false"])) { @slot; }
+}
+
+@theme inline {
+	--font-heading: var(--font-heading);
+	--font-sans: var(--font-sans);
+	--font-mono: var(--font-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+
+	/* tw-animate-css tokens */
+	--animate-in: enter var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+	--animate-out: exit var(--tw-animation-duration, var(--tw-duration, .15s)) var(--tw-ease, ease) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+	@keyframes enter {
+		from { opacity: var(--tw-enter-opacity, 1); transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0)); }
+	}
+	@keyframes exit {
+		to { opacity: var(--tw-exit-opacity, 1); transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0)); }
+	}
+}
+
+:root {
+	/* reco brand tokens */
+	--background: #FAF9F4;
+	--foreground: #000000;
+	--card: #F0EFE8;
+	--card-foreground: #000000;
+	--popover: #FAF9F4;
+	--popover-foreground: #000000;
+	--primary: #ED1C24;
+	--primary-foreground: #FAF9F4;
+	--secondary: #F0EFE8;
+	--secondary-foreground: #000000;
+	--muted: #F0EFE8;
+	--muted-foreground: #9FA4A6;
+	--accent: #ED1C24;
+	--accent-foreground: #FAF9F4;
+	--destructive: #CC1018;
+	--destructive-foreground: #FAF9F4;
+	--border: #E0DFD8;
+	--input: #E0DFD8;
+	--ring: #ED1C24;
+	--radius: 0.5rem;
+
+	/* reco typography */
+	--font-heading: 'Aileron', sans-serif;
+	--font-sans: 'Aileron', sans-serif;
+	--font-mono: 'Consolas', monospace;
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+		font-family: var(--font-sans);
+	}
+}
