@@ -92,19 +92,19 @@ Plans:
   3. A consolidation provider can view their warehouse inventory (held pickups with ageing), create an outbound shipment selecting multiple pickups, and the warehouse→prison cost is allocated pro-rata by pallet count
   4. When an outbound shipment is marked delivered, all linked pickup requests automatically advance to the delivered status
   5. reco-admin receives an in-app alert when any pallet has been held at a consolidation warehouse beyond the configured threshold
-**Plans**: TBD
+**Plans**: 10 plans
 
 Plans:
-- [ ] 04-01: Pickup request schema — status lifecycle, reference number generation, location pre-fill for client role
-- [ ] 04-02: Pickup booking form — dynamic product quantity inputs from registry, pallet fields, 72h lead time validation, photo upload
-- [ ] 04-03: Pickup queue — reco-admin view with status management, confirm, cancel with reason
-- [ ] 04-04: Transport provider registry — company, type (direct/consolidation), regions, warehouse address, platform access flag
-- [ ] 04-05: Direct transport booking — provider selection, destination prison, transport cost entry, pickup date confirmation
-- [ ] 04-06: Consolidation transport booking — provider selection, warehouse destination, market-to-warehouse leg cost
-- [ ] 04-07: Consolidation warehouse inventory — held pickups view for providers, ageing display, threshold alert for reco-admin
-- [ ] 04-08: Outbound shipment creation — select held pickups, destination prison, warehouse-to-prison cost, pro-rata allocation DB function
-- [ ] 04-09: Transport provider portal — assigned pickups, active shipments, status updates, proof of delivery upload
-- [ ] 04-10: Pickup notification emails — submission confirmation to client, new pickup alert to reco-admin
+- [ ] 04-01-PLAN.md — Locations, pickups, transport, notifications schema with RLS + migration SQL with PU-YYYY-NNNN trigger
+- [ ] 04-02-PLAN.md — Client pickup booking form with product quantities, auto-weight, 72h date validation, photo upload
+- [ ] 04-03-PLAN.md — Pickup queue (ops + client) with status tabs, confirm/cancel actions, nav bar updates
+- [ ] 04-04-PLAN.md — Transport provider registry CRUD: list, create, edit with tenant linking
+- [ ] 04-05-PLAN.md — Direct and consolidation transport booking from pickup detail page
+- [ ] 04-06-PLAN.md — Consolidation warehouse inventory with colour-coded ageing and threshold alerts
+- [ ] 04-07-PLAN.md — Outbound shipment creation with pro-rata cost allocation and delivery cascade
+- [ ] 04-08-PLAN.md — Transport provider portal: assigned pickups, status updates, POD upload
+- [ ] 04-09-PLAN.md — Resend email integration: pickup confirmation to client, alert to reco-admin, in-app notification
+- [ ] 04-10-PLAN.md — Integration wiring: transport summary on pickup detail, delivery actions on outbound page
 
 ### Phase 5: Prison Intake and Counting
 **Goal**: Prison staff can register all incoming deliveries on facility tablets with Danish-language forms; discrepancies and defective batches are automatically detected and flagged
