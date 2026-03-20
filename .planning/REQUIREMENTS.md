@@ -10,8 +10,8 @@
 ### Routing and Multi-Tenancy
 
 - [ ] **ROUTE-01**: System resolves tenant context from subdomain hostname (e.g. `wolt.courierrecycling.com` → Wolt tenant) via Next.js `proxy.ts` without a database call
-- [ ] **ROUTE-02**: Single Next.js 16 App Router deployment serves three domain contexts: `ops.courierrecycling.com`, `[client].courierrecycling.com`, `courierrecycling.com`
-- [ ] **ROUTE-03**: Wildcard DNS (`*.courierrecycling.com`) routes all client subdomains to the same Vercel deployment; new client subdomain provisioning requires no DNS changes
+- [x] **ROUTE-02**: Single Next.js 16 App Router deployment serves three domain contexts: `ops.courierrecycling.com`, `[client].courierrecycling.com`, `courierrecycling.com`
+- [x] **ROUTE-03**: Wildcard DNS (`*.courierrecycling.com`) routes all client subdomains to the same Vercel deployment; new client subdomain provisioning requires no DNS changes
 - [ ] **ROUTE-04**: Every database table has a `tenant_id` column; Supabase RLS policies enforce tenant isolation at the database layer on all tenant-scoped tables
 - [ ] **ROUTE-05**: `tenant_id` index exists on every tenant-scoped table (performance requirement for RLS)
 
@@ -212,8 +212,8 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | ROUTE-01 | Phase 1: Infrastructure Foundation | Pending |
-| ROUTE-02 | Phase 1: Infrastructure Foundation | Pending |
-| ROUTE-03 | Phase 1: Infrastructure Foundation | Pending |
+| ROUTE-02 | Phase 1: Infrastructure Foundation | Complete |
+| ROUTE-03 | Phase 1: Infrastructure Foundation | Complete |
 | ROUTE-04 | Phase 1: Infrastructure Foundation | Pending |
 | ROUTE-05 | Phase 1: Infrastructure Foundation | Pending |
 | AUTH-01 | Phase 1: Infrastructure Foundation | Pending |
