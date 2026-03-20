@@ -85,7 +85,7 @@
 ### Prison Processing
 
 - [ ] **PROCESS-01**: Prison staff submit Wash and Pack reports from the same `ops.courierrecycling.com/prison` interface; maximum two taps to reach any form
-- [ ] **PROCESS-02**: Processing report fields: staff name (free text), client (dropdown), activity type (Wash or Pack), product type (from client registry), quantity per size bucket (XXS–XXXL for clothing; total quantity for bags), date (defaults today), notes
+- [x] **PROCESS-02**: Processing report fields: staff name (free text), client (dropdown), activity type (Wash or Pack), product type (from client registry), quantity per size bucket (XXS–XXXL for clothing; total quantity for bags), date (defaults today), notes
 - [ ] **PROCESS-03**: Processing pipeline view per facility: items at each stage (awaiting processing, in progress, ready to ship, shipped); visible to prison staff (own facility) and reco-admin (all facilities, all clients)
 - [ ] **PROCESS-04**: Prison interface uses large touch targets (tablet-first), Danish language labels and instructions, minimal navigation
 - [ ] **PROCESS-05**: Full traceability chain visible: pickup request → transport → prison intake → wash → pack → dispatch
@@ -268,7 +268,7 @@
 | INTAKE-07 | Phase 5: Prison Intake and Counting | Complete |
 | INTAKE-08 | Phase 5: Prison Intake and Counting | Complete |
 | PROCESS-01 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
-| PROCESS-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
+| PROCESS-02 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | PROCESS-03 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | PROCESS-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
 | PROCESS-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Pending |
