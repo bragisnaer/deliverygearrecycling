@@ -90,4 +90,4 @@ Every delivery is tracked from booking to invoice, and every item from pickup to
 | Pricing at product level with effective_from/to dates | Historical deliveries retain the rate active at time of delivery | — Pending |
 
 ---
-*Last updated: 2026-03-19 after initialization*
+*Last updated: 2026-03-20 — Phase 3 complete: Product Registry (material library, product schema, UI, Wolt seed)*
