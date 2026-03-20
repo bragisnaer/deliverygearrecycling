@@ -1,19 +1,52 @@
 import NextAuth from 'next-auth'
-import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id'
+import Credentials from 'next-auth/providers/credentials'
 import Resend from 'next-auth/providers/resend'
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db, users } from '@repo/db'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
+import bcrypt from 'bcryptjs'
 import type { UserRole } from '@repo/types'
+
+const credentialsSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(72),
+})
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
 
   providers: [
-    MicrosoftEntraID({
-      clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID!,
-      clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET!,
-      issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER!,
+    Credentials({
+      credentials: {
+        email: { type: 'email', label: 'Email' },
+        password: { type: 'password', label: 'Password' },
+      },
+      async authorize(credentials) {
+        const parsed = credentialsSchema.safeParse(credentials)
+        if (!parsed.success) return null
+
+        const [user] = await db
+          .select()
+          .from(users)
+          .where(eq(users.email, parsed.data.email))
+          .limit(1)
+
+        if (!user || !user.password_hash) return null
+
+        const valid = await bcrypt.compare(parsed.data.password, user.password_hash)
+        if (!valid) return null
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          tenant_id: user.tenant_id,
+          location_id: user.location_id ? String(user.location_id) : null,
+          facility_id: user.facility_id ? String(user.facility_id) : null,
+        }
+      },
     }),
     Resend({
       apiKey: process.env.AUTH_RESEND_KEY!,

@@ -39,6 +39,7 @@ export const users = pgTable(
     email: text('email').notNull().unique(),
     emailVerified: timestamp('emailVerified'), // Auth.js adapter requires camelCase
     image: text('image'),
+    password_hash: text('password_hash'), // nullable — magic-link-only users have null
     // Custom columns
     role: userRoleEnum('role').notNull().default('client'),
     tenant_id: text('tenant_id'), // null for reco-admin, reco (ROUTE-04, ROUTE-05)

@@ -15,6 +15,7 @@
 		"@hookform/resolvers": "^3.9.0",
 		"@repo/db": "workspace:*",
 		"@repo/types": "workspace:*",
+		"bcryptjs": "^3.0.3",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"drizzle-orm": "^0.45.1",
@@ -32,6 +33,7 @@
 		"zod": "^3.24.1"
 	},
 	"devDependencies": {
+		"@types/bcryptjs": "^3.0.0",
 		"@types/node": "^22.0.0",
 		"@types/react": "^19.0.0",
 		"@types/react-dom": "^19.0.0",
