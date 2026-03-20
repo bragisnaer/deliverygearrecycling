@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-auth-roles-and-tenant-branding/02-01-PLAN.md
-last_updated: "2026-03-20T14:24:26.036Z"
+stopped_at: Completed 02-auth-roles-and-tenant-branding/02-02-PLAN.md
+last_updated: "2026-03-20T14:32:57.452Z"
 progress:
   total_phases: 10
   completed_phases: 1
   total_plans: 13
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -56,6 +56,7 @@ Plan: 1 of 4
 | Phase 01-infrastructure-foundation P08 | 1 | 1 tasks | 1 files |
 | Phase 01-infrastructure-foundation P09 | 77 | 1 tasks | 1 files |
 | Phase 02 P01 | 25 | 2 tasks | 8 files |
+| Phase 02 P02 | 5 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,8 @@ Recent decisions affecting current work:
 - [Phase 02-01]: authorize() returns full User object (role, tenant_id, location_id, facility_id) — required by extended next-auth User interface in types/next-auth.d.ts
 - [Phase 02-01]: DialogTrigger uses render prop pattern not asChild — codebase uses @base-ui/react/dialog not Radix UI
 - [Phase 02-01]: inviteUser wraps signIn('resend') in try/catch — next-auth throws redirect error even with redirect:false
+- [Phase 02-02]: auth() wrapper from Auth.js v5 wraps proxy function — session injected as request.auth in middleware
+- [Phase 02-02]: Vitest alias array ordering required (specific before generic) for @/auth mock; __mocks__ directory isolates proxy.test.ts from next-auth/DB runtime
 
 ### Pending Todos
 
@@ -102,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T14:24:26.032Z
-Stopped at: Completed 02-auth-roles-and-tenant-branding/02-01-PLAN.md
+Last session: 2026-03-20T14:32:57.448Z
+Stopped at: Completed 02-auth-roles-and-tenant-branding/02-02-PLAN.md
 Resume file: None
