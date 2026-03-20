@@ -7,6 +7,7 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
+		"seed:wolt": "tsx src/seed-wolt.ts",
 		"test": "vitest run",
 		"test:rls": "vitest run rls"
 	},
