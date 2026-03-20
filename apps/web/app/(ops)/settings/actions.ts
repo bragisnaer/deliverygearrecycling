@@ -1,12 +1,13 @@
 'use server'
 
 import { auth, signIn } from '@/auth'
-import { db, systemSettings, prisonFacilities, users } from '@repo/db'
+import { db, systemSettings, prisonFacilities, users, tenantBranding, tenants } from '@repo/db'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import type { UserRole } from '@repo/types'
 import { USER_ROLES } from '@repo/types'
+import { checkBrandingContrast } from '@/lib/contrast'
 
 // --- Validation Schemas ---
 
@@ -241,6 +242,120 @@ export async function reactivateUser(userId: string) {
     .update(users)
     .set({ active: true, updated_at: new Date() })
     .where(eq(users.id, validatedId))
+
+  revalidatePath('/settings')
+  return { success: true }
+}
+
+// --- Branding ---
+
+const hexColorSchema = z
+  .string()
+  .regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid 6-digit hex colour')
+  .nullable()
+  .optional()
+
+const fontSchema = z
+  .enum(['system-ui', 'Inter', 'DM Sans', 'Lato', 'Nunito', 'Roboto', 'Source Sans 3'] as const)
+  .nullable()
+  .optional()
+
+const brandingSchema = z.object({
+  tenant_id: z.string().min(1, 'Tenant is required'),
+  logo_url: z.string().url('Must be a valid URL').nullable().optional(),
+  favicon_url: z.string().url('Must be a valid URL').nullable().optional(),
+  primary_color: hexColorSchema,
+  secondary_color: hexColorSchema,
+  background_color: hexColorSchema,
+  foreground_color: hexColorSchema,
+  accent_color: hexColorSchema,
+  heading_font: fontSchema,
+  body_font: fontSchema,
+})
+
+export async function getTenants() {
+  await requireRecoAdmin()
+  return db
+    .select({ id: tenants.id, name: tenants.name })
+    .from(tenants)
+    .where(eq(tenants.active, true))
+    .orderBy(tenants.name)
+}
+
+export async function getBranding(tenantId: string) {
+  await requireRecoAdmin()
+  if (!tenantId) return null
+  const [branding] = await db
+    .select()
+    .from(tenantBranding)
+    .where(eq(tenantBranding.tenant_id, tenantId))
+    .limit(1)
+  return branding ?? null
+}
+
+export async function saveBranding(data: {
+  tenant_id: string
+  logo_url?: string | null
+  favicon_url?: string | null
+  primary_color?: string | null
+  secondary_color?: string | null
+  background_color?: string | null
+  foreground_color?: string | null
+  accent_color?: string | null
+  heading_font?: string | null
+  body_font?: string | null
+}) {
+  await requireRecoAdmin()
+  const parsed = brandingSchema.parse(data)
+
+  // BRAND-05: WCAG AA contrast validation before save
+  // Use reco defaults as fallback for unset colours
+  const bg = parsed.background_color ?? '#FAF9F4'
+  const fg = parsed.foreground_color ?? '#000000'
+  const primary = parsed.primary_color ?? '#ED1C24'
+
+  const contrastError = checkBrandingContrast([
+    { fg, bg, label: 'text on background' },
+    { fg: primary, bg, label: 'primary on background' },
+  ])
+
+  if (contrastError) {
+    return { success: false, error: contrastError }
+  }
+
+  // Upsert branding record (unique on tenant_id)
+  const values = {
+    tenant_id: parsed.tenant_id,
+    logo_url: parsed.logo_url ?? null,
+    favicon_url: parsed.favicon_url ?? null,
+    primary_color: parsed.primary_color ?? null,
+    secondary_color: parsed.secondary_color ?? null,
+    background_color: parsed.background_color ?? null,
+    foreground_color: parsed.foreground_color ?? null,
+    accent_color: parsed.accent_color ?? null,
+    heading_font: parsed.heading_font ?? null,
+    body_font: parsed.body_font ?? null,
+    updated_at: new Date(),
+  }
+
+  await db
+    .insert(tenantBranding)
+    .values(values)
+    .onConflictDoUpdate({
+      target: tenantBranding.tenant_id,
+      set: {
+        logo_url: values.logo_url,
+        favicon_url: values.favicon_url,
+        primary_color: values.primary_color,
+        secondary_color: values.secondary_color,
+        background_color: values.background_color,
+        foreground_color: values.foreground_color,
+        accent_color: values.accent_color,
+        heading_font: values.heading_font,
+        body_font: values.body_font,
+        updated_at: values.updated_at,
+      },
+    })
 
   revalidatePath('/settings')
   return { success: true }
