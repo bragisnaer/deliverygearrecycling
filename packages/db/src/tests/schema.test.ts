@@ -65,8 +65,25 @@ describe('Schema assertions', () => {
     expect(columns).toContain('changed_at')
   })
 
-  // PROD-01: products table (stub — table does not exist yet)
-  it.todo('products table exists with required columns')
+  // PROD-01: products table (active — table created in 03-02)
+  it('products table exists with required columns', async () => {
+    const result = await testDb.execute(sql`
+      SELECT column_name FROM information_schema.columns
+      WHERE table_name = 'products'
+      ORDER BY ordinal_position
+    `)
+    const columns = (result as unknown as Array<{ column_name: string }>).map(r => r.column_name)
+
+    expect(columns).toContain('id')
+    expect(columns).toContain('tenant_id')
+    expect(columns).toContain('name')
+    expect(columns).toContain('product_code')
+    expect(columns).toContain('processing_stream')
+    expect(columns).toContain('weight_grams')
+    expect(columns).toContain('active')
+    expect(columns).toContain('created_at')
+    expect(columns).toContain('updated_at')
+  })
 
   // PROD-06: material_library table (active — table created in 03-01)
   it('material_library table exists with required columns', async () => {
@@ -83,8 +100,15 @@ describe('Schema assertions', () => {
     expect(columns).toContain('updated_at')
   })
 
-  // PROD-08: product_group column (stub — table does not exist yet)
-  it.todo('products table has product_group column')
+  // PROD-08: product_group column (active — table created in 03-02)
+  it('products table has product_group column', async () => {
+    const result = await testDb.execute(sql`
+      SELECT column_name FROM information_schema.columns
+      WHERE table_name = 'products' AND column_name = 'product_group'
+    `)
+    const rows = result as unknown as Array<{ column_name: string }>
+    expect(rows.length).toBe(1)
+  })
 
   it('no service_role or superuser references in API routes', () => {
     const apiDir = join(__dirname, '../../../../apps/web/app/api')

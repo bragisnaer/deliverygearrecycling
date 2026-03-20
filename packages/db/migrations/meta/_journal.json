@@ -15,6 +15,13 @@
       "when": 1774021399000,
       "tag": "0001_curved_zaran",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774021806792,
+      "tag": "0002_natural_exiles",
+      "breakpoints": true
     }
   ]
 }
