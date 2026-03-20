@@ -54,7 +54,7 @@
 - [x] **PICKUP-03**: `client` role auto-fills pickup address from their assigned location record; address is not editable
 - [x] **PICKUP-04**: Preferred pickup date enforces minimum 72-hour lead time from submission
 - [x] **PICKUP-05**: A location can have multiple active pickup requests simultaneously (no restriction)
-- [ ] **PICKUP-06**: Client can cancel a pickup up to 24 hours before confirmed pickup date; reco-admin can cancel at any time with a reason
+- [x] **PICKUP-06**: Client can cancel a pickup up to 24 hours before confirmed pickup date; reco-admin can cancel at any time with a reason
 - [x] **PICKUP-07**: Pickup status lifecycle: `submitted` → `confirmed` → `transport_booked` → `picked_up` → `at_warehouse` (consolidation only) → `in_outbound_shipment` (consolidation only) → `in_transit` → `delivered` → `intake_registered`
 - [ ] **PICKUP-08**: On submission, reco-admin receives email + in-app notification; client submitter receives confirmation email with request ID
 
@@ -67,7 +67,7 @@
 - [ ] **TRANS-05**: Consolidation provider sees warehouse inventory: held pickups with client, market, products, pallet count, arrival date, days held
 - [ ] **TRANS-06**: Consolidation provider (or reco-admin) creates outbound shipments from warehouse: select held pickups, select destination prison, enter warehouse→prison transport cost; soft warning at 7 pallets per truck
 - [x] **TRANS-07**: Two-leg transport cost model: `transport_cost_market_to_destination_eur` (direct: market→prison; consolidation: market→warehouse) and `transport_cost_warehouse_to_prison_eur` (consolidation only); second leg allocated pro-rata by pallet count across bookings in the outbound shipment
-- [ ] **TRANS-08**: Transport providers with platform access can update shipment status, add delivery notes, upload proof of delivery; cannot see pricing, prison data, or other providers' shipments
+- [x] **TRANS-08**: Transport providers with platform access can update shipment status, add delivery notes, upload proof of delivery; cannot see pricing, prison data, or other providers' shipments
 - [ ] **TRANS-09**: reco-admin receives in-app alert when pallets held at warehouse exceed configurable threshold (default 14 days)
 - [ ] **TRANS-10**: Outbound shipment delivery cascades `delivered` status to all linked transport bookings and their pickup requests
 
@@ -246,7 +246,7 @@
 | PICKUP-03 | Phase 4: Pickup Booking and Transport Management | Complete |
 | PICKUP-04 | Phase 4: Pickup Booking and Transport Management | Complete |
 | PICKUP-05 | Phase 4: Pickup Booking and Transport Management | Complete |
-| PICKUP-06 | Phase 4: Pickup Booking and Transport Management | Pending |
+| PICKUP-06 | Phase 4: Pickup Booking and Transport Management | Complete |
 | PICKUP-07 | Phase 4: Pickup Booking and Transport Management | Complete |
 | PICKUP-08 | Phase 4: Pickup Booking and Transport Management | Pending |
 | TRANS-01 | Phase 4: Pickup Booking and Transport Management | Complete |
@@ -256,7 +256,7 @@
 | TRANS-05 | Phase 4: Pickup Booking and Transport Management | Pending |
 | TRANS-06 | Phase 4: Pickup Booking and Transport Management | Pending |
 | TRANS-07 | Phase 4: Pickup Booking and Transport Management | Complete |
-| TRANS-08 | Phase 4: Pickup Booking and Transport Management | Pending |
+| TRANS-08 | Phase 4: Pickup Booking and Transport Management | Complete |
 | TRANS-09 | Phase 4: Pickup Booking and Transport Management | Pending |
 | TRANS-10 | Phase 4: Pickup Booking and Transport Management | Pending |
 | INTAKE-01 | Phase 5: Prison Intake and Counting | Pending |
