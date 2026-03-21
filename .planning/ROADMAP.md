@@ -182,7 +182,7 @@ Plans:
 
 Plans:
 - [x] 08-01-PLAN.md — ESG calculation engine (TDD): pure functions for material weight aggregation, reuse rate, CO2 stub, CSV serialiser with Wolt-anchored tests
-- [ ] 08-02-PLAN.md — ESG metrics page: temporal composition join queries, material breakdown table, reuse rate, methodology block, ops nav link
+- [x] 08-02-PLAN.md — ESG metrics page: temporal composition join queries, material breakdown table, reuse rate, methodology block, ops nav link
 - [ ] 08-03-PLAN.md — ESG export: @react-pdf/renderer PDF report and CSV download via auth-protected Route Handler
 - [x] 08-04-PLAN.md — Ops dashboard: pickup status summary, consolidation ageing, prison pipeline, revenue summary, client context switcher
 - [x] 08-05-PLAN.md — Client dashboard: role-branched (client vs client-global), pickup activity, sent-vs-received discrepancy, quarterly volume, ESG summary
@@ -241,6 +241,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 5. Prison Intake and Counting | 8/8 | Complete   | 2026-03-20 |
 | 6. Prison Processing, Dispatch, and Audit Trail | 9/9 | Complete   | 2026-03-20 |
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
-| 8. Dashboards and ESG Metrics | 5/7 | In Progress|  |
+| 8. Dashboards and ESG Metrics | 6/7 | In Progress|  |
 | 9. Notifications and Manuals | 0/6 | Not started | - |
 | 10. Historical Data Import | 0/5 | Not started | - |

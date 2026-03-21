@@ -120,9 +120,9 @@
 - [x] **ESG-01**: Total material recycled per type calculated as: `product_materials.weight_grams × intake_record_lines.actual_quantity` for all intake records; aggregated by material, product, country, time period
 - [x] **ESG-02**: Example auto-calculation: 1,000 bike bags processed = 943kg polypropylene, 386kg PVC, 294kg polyester, etc.
 - [x] **ESG-03**: Reuse rate displayed: items in `reuse` processing stream / total items processed
-- [ ] **ESG-04**: CO2 avoided displayed: configurable formula based on weight and material type (formula defined before Phase 3 build)
+- [x] **ESG-04**: CO2 avoided displayed: configurable formula based on weight and material type (formula defined before Phase 3 build)
 - [x] **ESG-05**: ESG calculations use material composition records temporally: `effective_from`/`effective_to` on `product_materials` ensures historical records use the composition that was active at time of delivery
-- [ ] **ESG-06**: ESG methodology shown inline (formula and inputs visible, not just output numbers)
+- [x] **ESG-06**: ESG methodology shown inline (formula and inputs visible, not just output numbers)
 - [ ] **ESG-07**: ESG summary exportable per client and aggregated (PDF report and CSV data)
 
 ### Dashboards
@@ -297,9 +297,9 @@
 | ESG-01 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-02 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-03 | Phase 8: Dashboards and ESG Metrics | Complete |
-| ESG-04 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-04 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-05 | Phase 8: Dashboards and ESG Metrics | Complete |
-| ESG-06 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-06 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-07 | Phase 8: Dashboards and ESG Metrics | Pending |
 | NOTIF-01 | Phase 9: Notifications and Manuals | Pending |
 | NOTIF-02 | Phase 9: Notifications and Manuals | Pending |

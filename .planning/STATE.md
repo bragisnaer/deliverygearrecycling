@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-07-PLAN.md
-last_updated: "2026-03-21T09:57:00.476Z"
+stopped_at: Completed 08-02-PLAN.md
+last_updated: "2026-03-21T09:58:27.140Z"
 progress:
   total_phases: 10
   completed_phases: 7
   total_plans: 55
-  completed_plans: 53
+  completed_plans: 54
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 8 (Dashboards and ESG Metrics) — EXECUTING
-Plan: 6 of 7
+Plan: 7 of 7
 
 ## Performance Metrics
 
@@ -98,6 +98,7 @@ Plan: 6 of 7
 | Phase 08-dashboards-and-esg-metrics P05 | 435 | 2 tasks | 6 files |
 | Phase 08-dashboards-and-esg-metrics P06 | 8 | 1 tasks | 4 files |
 | Phase 08-dashboards-and-esg-metrics P07 | 5 | 1 tasks | 2 files |
+| Phase 08-dashboards-and-esg-metrics P02 | 15 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -212,6 +213,8 @@ Recent decisions affecting current work:
 - [Phase 08-dashboards-and-esg-metrics]: Promise.all used for parallel conditional fetches when provider is consolidation; warehouse section placed after tabs
 - [Phase 08-dashboards-and-esg-metrics]: financial_records_invoice_status_idx uses IF NOT EXISTS — already created in 0006_financial_records.sql; idempotent
 - [Phase 08-dashboards-and-esg-metrics]: Journal entry at idx 5 for 0007_esg_dashboard_indexes — follows last registered idx 4 since manual migrations 0005/0006 were not journaled
+- [Phase 08-dashboards-and-esg-metrics]: getEsgData returns reuseRate: 0 — reuseRate calculated in page.tsx from getProcessingStreamCounts via calculateReuseRate; separation of concerns keeps DB queries independent
+- [Phase 08-dashboards-and-esg-metrics]: Temporal join: pm.effective_from <= ir.delivery_date AND (pm.effective_to IS NULL OR pm.effective_to > ir.delivery_date) — open-ended materials use effective_to IS NULL
 
 ### Pending Todos
 
@@ -225,6 +228,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T09:57:00.472Z
-Stopped at: Completed 08-07-PLAN.md
+Last session: 2026-03-21T09:58:27.136Z
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None
