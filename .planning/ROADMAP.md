@@ -164,7 +164,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Financial records schema, migration with auto-create trigger and RLS, pure calculation/formatting functions with tests
+- [x] 07-01-PLAN.md — Financial records schema, migration with auto-create trigger and RLS, pure calculation/formatting functions with tests
 - [ ] 07-02-PLAN.md — Financial record Server Actions (CRUD, invoice calculation), list page, detail page with invoice edit, nav bar link
 - [ ] 07-03-PLAN.md — Uninvoiced delivery alert widget on dashboard, EUR/DKK currency toggle with cookie persistence
 
@@ -240,7 +240,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 4. Pickup Booking and Transport Management | 10/10 | Complete   | 2026-03-20 |
 | 5. Prison Intake and Counting | 8/8 | Complete   | 2026-03-20 |
 | 6. Prison Processing, Dispatch, and Audit Trail | 9/9 | Complete   | 2026-03-20 |
-| 7. Financial Tracking | 0/3 | Not started | - |
+| 7. Financial Tracking | 1/3 | In Progress|  |
 | 8. Dashboards and ESG Metrics | 0/7 | Not started | - |
 | 9. Notifications and Manuals | 0/6 | Not started | - |
 | 10. Historical Data Import | 0/5 | Not started | - |
