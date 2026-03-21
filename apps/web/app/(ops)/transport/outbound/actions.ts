@@ -19,6 +19,9 @@ import {
 import { eq, and, inArray, or, gte } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { dispatchNotification, getRecoAdminEmails } from '@/lib/notification-events'
+import { sendEmail } from '@/lib/email'
+import WarehouseAgeingAlertEmail from '@/emails/warehouse-ageing-alert'
 
 // --- Auth helpers ---
 
@@ -169,6 +172,26 @@ export async function checkAndCreateAgeingAlerts() {
             read: false,
           })
         })
+
+        // Send warehouse ageing email to reco-admin (non-blocking)
+        try {
+          const adminEmails = await getRecoAdminEmails()
+          if (adminEmails.length > 0) {
+            await sendEmail({
+              to: adminEmails,
+              subject: `Warehouse Ageing Alert — ${warehouseName}`,
+              react: WarehouseAgeingAlertEmail({
+                providerName: pickup.provider_name ?? 'Unknown',
+                warehouseAddress: pickup.provider_warehouse_address ?? warehouseName,
+                palletCount: pickup.pallet_count,
+                oldestDays: pickup.days_held,
+                thresholdDays: threshold,
+              }),
+            })
+          }
+        } catch (err) {
+          console.error('[email] Warehouse ageing alert failed:', err)
+        }
       }
     }
   }
@@ -197,12 +220,38 @@ export async function updatePickupToAtWarehouse(pickupId: string) {
     return { error: 'Only consolidation pickups can be moved to at_warehouse status' }
   }
 
+  // Fetch pickup reference for notification
+  const pickupRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({ reference: pickups.reference })
+      .from(pickups)
+      .where(eq(pickups.id, pickupId))
+      .limit(1)
+  })
+
+  const pickupRef = pickupRows[0]?.reference ?? pickupId
+
   await withRLSContext(user, async (tx) => {
     await tx
       .update(pickups)
       .set({ status: 'at_warehouse', updated_at: new Date() })
       .where(eq(pickups.id, pickupId))
   })
+
+  // Notify reco-admin that pallets have arrived at the warehouse (non-blocking)
+  try {
+    await dispatchNotification({
+      userId: null,
+      tenantId: null,
+      type: 'pallets_received',
+      title: `Pallets received at warehouse`,
+      body: `Pallets from pickup ${pickupRef} received at warehouse.`,
+      entityType: 'pickup',
+      entityId: pickupId,
+    })
+  } catch (err) {
+    console.error('[notification] pallets_received failed:', err)
+  }
 
   revalidatePath('/transport/outbound')
   return { success: true }
@@ -373,6 +422,21 @@ export async function markOutboundInTransit(shipmentId: string) {
     })
   }
 
+  // Notify reco-admin that outbound shipment was dispatched (non-blocking)
+  try {
+    await dispatchNotification({
+      userId: null,
+      tenantId: null,
+      type: 'outbound_dispatched',
+      title: `Outbound shipment dispatched`,
+      body: `Outbound shipment ${validatedId.slice(0, 8).toUpperCase()} dispatched with ${pickupIds.length} pickup(s).`,
+      entityType: 'outbound_shipment',
+      entityId: validatedId,
+    })
+  } catch (err) {
+    console.error('[notification] outbound_dispatched failed:', err)
+  }
+
   revalidatePath('/transport/outbound')
   return { success: true }
 }
@@ -408,6 +472,21 @@ export async function markOutboundDelivered(shipmentId: string) {
         .set({ status: 'delivered', updated_at: new Date() })
         .where(inArray(pickups.id, pickupIds))
     })
+  }
+
+  // Notify reco-admin that delivery was completed (non-blocking)
+  try {
+    await dispatchNotification({
+      userId: null,
+      tenantId: null,
+      type: 'delivery_completed',
+      title: `Delivery completed`,
+      body: `Outbound shipment ${validatedId.slice(0, 8).toUpperCase()} has been delivered.`,
+      entityType: 'outbound_shipment',
+      entityId: validatedId,
+    })
+  } catch (err) {
+    console.error('[notification] delivery_completed failed:', err)
   }
 
   revalidatePath('/transport/outbound')

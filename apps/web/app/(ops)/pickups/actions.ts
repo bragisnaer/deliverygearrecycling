@@ -17,6 +17,8 @@ import {
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { dispatchNotification } from '@/lib/notification-events'
+import PickupConfirmedEmail from '@/emails/pickup-confirmed'
 
 // --- Auth helpers ---
 
@@ -74,17 +76,75 @@ export async function confirmPickup(pickupId: string) {
     return { error: 'Can only confirm pickups with submitted status' }
   }
 
+  // Fetch pickup details for notification
+  const pickupDetail = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        reference: pickups.reference,
+        tenant_id: pickups.tenant_id,
+        submitted_by: pickups.submitted_by,
+        location_name: locations.name,
+        confirmed_date: pickups.confirmed_date,
+      })
+      .from(pickups)
+      .leftJoin(locations, eq(pickups.location_id, locations.id))
+      .where(eq(pickups.id, validatedId))
+      .limit(1)
+  })
+
+  const pickupInfo = pickupDetail[0]
+
   // Update status to confirmed
+  const confirmedDate = new Date()
   await withRLSContext(user, async (tx) => {
     return tx
       .update(pickups)
       .set({
         status: 'confirmed',
-        confirmed_date: new Date(),
+        confirmed_date: confirmedDate,
         updated_at: new Date(),
       })
       .where(eq(pickups.id, validatedId))
   })
+
+  // Send pickup_confirmed notification + email (non-blocking)
+  if (pickupInfo) {
+    try {
+      // Fetch the client user email for email notification
+      const { db: rawDb, users } = await import('@repo/db')
+      const clientUser = pickupInfo.submitted_by
+        ? await rawDb
+            .select({ email: users.email })
+            .from(users)
+            .where(eq(users.id, pickupInfo.submitted_by as string))
+            .limit(1)
+        : []
+      const clientEmail = clientUser[0]?.email
+
+      await dispatchNotification({
+        userId: pickupInfo.submitted_by as string | null,
+        tenantId: pickupInfo.tenant_id,
+        type: 'pickup_confirmed',
+        title: `Pickup ${pickupInfo.reference} confirmed`,
+        body: `Your pickup request has been confirmed for ${confirmedDate.toISOString().split('T')[0]}.`,
+        entityType: 'pickup',
+        entityId: validatedId,
+        email: clientEmail ? {
+          to: clientEmail,
+          subject: `Pickup ${pickupInfo.reference} Confirmed`,
+          react: PickupConfirmedEmail({
+            reference: pickupInfo.reference,
+            clientName: pickupInfo.location_name ?? 'Client',
+            locationName: pickupInfo.location_name ?? 'Your location',
+            confirmedDate: confirmedDate.toISOString().split('T')[0],
+            pickupId: validatedId,
+          }),
+        } : undefined,
+      })
+    } catch (err) {
+      console.error('[notification] Pickup confirmation failed:', err)
+    }
+  }
 
   revalidatePath('/pickups')
   return { success: true }
@@ -161,6 +221,22 @@ export async function updatePickupStatus(pickupId: string, newStatus: string) {
     }
   }
 
+  // Fetch pickup info for notification (before update)
+  const pickupRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        reference: pickups.reference,
+        tenant_id: pickups.tenant_id,
+        location_name: locations.name,
+      })
+      .from(pickups)
+      .leftJoin(locations, eq(pickups.location_id, locations.id))
+      .where(eq(pickups.id, validatedId))
+      .limit(1)
+  })
+
+  const pickupRef = pickupRows[0]
+
   // Update status
   await withRLSContext(user, async (tx) => {
     return tx
@@ -171,6 +247,23 @@ export async function updatePickupStatus(pickupId: string, newStatus: string) {
       })
       .where(eq(pickups.id, validatedId))
   })
+
+  // Fire pickup_collected notification when status transitions to picked_up
+  if (newStatus === 'picked_up' && pickupRef) {
+    try {
+      await dispatchNotification({
+        userId: null,
+        tenantId: pickupRef.tenant_id,
+        type: 'pickup_collected',
+        title: `Pickup ${pickupRef.reference} collected`,
+        body: `Pickup from ${pickupRef.location_name ?? 'location'} has been collected.`,
+        entityType: 'pickup',
+        entityId: validatedId,
+      })
+    } catch (err) {
+      console.error('[notification] pickup_collected failed:', err)
+    }
+  }
 
   revalidatePath('/pickups')
   return { success: true }

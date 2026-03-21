@@ -16,6 +16,8 @@ import {
 import { eq, desc, isNull, and, lt, gte, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { dispatchNotification, getRecoAdminEmails } from '@/lib/notification-events'
+import UninvoicedAlertEmail from '@/emails/uninvoiced-alert'
 
 // --- Auth helpers ---
 
@@ -469,5 +471,80 @@ export async function getUninvoicedAlerts(
     overdue_count: parseInt(overdueRow?.count ?? '0', 10),
     overdue_total_eur: overdueRow?.total ?? '0',
     monthly_uninvoiced_eur: monthlyRow?.total ?? '0',
+  }
+}
+
+/**
+ * Check for uninvoiced deliveries past the threshold and dispatch notification + email.
+ * Creates at most one notification per run — deduplication is caller's responsibility
+ * (dashboard wires this on page load, which is infrequent enough to avoid spam).
+ * reco-admin only.
+ */
+export async function checkUninvoicedAlerts(): Promise<void> {
+  const user = await requireRecoAdmin()
+
+  // Read system settings for threshold (raw db — non-sensitive, no RLS needed)
+  const settingsRows = await db
+    .select({ warehouse_ageing_threshold_days: systemSettings.warehouse_ageing_threshold_days })
+    .from(systemSettings)
+    .limit(1)
+  const thresholdDays = settingsRows[0]?.warehouse_ageing_threshold_days ?? 14
+
+  const thresholdDate = new Date()
+  thresholdDate.setDate(thresholdDate.getDate() - thresholdDays)
+
+  // Query overdue not_invoiced records
+  const overdueRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        count: sql<string>`count(*)`,
+        total: sql<string>`coalesce(sum(${financialRecords.estimated_invoice_amount_eur}), 0)`,
+        oldest_date: sql<Date | null>`min(${intakeRecords.delivery_date})`,
+      })
+      .from(financialRecords)
+      .innerJoin(intakeRecords, eq(intakeRecords.id, financialRecords.intake_record_id))
+      .where(
+        and(
+          eq(financialRecords.invoice_status, 'not_invoiced'),
+          eq(intakeRecords.voided, false),
+          lt(intakeRecords.delivery_date, thresholdDate)
+        )
+      )
+  })
+
+  const overdueRow = overdueRows[0]
+  const uninvoicedCount = parseInt(overdueRow?.count ?? '0', 10)
+
+  if (uninvoicedCount === 0) return
+
+  const oldestDate = overdueRow?.oldest_date
+  const oldestDays = oldestDate
+    ? Math.floor((Date.now() - oldestDate.getTime()) / (1000 * 60 * 60 * 24))
+    : thresholdDays
+  const estimatedRevenue = `\u20AC${parseFloat(overdueRow?.total ?? '0').toFixed(2)}`
+  const formattedRevenue = estimatedRevenue
+
+  try {
+    const adminEmails = await getRecoAdminEmails()
+    await dispatchNotification({
+      userId: null,
+      tenantId: null,
+      type: 'uninvoiced_delivery',
+      title: `${uninvoicedCount} deliveries uninvoiced`,
+      body: `${uninvoicedCount} deliveries remain uninvoiced. Oldest: ${oldestDays} days.`,
+      entityType: 'financial',
+      entityId: null,
+      email: adminEmails.length > 0 ? {
+        to: adminEmails,
+        subject: `Uninvoiced Delivery Alert — ${uninvoicedCount} deliveries`,
+        react: UninvoicedAlertEmail({
+          deliveryCount: uninvoicedCount,
+          oldestDays,
+          estimatedRevenue: formattedRevenue,
+        }),
+      } : undefined,
+    })
+  } catch (err) {
+    console.error('[notification] Uninvoiced delivery alert failed:', err)
   }
 }

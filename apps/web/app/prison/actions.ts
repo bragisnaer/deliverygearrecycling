@@ -27,6 +27,10 @@ import { eq, and, isNull, asc, inArray, desc, count } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { calculateDiscrepancyPct } from '@/lib/discrepancy'
+import { dispatchNotification, getRecoAdminEmails } from '@/lib/notification-events'
+import { sendEmail } from '@/lib/email'
+import DiscrepancyAlertEmail from '@/emails/discrepancy-alert'
+import DefectiveBatchAlertEmail from '@/emails/defective-batch-alert'
 
 // --- Types ---
 
@@ -449,6 +453,34 @@ export async function submitIntake(
       })
 
       if (flagRows.length > 0) {
+        // Notify reco-admin of defective batch match (non-blocking)
+        const firstFlag = flagRows[0]!
+        try {
+          const adminEmails = await getRecoAdminEmails()
+          await dispatchNotification({
+            userId: null,
+            tenantId: null,
+            type: 'defective_batch_match',
+            title: `Defective batch match: ${firstFlag.batch_lot_number}`,
+            body: `Batch ${firstFlag.batch_lot_number} at facility ${facilityId} matched a flagged entry.`,
+            entityType: 'intake',
+            entityId: null,
+            email: adminEmails.length > 0 ? {
+              to: adminEmails,
+              subject: `Defective Batch Match — ${firstFlag.batch_lot_number}`,
+              react: DefectiveBatchAlertEmail({
+                intakeReference: 'pending',
+                facilityName: facilityId,
+                batchNumber: firstFlag.batch_lot_number,
+                flagReason: firstFlag.reason ?? 'Matched flagged batch entry',
+                intakeId: '',
+              }),
+            } : undefined,
+          })
+        } catch (err) {
+          console.error('[notification] Defective batch alert failed:', err)
+        }
+
         return {
           error: 'quarantine_blocked',
           flaggedBatches: flagRows.map((r) => ({
@@ -554,6 +586,31 @@ export async function submitIntake(
         })
       } catch {
         // Non-blocking — notification failure must not break intake submission
+      }
+
+      // Send discrepancy email to reco-admin (critical — always sent, non-blocking)
+      try {
+        const adminEmails = await getRecoAdminEmails()
+        if (adminEmails.length > 0) {
+          const maxDiscrepancy = Math.max(
+            ...processedLines
+              .map((l) => l.discrepancy_pct)
+              .filter((p): p is number => p !== null)
+          )
+          await sendEmail({
+            to: adminEmails,
+            subject: `Discrepancy Alert — intake at ${facilityId}`,
+            react: DiscrepancyAlertEmail({
+              intakeReference: 'See platform',
+              facilityName: facilityId,
+              clientName: input.origin_market ?? 'Unknown',
+              discrepancyPercent: Math.round(maxDiscrepancy),
+              intakeId,
+            }),
+          })
+        }
+      } catch (err) {
+        console.error('[email] Discrepancy alert failed:', err)
       }
     }
   } catch (err) {
