@@ -6,7 +6,8 @@
 		"build": "turbo build",
 		"dev": "turbo dev",
 		"lint": "biome check .",
-		"format": "biome format --write ."
+		"format": "biome format --write .",
+		"db:deploy": "bash scripts/deploy-db-production.sh"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.8",
