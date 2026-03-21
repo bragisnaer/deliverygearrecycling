@@ -199,15 +199,16 @@ Plans:
   3. A client user visiting their portal sees a manual covering packing guide, gear types, booking walkthrough, and FAQs, rendered from markdown with images
   4. Prison staff visiting the prison section see the prison operations manual covering intake flow, counting guide, QC checklists, and processing workflow, with content distinct from the client manual
   5. reco-admin can edit manual content directly in the platform and changes are versioned with an audit trail
-**Plans**: 6 plans
+**Plans**: 7 plans
 
 Plans:
+- [ ] 09-00-PLAN.md — Wave 0: test stubs (notifications, manual-render, manual-editor), react-markdown install, ESM mock config
 - [ ] 09-01-PLAN.md — Notification + manual schema: mute_preferences table, expanded notifications RLS, manual_pages + versions tables, notification type helper library
 - [ ] 09-02-PLAN.md — Email notification templates: 6 new React Email templates for all PRD notification matrix gaps
-- [ ] 09-03-PLAN.md — Notification centre UI: bell component with Realtime, dropdown, full list page, mute toggles, layout integration
-- [ ] 09-04-PLAN.md — Manual editor: reco-admin CRUD pages, textarea with preview, version history, publish toggle
-- [ ] 09-05-PLAN.md — Manual rendering: react-markdown install, ManualRenderer component, client + prison manual routes
-- [ ] 09-06-PLAN.md — Notification event wiring: centralized dispatch helper, missing event triggers, facility inactive check
+- [ ] 09-03-PLAN.md — Notification centre UI: bell component with Realtime, shared Server Actions in lib/, dropdown, full list page, mute toggles, layout integration
+- [ ] 09-04-PLAN.md — Manual editor: reco-admin CRUD pages with separate client components, textarea with preview, version history, publish toggle
+- [ ] 09-05-PLAN.md — Manual rendering: ManualRenderer component, client + prison manual routes, custom typography CSS
+- [ ] 09-06-PLAN.md — Notification event wiring: centralized dispatch helper, all missing event triggers, uninvoiced_delivery email, facility inactive check
 
 ### Phase 10: Historical Data Import
 **Goal**: All historical operational data (2022-2026) is imported, flagged as imported records, and fully queryable in dashboards and reports from day one of live operations
@@ -242,5 +243,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Prison Processing, Dispatch, and Audit Trail | 9/9 | Complete   | 2026-03-20 |
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
-| 9. Notifications and Manuals | 0/6 | Not started | - |
+| 9. Notifications and Manuals | 0/7 | Not started | - |
 | 10. Historical Data Import | 0/5 | Not started | - |
