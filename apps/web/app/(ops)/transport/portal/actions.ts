@@ -5,11 +5,14 @@ import {
   db,
   transportBookings,
   transportProviders,
+  outboundShipments,
+  outboundShipmentPickups,
   pickups,
   locations,
+  tenants,
   withRLSContext,
 } from '@repo/db'
-import { eq, and, gte } from 'drizzle-orm'
+import { eq, and, gte, desc } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { getStorageClient } from '@/lib/storage'
@@ -78,6 +81,161 @@ export async function getAssignedPickups() {
   )
 
   return { awaiting_collection, at_warehouse, in_transit, completed }
+}
+
+/**
+ * Get the transport provider record for the current user.
+ * Returns provider_type and name, or null if no provider found.
+ */
+export async function getTransportProviderInfo(): Promise<{
+  provider_type: 'direct' | 'consolidation'
+  provider_name: string
+} | null> {
+  const user = await requireTransport()
+
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        provider_type: transportProviders.provider_type,
+        name: transportProviders.name,
+      })
+      .from(transportProviders)
+      .where(eq(transportProviders.user_id, user.id!))
+      .limit(1)
+  })
+
+  if (!rows[0]) return null
+  return {
+    provider_type: rows[0].provider_type,
+    provider_name: rows[0].name,
+  }
+}
+
+/**
+ * Get warehouse inventory for consolidation providers.
+ * Returns pickups with status 'at_warehouse' linked to this provider's bookings.
+ */
+export async function getWarehouseInventory(): Promise<
+  {
+    pickup_id: string
+    reference: string
+    client_name: string
+    product_summary: string
+    pallet_count: number
+    arrival_date: string
+    days_held: number
+  }[]
+> {
+  const user = await requireTransport()
+
+  const rows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        pickup_id: pickups.id,
+        reference: pickups.reference,
+        client_name: tenants.name,
+        pallet_count: pickups.pallet_count,
+        notes: pickups.notes,
+        confirmed_pickup_date: transportBookings.confirmed_pickup_date,
+        updated_at: pickups.updated_at,
+      })
+      .from(transportBookings)
+      .innerJoin(pickups, eq(transportBookings.pickup_id, pickups.id))
+      .innerJoin(tenants, eq(pickups.tenant_id, tenants.id))
+      .where(eq(pickups.status, 'at_warehouse'))
+  })
+
+  const now = new Date()
+  return rows
+    .map((r) => {
+      const arrivalDate = r.confirmed_pickup_date ?? r.updated_at
+      const daysHeld = Math.floor(
+        (now.getTime() - new Date(arrivalDate).getTime()) / (1000 * 60 * 60 * 24)
+      )
+      return {
+        pickup_id: r.pickup_id,
+        reference: r.reference,
+        client_name: r.client_name,
+        product_summary: r.notes ?? '—',
+        pallet_count: r.pallet_count,
+        arrival_date: new Date(arrivalDate).toISOString().slice(0, 10),
+        days_held: daysHeld,
+      }
+    })
+    .sort((a, b) => b.days_held - a.days_held)
+}
+
+/**
+ * Get outbound shipment history for the current provider (last 30 days).
+ * Returns shipments with pickup count.
+ */
+export async function getOutboundShipmentHistory(): Promise<
+  {
+    id: string
+    destination: string
+    status: string
+    pickup_count: number
+    created_at: string
+  }[]
+> {
+  const user = await requireTransport()
+
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+  // Get the provider id first, then fetch shipments
+  const providerRows = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({ id: transportProviders.id })
+      .from(transportProviders)
+      .where(eq(transportProviders.user_id, user.id!))
+      .limit(1)
+  })
+
+  if (!providerRows[0]) return []
+  const providerId = providerRows[0].id
+
+  const shipments = await withRLSContext(user, async (tx) => {
+    return tx
+      .select({
+        id: outboundShipments.id,
+        prison_facility_id: outboundShipments.prison_facility_id,
+        status: outboundShipments.status,
+        created_at: outboundShipments.created_at,
+      })
+      .from(outboundShipments)
+      .where(
+        and(
+          eq(outboundShipments.transport_provider_id, providerId),
+          gte(outboundShipments.created_at, thirtyDaysAgo)
+        )
+      )
+      .orderBy(desc(outboundShipments.created_at))
+  })
+
+  if (shipments.length === 0) return []
+
+  // Count pickups per shipment
+  const shipmentIds = shipments.map((s) => s.id)
+  const pickupCounts = await withRLSContext(user, async (tx) => {
+    const counts: Record<string, number> = {}
+    for (const shipmentId of shipmentIds) {
+      const rows = await tx
+        .select({ pickup_id: outboundShipmentPickups.pickup_id })
+        .from(outboundShipmentPickups)
+        .where(eq(outboundShipmentPickups.outbound_shipment_id, shipmentId))
+      counts[shipmentId] = rows.length
+    }
+    return counts
+  })
+
+  return shipments.map((s) => ({
+    id: s.id,
+    destination: `Facility ${s.prison_facility_id.slice(0, 8)}`,
+    status: s.status,
+    pickup_count: pickupCounts[s.id] ?? 0,
+    created_at: new Date(s.created_at).toISOString().slice(0, 10),
+  }))
 }
 
 // --- Write actions ---

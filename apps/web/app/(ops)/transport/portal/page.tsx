@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { requireAuth } from '@/lib/auth-guard'
-import { getAssignedPickups } from './actions'
+import { getAssignedPickups, getTransportProviderInfo, getWarehouseInventory, getOutboundShipmentHistory } from './actions'
 import {
   Table,
   TableBody,
@@ -9,6 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { TransportStats } from './components/transport-stats'
+import { WarehouseInventorySection } from './components/warehouse-inventory-section'
 
 function formatDate(date: Date | string | null | undefined): string {
   if (!date) return '—'
@@ -132,6 +134,13 @@ export default async function TransportPortalPage({ searchParams }: TransportPor
   const activeTab = tab ?? 'awaiting'
 
   const { awaiting_collection, at_warehouse, in_transit, completed } = await getAssignedPickups()
+  const providerInfo = await getTransportProviderInfo()
+
+  const isConsolidation = providerInfo?.provider_type === 'consolidation'
+
+  const [inventory, shipments] = isConsolidation
+    ? await Promise.all([getWarehouseInventory(), getOutboundShipmentHistory()])
+    : [[], []]
 
   return (
     <div className="max-w-6xl space-y-6">
@@ -141,6 +150,16 @@ export default async function TransportPortalPage({ searchParams }: TransportPor
           View and manage your assigned pickups and shipments.
         </p>
       </div>
+
+      {/* Summary stats */}
+      <TransportStats
+        counts={{
+          awaiting: awaiting_collection.length,
+          inTransit: in_transit.length,
+          atWarehouse: at_warehouse.length,
+          completed: completed.length,
+        }}
+      />
 
       {/* Status tabs */}
       <div className="flex items-center gap-1 border-b border-border">
@@ -209,6 +228,11 @@ export default async function TransportPortalPage({ searchParams }: TransportPor
           dateLabel="Delivery Date"
           dateField="confirmed_pickup_date"
         />
+      )}
+
+      {/* Warehouse inventory section — consolidation providers only */}
+      {isConsolidation && (
+        <WarehouseInventorySection inventory={inventory} shipments={shipments} />
       )}
     </div>
   )
