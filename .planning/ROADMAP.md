@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Prison Intake and Counting** - Tablet-first intake forms, discrepancy detection, batch quarantine (completed 2026-03-20)
 - [x] **Phase 6: Prison Processing, Dispatch, and Audit Trail** - Wash/Pack reports, outbound dispatch, edit-in-place with audit (completed 2026-03-20)
 - [x] **Phase 7: Financial Tracking** - Per-delivery financial records, invoice status, two-leg cost allocation (completed 2026-03-21)
-- [ ] **Phase 8: Dashboards and ESG Metrics** - Role-scoped dashboards, ESG calculation engine, export
+- [x] **Phase 8: Dashboards and ESG Metrics** - Role-scoped dashboards, ESG calculation engine, export (completed 2026-03-21)
 - [ ] **Phase 9: Notifications and Manuals** - In-app and email notifications, FAQ/manual system
 - [ ] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag
 
@@ -183,7 +183,7 @@ Plans:
 Plans:
 - [x] 08-01-PLAN.md — ESG calculation engine (TDD): pure functions for material weight aggregation, reuse rate, CO2 stub, CSV serialiser with Wolt-anchored tests
 - [x] 08-02-PLAN.md — ESG metrics page: temporal composition join queries, material breakdown table, reuse rate, methodology block, ops nav link
-- [ ] 08-03-PLAN.md — ESG export: @react-pdf/renderer PDF report and CSV download via auth-protected Route Handler
+- [x] 08-03-PLAN.md — ESG export: @react-pdf/renderer PDF report and CSV download via auth-protected Route Handler
 - [x] 08-04-PLAN.md — Ops dashboard: pickup status summary, consolidation ageing, prison pipeline, revenue summary, client context switcher
 - [x] 08-05-PLAN.md — Client dashboard: role-branched (client vs client-global), pickup activity, sent-vs-received discrepancy, quarterly volume, ESG summary
 - [x] 08-06-PLAN.md — Transport dashboard: stat summary cards, warehouse inventory section for consolidation providers
@@ -241,6 +241,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 5. Prison Intake and Counting | 8/8 | Complete   | 2026-03-20 |
 | 6. Prison Processing, Dispatch, and Audit Trail | 9/9 | Complete   | 2026-03-20 |
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
-| 8. Dashboards and ESG Metrics | 6/7 | In Progress|  |
+| 8. Dashboards and ESG Metrics | 7/7 | Complete   | 2026-03-21 |
 | 9. Notifications and Manuals | 0/6 | Not started | - |
 | 10. Historical Data Import | 0/5 | Not started | - |
