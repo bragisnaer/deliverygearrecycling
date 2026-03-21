@@ -178,16 +178,16 @@ Plans:
   3. The transport dashboard shows assigned pickups awaiting collection, active shipments, and completed deliveries; consolidation providers also see warehouse inventory
   4. ESG output for 1,000 bike bags shows exactly 943kg polypropylene, 386kg PVC, 294kg polyester (and other materials) using intake quantities × material weight from the composition active at delivery date
   5. The ESG summary is exportable as a PDF report and a CSV data file, with the calculation methodology (formula and inputs) shown inline
-**Plans**: TBD
+**Plans**: 7 plans
 
 Plans:
-- [ ] 08-01: ESG calculation engine — material weight × actual quantities, temporal composition join, aggregation by material/product/country/period
-- [ ] 08-02: ESG metrics UI — reuse rate, CO2 avoided (formula validated pre-build), methodology inline display
-- [ ] 08-03: ESG export — PDF report (@react-pdf/renderer) and CSV data download
-- [ ] 08-04: reco ops dashboard — aggregated pickups, consolidation ageing, uninvoiced widget, prison pipeline, revenue summary
-- [ ] 08-05: Client dashboard — location view (client role), cross-market aggregated view (client-global), discrepancy flags, ESG summary
-- [ ] 08-06: Transport dashboard — pickup queue, active shipments, completed deliveries, warehouse inventory for consolidation
-- [ ] 08-07: Dashboard performance — materialised views or indexed aggregations, query optimisation, <2s load / <500ms filter
+- [ ] 08-01-PLAN.md — ESG calculation engine (TDD): pure functions for material weight aggregation, reuse rate, CO2 stub, CSV serialiser with Wolt-anchored tests
+- [ ] 08-02-PLAN.md — ESG metrics page: temporal composition join queries, material breakdown table, reuse rate, methodology block, ops nav link
+- [ ] 08-03-PLAN.md — ESG export: @react-pdf/renderer PDF report and CSV download via auth-protected Route Handler
+- [ ] 08-04-PLAN.md — Ops dashboard: pickup status summary, consolidation ageing, prison pipeline, revenue summary, client context switcher
+- [ ] 08-05-PLAN.md — Client dashboard: role-branched (client vs client-global), pickup activity, sent-vs-received discrepancy, quarterly volume, ESG summary
+- [ ] 08-06-PLAN.md — Transport dashboard: stat summary cards, warehouse inventory section for consolidation providers
+- [ ] 08-07-PLAN.md — Dashboard performance: composite indexes migration for ESG temporal joins and dashboard aggregations
 
 ### Phase 9: Notifications and Manuals
 **Goal**: All roles receive timely notifications for critical events; client and prison users have role-appropriate manual content accessible from their portals
