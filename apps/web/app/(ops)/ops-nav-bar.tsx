@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { label: 'Intake', href: '/intake' },
   { label: 'Processing', href: '/processing' },
   { label: 'Dispatch', href: '/dispatch' },
+  { label: 'Financial', href: '/financial' },
   { label: 'Products', href: '/products' },
   { label: 'Settings', href: '/settings' },
 ]
