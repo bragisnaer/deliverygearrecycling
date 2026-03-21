@@ -108,20 +108,20 @@
 
 ### Financial Tracking
 
-- [ ] **FIN-01**: Each delivered intake record has a financial record with: transport cost (EUR, sum of both legs), estimated invoice amount (auto-calculated: intake quantities × product pricing + transport cost), invoice status (`not_invoiced` / `invoiced` / `paid`), invoice number, invoice date, notes
-- [ ] **FIN-02**: Estimated invoice amount uses the product pricing record with `effective_to = null` (current) at the time of delivery
-- [ ] **FIN-03**: Invoice status, invoice number, invoice date, and notes are editable by reco-admin
-- [ ] **FIN-04**: Dashboard alert: deliveries older than 14 days with status `not_invoiced`; monthly uninvoiced revenue estimate
-- [ ] **FIN-05**: System-level exchange rate (EUR↔DKK) configured by reco-admin in system settings; applied at display time only, never stored on financial records; users can set preferred display currency (EUR or DKK, default EUR)
-- [ ] **FIN-06**: Financial data visible to `reco-admin` always; visible to `reco` role only if `can_view_financials` toggle is on; never visible to `client`, `client-global`, `transport`, or `prison` roles
+- [x] **FIN-01**: Each delivered intake record has a financial record with: transport cost (EUR, sum of both legs), estimated invoice amount (auto-calculated: intake quantities × product pricing + transport cost), invoice status (`not_invoiced` / `invoiced` / `paid`), invoice number, invoice date, notes
+- [x] **FIN-02**: Estimated invoice amount uses the product pricing record with `effective_to = null` (current) at the time of delivery
+- [x] **FIN-03**: Invoice status, invoice number, invoice date, and notes are editable by reco-admin
+- [x] **FIN-04**: Dashboard alert: deliveries older than 14 days with status `not_invoiced`; monthly uninvoiced revenue estimate
+- [x] **FIN-05**: System-level exchange rate (EUR↔DKK) configured by reco-admin in system settings; applied at display time only, never stored on financial records; users can set preferred display currency (EUR or DKK, default EUR)
+- [x] **FIN-06**: Financial data visible to `reco-admin` always; visible to `reco` role only if `can_view_financials` toggle is on; never visible to `client`, `client-global`, `transport`, or `prison` roles
 
 ### ESG Metrics
 
-- [ ] **ESG-01**: Total material recycled per type calculated as: `product_materials.weight_grams × intake_record_lines.actual_quantity` for all intake records; aggregated by material, product, country, time period
-- [ ] **ESG-02**: Example auto-calculation: 1,000 bike bags processed = 943kg polypropylene, 386kg PVC, 294kg polyester, etc.
-- [ ] **ESG-03**: Reuse rate displayed: items in `reuse` processing stream / total items processed
+- [x] **ESG-01**: Total material recycled per type calculated as: `product_materials.weight_grams × intake_record_lines.actual_quantity` for all intake records; aggregated by material, product, country, time period
+- [x] **ESG-02**: Example auto-calculation: 1,000 bike bags processed = 943kg polypropylene, 386kg PVC, 294kg polyester, etc.
+- [x] **ESG-03**: Reuse rate displayed: items in `reuse` processing stream / total items processed
 - [ ] **ESG-04**: CO2 avoided displayed: configurable formula based on weight and material type (formula defined before Phase 3 build)
-- [ ] **ESG-05**: ESG calculations use material composition records temporally: `effective_from`/`effective_to` on `product_materials` ensures historical records use the composition that was active at time of delivery
+- [x] **ESG-05**: ESG calculations use material composition records temporally: `effective_from`/`effective_to` on `product_materials` ensures historical records use the composition that was active at time of delivery
 - [ ] **ESG-06**: ESG methodology shown inline (formula and inputs visible, not just output numbers)
 - [ ] **ESG-07**: ESG summary exportable per client and aggregated (PDF report and CSV data)
 
@@ -282,23 +282,23 @@
 | AUDIT-04 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-05 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
 | AUDIT-06 | Phase 6: Prison Processing, Dispatch, and Audit Trail | Complete |
-| FIN-01 | Phase 7: Financial Tracking | Pending |
-| FIN-02 | Phase 7: Financial Tracking | Pending |
-| FIN-03 | Phase 7: Financial Tracking | Pending |
-| FIN-04 | Phase 7: Financial Tracking | Pending |
-| FIN-05 | Phase 7: Financial Tracking | Pending |
-| FIN-06 | Phase 7: Financial Tracking | Pending |
+| FIN-01 | Phase 7: Financial Tracking | Complete |
+| FIN-02 | Phase 7: Financial Tracking | Complete |
+| FIN-03 | Phase 7: Financial Tracking | Complete |
+| FIN-04 | Phase 7: Financial Tracking | Complete |
+| FIN-05 | Phase 7: Financial Tracking | Complete |
+| FIN-06 | Phase 7: Financial Tracking | Complete |
 | DASH-01 | Phase 8: Dashboards and ESG Metrics | Pending |
 | DASH-02 | Phase 8: Dashboards and ESG Metrics | Pending |
 | DASH-03 | Phase 8: Dashboards and ESG Metrics | Pending |
 | DASH-04 | Phase 8: Dashboards and ESG Metrics | Pending |
 | DASH-05 | Phase 8: Dashboards and ESG Metrics | Pending |
 | DASH-06 | Phase 8: Dashboards and ESG Metrics | Pending |
-| ESG-01 | Phase 8: Dashboards and ESG Metrics | Pending |
-| ESG-02 | Phase 8: Dashboards and ESG Metrics | Pending |
-| ESG-03 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-01 | Phase 8: Dashboards and ESG Metrics | Complete |
+| ESG-02 | Phase 8: Dashboards and ESG Metrics | Complete |
+| ESG-03 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-04 | Phase 8: Dashboards and ESG Metrics | Pending |
-| ESG-05 | Phase 8: Dashboards and ESG Metrics | Pending |
+| ESG-05 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-06 | Phase 8: Dashboards and ESG Metrics | Pending |
 | ESG-07 | Phase 8: Dashboards and ESG Metrics | Pending |
 | NOTIF-01 | Phase 9: Notifications and Manuals | Pending |

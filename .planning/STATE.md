@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-03-PLAN.md
-last_updated: "2026-03-21T09:09:12.369Z"
+stopped_at: Completed 08-01-PLAN.md
+last_updated: "2026-03-21T09:44:24.445Z"
 progress:
   total_phases: 10
   completed_phases: 7
-  total_plans: 48
-  completed_plans: 48
+  total_plans: 55
+  completed_plans: 49
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-20)
 
 **Core value:** Every delivery tracked from booking to invoice; every item from pickup to recycling or redistribution — zero uninvoiced deliveries, zero missing processing data, discrepancy rate below 10%
-**Current focus:** Phase 07 — financial-tracking
+**Current focus:** Phase 8 — Dashboards and ESG Metrics
 
 ## Current Position
 
-Phase: 08
-Plan: Not started
+Phase: 8 (Dashboards and ESG Metrics) — EXECUTING
+Plan: 2 of 7
 
 ## Performance Metrics
 
@@ -93,6 +93,7 @@ Plan: Not started
 | Phase 07-financial-tracking P01 | 8 | 2 tasks | 5 files |
 | Phase 07-financial-tracking P02 | 10 | 2 tasks | 5 files |
 | Phase 07-financial-tracking P03 | 5 | 2 tasks | 5 files |
+| Phase 08-dashboards-and-esg-metrics P01 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -198,6 +199,8 @@ Recent decisions affecting current work:
 - [Phase 07-financial-tracking]: Native select element used for invoice_status in InvoiceEditForm — @base-ui/react/select incompatible with react-hook-form Controller; native element styled to match input appearance
 - [Phase 07-financial-tracking]: getUninvoicedAlerts reads systemSettings via raw db (not withRLSContext) — settings are non-sensitive and accessible before tenant context is established
 - [Phase 07-financial-tracking]: setCurrencyPreference uses dynamic import for next/headers cookies() — required pattern for calling cookies() inside a use server action file
+- [Phase 08-dashboards-and-esg-metrics]: item_count in MaterialWeightRow accumulates actual_quantity (total items processed), not line count — matches semantic meaning for ESG display
+- [Phase 08-dashboards-and-esg-metrics]: calculateCO2Avoided stubbed with formula_pending: true until reco/Wolt define per-material CO2 factors (ESG-04 blocker acknowledged)
 
 ### Pending Todos
 
@@ -211,6 +214,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T09:05:19.853Z
-Stopped at: Completed 07-03-PLAN.md
+Last session: 2026-03-21T09:44:24.441Z
+Stopped at: Completed 08-01-PLAN.md
 Resume file: None
