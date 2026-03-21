@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 const nextConfig: NextConfig = {
 	transpilePackages: ["@repo/db", "@repo/types"],
 	output: "standalone",
+	serverExternalPackages: ['@react-pdf/renderer'],
 };
 
 export default withNextIntl(nextConfig);
