@@ -16,6 +16,8 @@ export default defineConfig({
       { find: 'react-markdown', replacement: path.resolve(webRoot, '__mocks__/react-markdown.ts') },
       { find: 'remark-gfm', replacement: path.resolve(webRoot, '__mocks__/remark-gfm.ts') },
       { find: 'rehype-raw', replacement: path.resolve(webRoot, '__mocks__/rehype-raw.ts') },
+      // Mock resend — prevents "Missing API key" error when email.ts is loaded during unit tests
+      { find: 'resend', replacement: path.resolve(webRoot, '__mocks__/resend.ts') },
       // Generic @ alias for everything else
       { find: '@', replacement: webRoot },
     ],

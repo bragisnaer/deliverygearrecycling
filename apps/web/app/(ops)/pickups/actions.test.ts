@@ -2,15 +2,31 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // Mock @repo/db — no real DB connection
 vi.mock('@repo/db', () => {
+  const selectChain = {
+    select: vi.fn().mockReturnThis(),
+    from: vi.fn().mockReturnThis(),
+    where: vi.fn().mockResolvedValue([]),
+    limit: vi.fn().mockResolvedValue([]),
+    leftJoin: vi.fn().mockReturnThis(),
+  }
   return {
-    db: { transaction: vi.fn() },
+    db: selectChain,
     withRLSContext: vi.fn(),
     pickups: {},
     pickupLines: {},
     products: {},
     locations: {},
+    users: {},
+    eq: vi.fn(),
+    and: vi.fn(),
   }
 })
+
+// Mock @/lib/notification-events — prevents real DB/email calls from notification dispatch
+vi.mock('@/lib/notification-events', () => ({
+  dispatchNotification: vi.fn().mockResolvedValue(undefined),
+  getRecoAdminEmails: vi.fn().mockResolvedValue([]),
+}))
 
 // Mock next/cache
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
@@ -79,7 +95,7 @@ describe('confirmPickup', () => {
     vi.mocked(withRLSContext).mockImplementation(async (_claims, fn) => {
       callCount++
       if (callCount === 1) {
-        // Fetch pickup
+        // Fetch pickup status
         const tx = {
           select: vi.fn().mockReturnValue({
             from: vi.fn().mockReturnValue({
@@ -92,7 +108,28 @@ describe('confirmPickup', () => {
         return fn(tx as never)
       }
       if (callCount === 2) {
-        // Update pickup
+        // Fetch pickup details for notification (Phase 9 addition)
+        const tx = {
+          select: vi.fn().mockReturnValue({
+            from: vi.fn().mockReturnValue({
+              leftJoin: vi.fn().mockReturnValue({
+                where: vi.fn().mockReturnValue({
+                  limit: vi.fn().mockResolvedValue([{
+                    reference: 'PU-001',
+                    tenant_id: 'wolt',
+                    submitted_by: null,
+                    location_name: 'Wolt HQ',
+                    confirmed_date: null,
+                  }]),
+                }),
+              }),
+            }),
+          }),
+        }
+        return fn(tx as never)
+      }
+      if (callCount === 3) {
+        // Update pickup status
         const tx = {
           update: vi.fn().mockReturnValue({
             set: vi.fn().mockReturnValue({
