@@ -161,14 +161,12 @@ Plans:
   3. The dashboard shows a persistent alert listing all deliveries older than 14 days with status not_invoiced, with a monthly uninvoiced revenue estimate
   4. Financial data is completely hidden from client, client-global, transport, and prison roles; visible to reco role only when the can_view_financials toggle is on
   5. Amounts display in EUR or DKK based on user preference; the exchange rate is applied at display time using the system-configured rate; stored values are always in EUR
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 07-01: Financial record schema — auto-created on intake delivery, two-leg cost fields, invoice status enum, invoice fields
-- [ ] 07-02: Estimated invoice calculation — quantities × effective-dated pricing + transport cost sum, trigger or Server Action
-- [ ] 07-03: Invoice management UI — reco-admin edit for status, number, date, notes; role-scoped visibility
-- [ ] 07-04: Uninvoiced delivery alert — dashboard widget, 14-day threshold, monthly revenue estimate
-- [ ] 07-05: Currency display — EUR/DKK toggle, exchange rate application at display, user preference storage
+- [ ] 07-01-PLAN.md — Financial records schema, migration with auto-create trigger and RLS, pure calculation/formatting functions with tests
+- [ ] 07-02-PLAN.md — Financial record Server Actions (CRUD, invoice calculation), list page, detail page with invoice edit, nav bar link
+- [ ] 07-03-PLAN.md — Uninvoiced delivery alert widget on dashboard, EUR/DKK currency toggle with cookie persistence
 
 ### Phase 8: Dashboards and ESG Metrics
 **Goal**: reco-admin, client, and transport users each have a role-scoped dashboard showing their most important operational data; ESG metrics are calculated from actual intake records and are exportable
@@ -242,7 +240,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 4. Pickup Booking and Transport Management | 10/10 | Complete   | 2026-03-20 |
 | 5. Prison Intake and Counting | 8/8 | Complete   | 2026-03-20 |
 | 6. Prison Processing, Dispatch, and Audit Trail | 9/9 | Complete   | 2026-03-20 |
-| 7. Financial Tracking | 0/5 | Not started | - |
+| 7. Financial Tracking | 0/3 | Not started | - |
 | 8. Dashboards and ESG Metrics | 0/7 | Not started | - |
 | 9. Notifications and Manuals | 0/6 | Not started | - |
 | 10. Historical Data Import | 0/5 | Not started | - |
