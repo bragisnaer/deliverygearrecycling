@@ -111,3 +111,30 @@
 		font-family: var(--font-sans);
 	}
 }
+
+/* Manual content typography — replaces @tailwindcss/typography */
+.manual-content {
+  line-height: 1.75;
+  color: var(--foreground);
+  max-width: 65ch;
+}
+.manual-content h1 { font-size: 2rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; line-height: 1.2; }
+.manual-content h2 { font-size: 1.5rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.75rem; line-height: 1.3; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+.manual-content h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+.manual-content p { margin-top: 0.75rem; margin-bottom: 0.75rem; }
+.manual-content ul, .manual-content ol { margin-top: 0.5rem; margin-bottom: 0.5rem; padding-left: 1.5rem; }
+.manual-content ul { list-style-type: disc; }
+.manual-content ol { list-style-type: decimal; }
+.manual-content li { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+.manual-content a { color: var(--primary, #ED1C24); text-decoration: underline; }
+.manual-content a:hover { opacity: 0.8; }
+.manual-content code { font-family: Consolas, monospace; font-size: 0.875em; background-color: var(--muted, #f3f4f6); padding: 0.125rem 0.25rem; border-radius: 0.25rem; }
+.manual-content pre { background-color: var(--muted, #f3f4f6); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-top: 1rem; margin-bottom: 1rem; }
+.manual-content pre code { background: none; padding: 0; }
+.manual-content blockquote { border-left: 4px solid var(--border); padding-left: 1rem; margin-left: 0; color: var(--muted-foreground); font-style: italic; }
+.manual-content img { max-width: 100%; height: auto; border-radius: 0.5rem; margin-top: 1rem; margin-bottom: 1rem; }
+.manual-content table { width: 100%; border-collapse: collapse; margin-top: 1rem; margin-bottom: 1rem; }
+.manual-content th, .manual-content td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+.manual-content th { background-color: var(--muted, #f3f4f6); font-weight: 600; }
+.manual-content iframe { max-width: 100%; margin-top: 1rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; }
+.manual-content hr { border: none; border-top: 1px solid var(--border); margin-top: 1.5rem; margin-bottom: 1.5rem; }
