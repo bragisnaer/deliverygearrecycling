@@ -219,14 +219,14 @@ Plans:
   2. The import preview shows validation errors (missing required fields, unrecognised values, date format issues) before any records are committed
   3. After import, all imported records are visually distinguished from live records (import source badge) in all list views and exports
   4. ESG totals and financial summaries include historical imported data and return accurate aggregates across the full 2022-2026 date range
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 10-01: Import schema — source flag on all importable record types, import_runs audit table
-- [ ] 10-02: File upload and column mapping UI — CSV/XLSX parsing, field mapping interface, field type validation
-- [ ] 10-03: Validation preview — error highlighting, row-by-row status, mandatory fix before commit
-- [ ] 10-04: Import commit — bulk upsert with source flag, import run record, rollback on partial failure
-- [ ] 10-05: Import source display — badge/indicator on imported records in all list views and detail pages
+- [ ] 10-01-PLAN.md — Migration (is_imported columns on 5 tables + import_jobs table) + CSV/XLSX parser library with tests
+- [ ] 10-02-PLAN.md — Import source definitions registry + per-source Zod validators + FK resolution helpers with tests
+- [ ] 10-03-PLAN.md — Upload API route, import hub page, multi-step wizard UI (upload, map, preview, commit), commit Server Action
+- [ ] 10-04-PLAN.md — Imported record badge in all list views (intake, pickup, processing, financial, transport) + ESG inclusion verification
+- [ ] 10-05-PLAN.md — Full test suite + type check + manual end-to-end verification checkpoint
 
 ## Progress
 
