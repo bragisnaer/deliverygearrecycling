@@ -53,6 +53,7 @@ export default async function ProcessingPipelinePage() {
                       staffName={item.staff_name}
                       deliveryDate={item.delivery_date}
                       originMarket={item.origin_market}
+                      isImported={item.is_imported}
                       washReport={item.washReport}
                       packReport={item.packReport}
                     />

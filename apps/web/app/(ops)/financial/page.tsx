@@ -126,7 +126,14 @@ export default async function FinancialRecordsPage() {
                   {formatCurrency(record.estimated_invoice_amount_eur, currency, exchangeRate)}
                 </TableCell>
                 <TableCell>
-                  <InvoiceStatusBadge status={record.invoice_status} />
+                  <div className="flex flex-wrap gap-1">
+                    <InvoiceStatusBadge status={record.invoice_status} />
+                    {record.is_imported && (
+                      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[12px] font-medium bg-blue-100 text-blue-800 border-blue-200">
+                        Imported
+                      </span>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell className="font-mono text-[13px] text-muted-foreground">
                   {record.invoice_number ?? '—'}

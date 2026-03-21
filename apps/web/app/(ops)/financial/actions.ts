@@ -113,13 +113,15 @@ export type FinancialRecordListItem = {
   invoice_status: 'not_invoiced' | 'invoiced' | 'paid'
   invoice_number: string | null
   invoice_date: Date | null
+  is_imported: boolean
   created_at: Date
 }
 
-export type FinancialRecordDetail = FinancialRecordListItem & {
+export type FinancialRecordDetail = Omit<FinancialRecordListItem, 'is_imported'> & {
   pickup_id: string | null
   tenant_id: string
   notes: string | null
+  is_imported: boolean
   updated_at: Date
 }
 
@@ -146,6 +148,7 @@ export async function getFinancialRecords(): Promise<FinancialRecordListItem[]> 
         invoice_status: financialRecords.invoice_status,
         invoice_number: financialRecords.invoice_number,
         invoice_date: financialRecords.invoice_date,
+        is_imported: financialRecords.is_imported,
         created_at: financialRecords.created_at,
       })
       .from(financialRecords)
@@ -166,6 +169,7 @@ export async function getFinancialRecords(): Promise<FinancialRecordListItem[]> 
     invoice_status: r.invoice_status,
     invoice_number: r.invoice_number,
     invoice_date: r.invoice_date,
+    is_imported: r.is_imported,
     created_at: r.created_at,
   }))
 }
@@ -192,6 +196,7 @@ export async function getFinancialRecord(id: string): Promise<FinancialRecordDet
         invoice_status: financialRecords.invoice_status,
         invoice_number: financialRecords.invoice_number,
         invoice_date: financialRecords.invoice_date,
+        is_imported: financialRecords.is_imported,
         notes: financialRecords.notes,
         created_at: financialRecords.created_at,
         updated_at: financialRecords.updated_at,
@@ -219,6 +224,7 @@ export async function getFinancialRecord(id: string): Promise<FinancialRecordDet
     invoice_status: row.invoice_status,
     invoice_number: row.invoice_number,
     invoice_date: row.invoice_date,
+    is_imported: row.is_imported,
     notes: row.notes,
     created_at: row.created_at,
     updated_at: row.updated_at,

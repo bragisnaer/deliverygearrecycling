@@ -15,6 +15,7 @@ interface PipelineCardProps {
   staffName: string
   deliveryDate: Date
   originMarket: string | null
+  isImported: boolean
   washReport: ProcessingReportCard | null
   packReport: ProcessingReportCard | null
 }
@@ -30,6 +31,7 @@ export function PipelineCard({
   staffName,
   deliveryDate,
   originMarket,
+  isImported,
   washReport,
   packReport,
 }: PipelineCardProps) {
@@ -49,11 +51,18 @@ export function PipelineCard({
           <span className="font-mono text-[12px] font-semibold text-foreground">
             {reference}
           </span>
-          {originMarket && (
-            <span className="font-mono text-[11px] text-muted-foreground">
-              {originMarket}
-            </span>
-          )}
+          <div className="flex items-center gap-1">
+            {isImported && (
+              <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[12px] font-medium bg-blue-100 text-blue-800 border-blue-200">
+                Imported
+              </span>
+            )}
+            {originMarket && (
+              <span className="font-mono text-[11px] text-muted-foreground">
+                {originMarket}
+              </span>
+            )}
+          </div>
         </div>
 
         {clientName && (

@@ -64,6 +64,7 @@ export async function getWarehouseInventory() {
         status: pickups.status,
         pallet_count: pickups.pallet_count,
         updated_at: pickups.updated_at,
+        is_imported: pickups.is_imported,
         location_name: locations.name,
         location_address: locations.address,
         location_country: locations.country,

@@ -102,12 +102,19 @@ export default async function WarehouseOutboundPage() {
               {heldPickups.map((pickup) => (
                 <TableRow key={pickup.id}>
                   <TableCell>
-                    <Link
-                      href={`/pickups/${pickup.id}`}
-                      className="font-mono text-[13px] text-primary hover:underline"
-                    >
-                      {pickup.reference}
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <Link
+                        href={`/pickups/${pickup.id}`}
+                        className="font-mono text-[13px] text-primary hover:underline"
+                      >
+                        {pickup.reference}
+                      </Link>
+                      {pickup.is_imported && (
+                        <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[12px] font-medium bg-blue-100 text-blue-800 border-blue-200">
+                          Imported
+                        </span>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="text-[13px]">
                     <div className="font-medium text-foreground">{pickup.location_name}</div>

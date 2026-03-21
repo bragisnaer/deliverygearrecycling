@@ -46,6 +46,7 @@ export interface PipelineIntakeItem {
   staff_name: string
   delivery_date: Date
   origin_market: string | null
+  is_imported: boolean
   stage: PipelineStage
   washReport: ProcessingReportCard | null
   packReport: ProcessingReportCard | null
@@ -80,6 +81,7 @@ export async function getPipelineData(facilityId?: string): Promise<PipelineData
         staff_name: intakeRecords.staff_name,
         delivery_date: intakeRecords.delivery_date,
         origin_market: intakeRecords.origin_market,
+        is_imported: intakeRecords.is_imported,
         prison_facility_id: intakeRecords.prison_facility_id,
       })
       .from(intakeRecords)
@@ -225,6 +227,7 @@ export async function getPipelineData(facilityId?: string): Promise<PipelineData
       staff_name: intake.staff_name,
       delivery_date: intake.delivery_date,
       origin_market: intake.origin_market,
+      is_imported: intake.is_imported,
       stage,
       washReport: toCard(washRow),
       packReport: toCard(packRow),
