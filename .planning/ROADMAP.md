@@ -205,7 +205,7 @@ Plans:
 - [x] 09-00-PLAN.md — Wave 0: test stubs (notifications, manual-render, manual-editor), react-markdown install, ESM mock config
 - [x] 09-01-PLAN.md — Notification + manual schema: mute_preferences table, expanded notifications RLS, manual_pages + versions tables, notification type helper library
 - [x] 09-02-PLAN.md — Email notification templates: 6 new React Email templates for all PRD notification matrix gaps
-- [ ] 09-03-PLAN.md — Notification centre UI: bell component with Realtime, shared Server Actions in lib/, dropdown, full list page, mute toggles, layout integration
+- [x] 09-03-PLAN.md — Notification centre UI: bell component with Realtime, shared Server Actions in lib/, dropdown, full list page, mute toggles, layout integration
 - [ ] 09-04-PLAN.md — Manual editor: reco-admin CRUD pages with separate client components, textarea with preview, version history, publish toggle
 - [ ] 09-05-PLAN.md — Manual rendering: ManualRenderer component, client + prison manual routes, custom typography CSS
 - [ ] 09-06-PLAN.md — Notification event wiring: centralized dispatch helper, all missing event triggers, uninvoiced_delivery email, facility inactive check
@@ -243,5 +243,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Prison Processing, Dispatch, and Audit Trail | 9/9 | Complete   | 2026-03-20 |
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
-| 9. Notifications and Manuals | 3/7 | In Progress|  |
+| 9. Notifications and Manuals | 4/7 | In Progress|  |
 | 10. Historical Data Import | 0/5 | Not started | - |
