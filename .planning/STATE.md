@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-00-PLAN.md
-last_updated: "2026-03-21T10:55:46.693Z"
+stopped_at: Completed 09-01-PLAN.md
+last_updated: "2026-03-21T11:00:50.198Z"
 progress:
   total_phases: 10
   completed_phases: 8
   total_plans: 62
-  completed_plans: 56
+  completed_plans: 57
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 09 (Notifications and Manuals) — EXECUTING
-Plan: 2 of 7
+Plan: 3 of 7
 
 ## Performance Metrics
 
@@ -101,6 +101,7 @@ Plan: 2 of 7
 | Phase 08-dashboards-and-esg-metrics P02 | 15 | 2 tasks | 6 files |
 | Phase 08-dashboards-and-esg-metrics P03 | 8 | 1 tasks | 4 files |
 | Phase 09 P00 | 2 | 2 tasks | 8 files |
+| Phase 09 P01 | 149 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -221,6 +222,9 @@ Recent decisions affecting current work:
 - [Phase 08-dashboards-and-esg-metrics]: new Uint8Array(buffer) wraps Node.js Buffer for Response BodyInit compatibility — Buffer alone fails TypeScript TS2345 since it lacks URLSearchParams interface
 - [Phase 09]: react-markdown ESM mock uses React.createElement to avoid JSX transform dependency in Vitest Node env
 - [Phase 09]: remark-gfm and rehype-raw mocked as no-op functions since plugins are not exercised in unit tests
+- [Phase 09]: notificationMutePreferences CHECK constraint on notification_type enforces critical-type immutability at DB layer — 4 critical types cannot be inserted into mute_preferences
+- [Phase 09]: manualContextEnum ('client'|'prison') scopes pages to role groups at RLS layer — no application-layer filter needed
+- [Phase 09]: Supabase Realtime publication added for notifications table — enables real-time in-app bell updates in Phase 9 UI plans
 
 ### Pending Todos
 
@@ -234,6 +238,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T10:55:46.689Z
-Stopped at: Completed 09-00-PLAN.md
+Last session: 2026-03-21T11:00:50.195Z
+Stopped at: Completed 09-01-PLAN.md
 Resume file: None
