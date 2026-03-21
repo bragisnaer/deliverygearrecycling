@@ -1,12 +1,20 @@
 import Link from 'next/link'
+import { auth } from '@/auth'
 import { requireAuth } from '@/lib/auth-guard'
 import { getBrandingForTenant, buildBrandingStyle, getGoogleFontUrls } from '@/lib/branding'
+import { NotificationBell } from '@/components/notification-bell'
+import { getUnreadCount, getRecentNotifications } from '@/lib/notification-actions'
 
 export default async function ClientLayout({ children }: { children: React.ReactNode }) {
   const { user } = await requireAuth(['client', 'client-global'])
+  const session = await auth()
 
   // Fetch tenant branding — returns null if no record (BRAND-04: reco defaults apply)
-  const branding = await getBrandingForTenant(user.tenant_id ?? '')
+  const [branding, unreadCount, recentNotifications] = await Promise.all([
+    getBrandingForTenant(user.tenant_id ?? ''),
+    getUnreadCount(),
+    getRecentNotifications(10),
+  ])
   const brandingStyle = buildBrandingStyle(branding)
   const fontUrls = getGoogleFontUrls(branding)
 
@@ -39,6 +47,17 @@ export default async function ClientLayout({ children }: { children: React.React
               >
                 Pickups
               </Link>
+              <Link
+                href="/manual"
+                className="font-mono text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Manual
+              </Link>
+              <NotificationBell
+                userId={session!.user!.id!}
+                initialCount={unreadCount}
+                initialNotifications={recentNotifications}
+              />
             </nav>
           </div>
         </header>

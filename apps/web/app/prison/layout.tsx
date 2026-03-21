@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import { getMessages } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { auth } from '@/auth'
+import { NotificationBell } from '@/components/notification-bell'
+import { getUnreadCount, getRecentNotifications } from '@/lib/notification-actions'
 
 export default async function PrisonLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -14,7 +16,11 @@ export default async function PrisonLayout({ children }: { children: React.React
     redirect('/prison/login')
   }
 
-  const messages = await getMessages()
+  const [messages, unreadCount, recentNotifications] = await Promise.all([
+    getMessages(),
+    getUnreadCount(),
+    getRecentNotifications(10),
+  ])
 
   return (
     <NextIntlClientProvider locale="da" messages={messages}>
@@ -25,8 +31,11 @@ export default async function PrisonLayout({ children }: { children: React.React
             <span className="font-heading text-base font-medium text-muted-foreground">
               {session.user.facility_id ?? 'Facility'}
             </span>
-            {/* Spacer to keep facility name centred */}
-            <span className="w-[60px]" />
+            <NotificationBell
+              userId={session.user.id!}
+              initialCount={unreadCount}
+              initialNotifications={recentNotifications}
+            />
           </div>
         </header>
         <main className="p-6">{children}</main>

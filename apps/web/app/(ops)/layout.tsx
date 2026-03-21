@@ -1,9 +1,18 @@
 import Link from 'next/link'
+import { auth } from '@/auth'
 import { requireAuth } from '@/lib/auth-guard'
 import { OpsNavBar } from './ops-nav-bar'
+import { NotificationBell } from '@/components/notification-bell'
+import { getUnreadCount, getRecentNotifications } from '@/lib/notification-actions'
 
 export default async function OpsLayout({ children }: { children: React.ReactNode }) {
   await requireAuth(['reco-admin', 'reco', 'transport', 'prison'])
+  const session = await auth()
+
+  const [unreadCount, recentNotifications] = await Promise.all([
+    getUnreadCount(),
+    getRecentNotifications(10),
+  ])
 
   return (
     <div className="min-h-screen bg-background">
@@ -12,7 +21,14 @@ export default async function OpsLayout({ children }: { children: React.ReactNod
           <Link href="/dashboard" className="font-heading text-lg font-semibold">
             reco ops
           </Link>
-          <OpsNavBar />
+          <div className="flex items-center gap-4">
+            <OpsNavBar />
+            <NotificationBell
+              userId={session!.user!.id!}
+              initialCount={unreadCount}
+              initialNotifications={recentNotifications}
+            />
+          </div>
         </div>
       </header>
       <main className="p-6">{children}</main>

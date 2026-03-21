@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { label: 'Dispatch', href: '/dispatch' },
   { label: 'Financial', href: '/financial' },
   { label: 'ESG', href: '/esg' },
+  { label: 'Manuals', href: '/manual-editor' },
   { label: 'Products', href: '/products' },
   { label: 'Settings', href: '/settings' },
 ]
