@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-03-PLAN.md
-last_updated: "2026-03-21T10:05:13.932Z"
+stopped_at: Completed 09-00-PLAN.md
+last_updated: "2026-03-21T10:55:46.693Z"
 progress:
   total_phases: 10
   completed_phases: 8
-  total_plans: 55
-  completed_plans: 55
+  total_plans: 62
+  completed_plans: 56
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-20)
 
 **Core value:** Every delivery tracked from booking to invoice; every item from pickup to recycling or redistribution — zero uninvoiced deliveries, zero missing processing data, discrepancy rate below 10%
-**Current focus:** Phase 8 — Dashboards and ESG Metrics
+**Current focus:** Phase 09 — Notifications and Manuals
 
 ## Current Position
 
-Phase: 09
-Plan: Not started
+Phase: 09 (Notifications and Manuals) — EXECUTING
+Plan: 2 of 7
 
 ## Performance Metrics
 
@@ -100,6 +100,7 @@ Plan: Not started
 | Phase 08-dashboards-and-esg-metrics P07 | 5 | 1 tasks | 2 files |
 | Phase 08-dashboards-and-esg-metrics P02 | 15 | 2 tasks | 6 files |
 | Phase 08-dashboards-and-esg-metrics P03 | 8 | 1 tasks | 4 files |
+| Phase 09 P00 | 2 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -218,6 +219,8 @@ Recent decisions affecting current work:
 - [Phase 08-dashboards-and-esg-metrics]: Temporal join: pm.effective_from <= ir.delivery_date AND (pm.effective_to IS NULL OR pm.effective_to > ir.delivery_date) — open-ended materials use effective_to IS NULL
 - [Phase 08-dashboards-and-esg-metrics]: require() cast for renderToBuffer bypasses TypeScript ReactElement<DocumentProps> incompatibility — import { renderToBuffer } from @react-pdf/renderer fails TS type check with createElement output
 - [Phase 08-dashboards-and-esg-metrics]: new Uint8Array(buffer) wraps Node.js Buffer for Response BodyInit compatibility — Buffer alone fails TypeScript TS2345 since it lacks URLSearchParams interface
+- [Phase 09]: react-markdown ESM mock uses React.createElement to avoid JSX transform dependency in Vitest Node env
+- [Phase 09]: remark-gfm and rehype-raw mocked as no-op functions since plugins are not exercised in unit tests
 
 ### Pending Todos
 
@@ -231,6 +234,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T09:59:23.117Z
-Stopped at: Completed 08-03-PLAN.md
+Last session: 2026-03-21T10:55:46.689Z
+Stopped at: Completed 09-00-PLAN.md
 Resume file: None
