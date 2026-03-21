@@ -1,0 +1,3559 @@
+{
+  "id": "b710826d-cd2b-4876-8d51-3b9ff3ed0a19",
+  "prevId": "1fb679b6-d0e2-4b3c-a3ff-23bf3060ea59",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.audit_log": {
+      "name": "audit_log",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "table_name": {
+          "name": "table_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "record_id": {
+          "name": "record_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "old_data": {
+          "name": "old_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "new_data": {
+          "name": "new_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "changed_by": {
+          "name": "changed_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "changed_at": {
+          "name": "changed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "audit_log_table_name_record_id_idx": {
+          "name": "audit_log_table_name_record_id_idx",
+          "columns": [
+            {
+              "expression": "table_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "record_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "audit_log_changed_at_idx": {
+          "name": "audit_log_changed_at_idx",
+          "columns": [
+            {
+              "expression": "changed_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.accounts": {
+      "name": "accounts",
+      "schema": "",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_type": {
+          "name": "token_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "session_state": {
+          "name": "session_state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "accounts_userId_users_id_fk": {
+          "name": "accounts_userId_users_id_fk",
+          "tableFrom": "accounts",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "accounts_provider_providerAccountId_pk": {
+          "name": "accounts_provider_providerAccountId_pk",
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'client'"
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "facility_id": {
+          "name": "facility_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "can_view_financials": {
+          "name": "can_view_financials",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "users_tenant_id_idx": {
+          "name": "users_tenant_id_idx",
+          "columns": [
+            {
+              "expression": "tenant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {
+        "users_deny_all": {
+          "name": "users_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "users_reco_admin_all": {
+          "name": "users_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "users_reco_read": {
+          "name": "users_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "users_client_read": {
+          "name": "users_client_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "tenant_id = current_setting('request.jwt.claim.tenant_id', true)"
+        },
+        "users_prison_read": {
+          "name": "users_prison_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "prison_role"
+          ],
+          "using": "facility_id::text = current_setting('request.jwt.claim.facility_id', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.verification_tokens": {
+      "name": "verification_tokens",
+      "schema": "",
+      "columns": {
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "verification_tokens_identifier_token_pk": {
+          "name": "verification_tokens_identifier_token_pk",
+          "columns": [
+            "identifier",
+            "token"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "verification_tokens_token_unique": {
+          "name": "verification_tokens_token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tenant_branding": {
+      "name": "tenant_branding",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "logo_url": {
+          "name": "logo_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "favicon_url": {
+          "name": "favicon_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "primary_color": {
+          "name": "primary_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "secondary_color": {
+          "name": "secondary_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "background_color": {
+          "name": "background_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "foreground_color": {
+          "name": "foreground_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "accent_color": {
+          "name": "accent_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "heading_font": {
+          "name": "heading_font",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "body_font": {
+          "name": "body_font",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "tenant_branding_tenant_id_idx": {
+          "name": "tenant_branding_tenant_id_idx",
+          "columns": [
+            {
+              "expression": "tenant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "tenant_branding_tenant_id_tenants_id_fk": {
+          "name": "tenant_branding_tenant_id_tenants_id_fk",
+          "tableFrom": "tenant_branding",
+          "tableTo": "tenants",
+          "columnsFrom": [
+            "tenant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "tenant_branding_tenant_id_unique": {
+          "name": "tenant_branding_tenant_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "tenant_id"
+          ]
+        }
+      },
+      "policies": {
+        "tenant_branding_deny_all": {
+          "name": "tenant_branding_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "tenant_branding_reco_admin_all": {
+          "name": "tenant_branding_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "tenant_branding_reco_read": {
+          "name": "tenant_branding_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "tenant_branding_client_read": {
+          "name": "tenant_branding_client_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "tenant_id = current_setting('request.jwt.claim.tenant_id', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.prison_facilities": {
+      "name": "prison_facilities",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contact_email": {
+          "name": "contact_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "prison_facilities_slug_unique": {
+          "name": "prison_facilities_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {
+        "prison_facilities_deny_all": {
+          "name": "prison_facilities_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "prison_facilities_reco_admin_all": {
+          "name": "prison_facilities_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "prison_facilities_reco_read": {
+          "name": "prison_facilities_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "prison_facilities_prison_read": {
+          "name": "prison_facilities_prison_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "prison_role"
+          ],
+          "using": "id::text = current_setting('request.jwt.claim.facility_id', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tenants": {
+      "name": "tenants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "tenants_deny_all": {
+          "name": "tenants_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "tenants_reco_admin_all": {
+          "name": "tenants_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "tenants_reco_read": {
+          "name": "tenants_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "tenants_client_read": {
+          "name": "tenants_client_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "id = current_setting('request.jwt.claim.tenant_id', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.system_settings": {
+      "name": "system_settings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "default": 1
+        },
+        "exchange_rate_eur_dkk": {
+          "name": "exchange_rate_eur_dkk",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'7.4600'"
+        },
+        "warehouse_ageing_threshold_days": {
+          "name": "warehouse_ageing_threshold_days",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 14
+        },
+        "discrepancy_alert_threshold_pct": {
+          "name": "discrepancy_alert_threshold_pct",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 15
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "system_settings_updated_by_users_id_fk": {
+          "name": "system_settings_updated_by_users_id_fk",
+          "tableFrom": "system_settings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "system_settings_deny_all": {
+          "name": "system_settings_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "system_settings_reco_admin_all": {
+          "name": "system_settings_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "system_settings_reco_read": {
+          "name": "system_settings_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        }
+      },
+      "checkConstraints": {
+        "system_settings_single_row": {
+          "name": "system_settings_single_row",
+          "value": "\"system_settings\".\"id\" = 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.material_library": {
+      "name": "material_library",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "material_library_name_unique": {
+          "name": "material_library_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {
+        "material_library_deny_all": {
+          "name": "material_library_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "material_library_reco_admin_all": {
+          "name": "material_library_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "material_library_authenticated_read": {
+          "name": "material_library_authenticated_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role",
+            "prison_role",
+            "reco_role",
+            "transport_role"
+          ],
+          "using": "true"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.product_materials": {
+      "name": "product_materials",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "material_library_id": {
+          "name": "material_library_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weight_grams": {
+          "name": "weight_grams",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recycling_cost_per_kg_eur": {
+          "name": "recycling_cost_per_kg_eur",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recycling_cost_per_kg_dkk": {
+          "name": "recycling_cost_per_kg_dkk",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recycling_outcome": {
+          "name": "recycling_outcome",
+          "type": "recycling_outcome",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "disassembly_photo_paths": {
+          "name": "disassembly_photo_paths",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "effective_from": {
+          "name": "effective_from",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "effective_to": {
+          "name": "effective_to",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "product_materials_product_id_idx": {
+          "name": "product_materials_product_id_idx",
+          "columns": [
+            {
+              "expression": "product_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "product_materials_product_id_products_id_fk": {
+          "name": "product_materials_product_id_products_id_fk",
+          "tableFrom": "product_materials",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "product_materials_material_library_id_material_library_id_fk": {
+          "name": "product_materials_material_library_id_material_library_id_fk",
+          "tableFrom": "product_materials",
+          "tableTo": "material_library",
+          "columnsFrom": [
+            "material_library_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "product_materials_deny_all": {
+          "name": "product_materials_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "product_materials_reco_admin_all": {
+          "name": "product_materials_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "product_materials_reco_read": {
+          "name": "product_materials_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "product_materials_client_read": {
+          "name": "product_materials_client_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "EXISTS (SELECT 1 FROM products p WHERE p.id = product_id AND p.tenant_id = current_setting('request.jwt.claim.tenant_id', true))"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.product_pricing": {
+      "name": "product_pricing",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price_eur": {
+          "name": "price_eur",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price_dkk": {
+          "name": "price_dkk",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "effective_from": {
+          "name": "effective_from",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "effective_to": {
+          "name": "effective_to",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "product_pricing_product_id_idx": {
+          "name": "product_pricing_product_id_idx",
+          "columns": [
+            {
+              "expression": "product_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "product_pricing_product_id_products_id_fk": {
+          "name": "product_pricing_product_id_products_id_fk",
+          "tableFrom": "product_pricing",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "product_pricing_deny_all": {
+          "name": "product_pricing_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "product_pricing_reco_admin_all": {
+          "name": "product_pricing_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "product_pricing_reco_read": {
+          "name": "product_pricing_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.products": {
+      "name": "products",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_code": {
+          "name": "product_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_group": {
+          "name": "product_group",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "processing_stream": {
+          "name": "processing_stream",
+          "type": "processing_stream",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight_grams": {
+          "name": "weight_grams",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "products_tenant_id_idx": {
+          "name": "products_tenant_id_idx",
+          "columns": [
+            {
+              "expression": "tenant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "products_tenant_id_tenants_id_fk": {
+          "name": "products_tenant_id_tenants_id_fk",
+          "tableFrom": "products",
+          "tableTo": "tenants",
+          "columnsFrom": [
+            "tenant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "products_deny_all": {
+          "name": "products_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "products_reco_admin_all": {
+          "name": "products_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "products_reco_read": {
+          "name": "products_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "products_client_read": {
+          "name": "products_client_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "tenant_id = current_setting('request.jwt.claim.tenant_id', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.locations": {
+      "name": "locations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "locations_tenant_id_idx": {
+          "name": "locations_tenant_id_idx",
+          "columns": [
+            {
+              "expression": "tenant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "locations_tenant_id_tenants_id_fk": {
+          "name": "locations_tenant_id_tenants_id_fk",
+          "tableFrom": "locations",
+          "tableTo": "tenants",
+          "columnsFrom": [
+            "tenant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "locations_deny_all": {
+          "name": "locations_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "locations_reco_admin_all": {
+          "name": "locations_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "locations_reco_read": {
+          "name": "locations_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "locations_client_read": {
+          "name": "locations_client_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "tenant_id = current_setting('request.jwt.claim.tenant_id', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pickup_lines": {
+      "name": "pickup_lines",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "pickup_id": {
+          "name": "pickup_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "pickup_lines_pickup_id_idx": {
+          "name": "pickup_lines_pickup_id_idx",
+          "columns": [
+            {
+              "expression": "pickup_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pickup_lines_pickup_id_pickups_id_fk": {
+          "name": "pickup_lines_pickup_id_pickups_id_fk",
+          "tableFrom": "pickup_lines",
+          "tableTo": "pickups",
+          "columnsFrom": [
+            "pickup_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pickup_lines_product_id_products_id_fk": {
+          "name": "pickup_lines_product_id_products_id_fk",
+          "tableFrom": "pickup_lines",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "pickup_lines_deny_all": {
+          "name": "pickup_lines_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "pickup_lines_reco_admin_all": {
+          "name": "pickup_lines_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "pickup_lines_reco_read": {
+          "name": "pickup_lines_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "pickup_lines_client_read": {
+          "name": "pickup_lines_client_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "EXISTS (SELECT 1 FROM pickups p WHERE p.id = pickup_id AND p.tenant_id = current_setting('request.jwt.claim.tenant_id', true))"
+        },
+        "pickup_lines_client_insert": {
+          "name": "pickup_lines_client_insert",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "client_role"
+          ],
+          "withCheck": "EXISTS (SELECT 1 FROM pickups p WHERE p.id = pickup_id AND p.tenant_id = current_setting('request.jwt.claim.tenant_id', true))"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pickups": {
+      "name": "pickups",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reference": {
+          "name": "reference",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "status": {
+          "name": "status",
+          "type": "pickup_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'submitted'"
+        },
+        "pallet_count": {
+          "name": "pallet_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pallet_dimensions": {
+          "name": "pallet_dimensions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estimated_weight_grams": {
+          "name": "estimated_weight_grams",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "preferred_date": {
+          "name": "preferred_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "confirmed_date": {
+          "name": "confirmed_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancellation_reason": {
+          "name": "cancellation_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancelled_at": {
+          "name": "cancelled_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancelled_by": {
+          "name": "cancelled_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "submitted_by": {
+          "name": "submitted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "pickups_tenant_id_idx": {
+          "name": "pickups_tenant_id_idx",
+          "columns": [
+            {
+              "expression": "tenant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "pickups_status_idx": {
+          "name": "pickups_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "pickups_location_id_idx": {
+          "name": "pickups_location_id_idx",
+          "columns": [
+            {
+              "expression": "location_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pickups_tenant_id_tenants_id_fk": {
+          "name": "pickups_tenant_id_tenants_id_fk",
+          "tableFrom": "pickups",
+          "tableTo": "tenants",
+          "columnsFrom": [
+            "tenant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pickups_location_id_locations_id_fk": {
+          "name": "pickups_location_id_locations_id_fk",
+          "tableFrom": "pickups",
+          "tableTo": "locations",
+          "columnsFrom": [
+            "location_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pickups_cancelled_by_users_id_fk": {
+          "name": "pickups_cancelled_by_users_id_fk",
+          "tableFrom": "pickups",
+          "tableTo": "users",
+          "columnsFrom": [
+            "cancelled_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pickups_submitted_by_users_id_fk": {
+          "name": "pickups_submitted_by_users_id_fk",
+          "tableFrom": "pickups",
+          "tableTo": "users",
+          "columnsFrom": [
+            "submitted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "pickups_deny_all": {
+          "name": "pickups_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "pickups_reco_admin_all": {
+          "name": "pickups_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "pickups_reco_read": {
+          "name": "pickups_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "pickups_client_read_insert": {
+          "name": "pickups_client_read_insert",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "tenant_id = current_setting('request.jwt.claim.tenant_id', true)"
+        },
+        "pickups_client_insert": {
+          "name": "pickups_client_insert",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "client_role"
+          ],
+          "withCheck": "tenant_id = current_setting('request.jwt.claim.tenant_id', true)"
+        },
+        "pickups_transport_read": {
+          "name": "pickups_transport_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "transport_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1\n        FROM transport_provider_clients tpc\n        JOIN transport_providers tp ON tp.id = tpc.transport_provider_id\n        WHERE tpc.tenant_id = pickups.tenant_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.outbound_shipment_pickups": {
+      "name": "outbound_shipment_pickups",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "outbound_shipment_id": {
+          "name": "outbound_shipment_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pickup_id": {
+          "name": "pickup_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pallet_count": {
+          "name": "pallet_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "allocated_cost_eur": {
+          "name": "allocated_cost_eur",
+          "type": "numeric(12, 4)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "outbound_shipment_pickups_shipment_id_idx": {
+          "name": "outbound_shipment_pickups_shipment_id_idx",
+          "columns": [
+            {
+              "expression": "outbound_shipment_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "outbound_shipment_pickups_outbound_shipment_id_outbound_shipments_id_fk": {
+          "name": "outbound_shipment_pickups_outbound_shipment_id_outbound_shipments_id_fk",
+          "tableFrom": "outbound_shipment_pickups",
+          "tableTo": "outbound_shipments",
+          "columnsFrom": [
+            "outbound_shipment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "outbound_shipment_pickups_pickup_id_pickups_id_fk": {
+          "name": "outbound_shipment_pickups_pickup_id_pickups_id_fk",
+          "tableFrom": "outbound_shipment_pickups",
+          "tableTo": "pickups",
+          "columnsFrom": [
+            "pickup_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "outbound_shipment_pickups_deny_all": {
+          "name": "outbound_shipment_pickups_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "outbound_shipment_pickups_reco_admin_all": {
+          "name": "outbound_shipment_pickups_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "outbound_shipment_pickups_reco_read": {
+          "name": "outbound_shipment_pickups_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "outbound_shipment_pickups_transport_read": {
+          "name": "outbound_shipment_pickups_transport_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "transport_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1\n        FROM outbound_shipments os\n        JOIN transport_providers tp ON tp.id = os.transport_provider_id\n        WHERE os.id = outbound_shipment_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.outbound_shipments": {
+      "name": "outbound_shipments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "transport_provider_id": {
+          "name": "transport_provider_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prison_facility_id": {
+          "name": "prison_facility_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transport_cost_warehouse_to_prison_eur": {
+          "name": "transport_cost_warehouse_to_prison_eur",
+          "type": "numeric(12, 4)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_pallet_count": {
+          "name": "total_pallet_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "outbound_shipment_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'created'"
+        },
+        "dispatched_at": {
+          "name": "dispatched_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "outbound_shipments_transport_provider_id_transport_providers_id_fk": {
+          "name": "outbound_shipments_transport_provider_id_transport_providers_id_fk",
+          "tableFrom": "outbound_shipments",
+          "tableTo": "transport_providers",
+          "columnsFrom": [
+            "transport_provider_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "outbound_shipments_prison_facility_id_prison_facilities_id_fk": {
+          "name": "outbound_shipments_prison_facility_id_prison_facilities_id_fk",
+          "tableFrom": "outbound_shipments",
+          "tableTo": "prison_facilities",
+          "columnsFrom": [
+            "prison_facility_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "outbound_shipments_created_by_users_id_fk": {
+          "name": "outbound_shipments_created_by_users_id_fk",
+          "tableFrom": "outbound_shipments",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "outbound_shipments_deny_all": {
+          "name": "outbound_shipments_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "outbound_shipments_reco_admin_all": {
+          "name": "outbound_shipments_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "outbound_shipments_reco_read": {
+          "name": "outbound_shipments_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "outbound_shipments_transport_read": {
+          "name": "outbound_shipments_transport_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "transport_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1\n        FROM transport_providers tp\n        WHERE tp.id = outbound_shipments.transport_provider_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )"
+        },
+        "outbound_shipments_transport_update": {
+          "name": "outbound_shipments_transport_update",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "transport_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1\n        FROM transport_providers tp\n        WHERE tp.id = outbound_shipments.transport_provider_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )",
+          "withCheck": "EXISTS (\n        SELECT 1\n        FROM transport_providers tp\n        WHERE tp.id = outbound_shipments.transport_provider_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.transport_bookings": {
+      "name": "transport_bookings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "pickup_id": {
+          "name": "pickup_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transport_provider_id": {
+          "name": "transport_provider_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transport_type": {
+          "name": "transport_type",
+          "type": "transport_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prison_facility_id": {
+          "name": "prison_facility_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transport_cost_market_to_destination_eur": {
+          "name": "transport_cost_market_to_destination_eur",
+          "type": "numeric(12, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "confirmed_pickup_date": {
+          "name": "confirmed_pickup_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "delivery_notes": {
+          "name": "delivery_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proof_of_delivery_path": {
+          "name": "proof_of_delivery_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "booked_by": {
+          "name": "booked_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "transport_bookings_pickup_id_idx": {
+          "name": "transport_bookings_pickup_id_idx",
+          "columns": [
+            {
+              "expression": "pickup_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "transport_bookings_pickup_id_pickups_id_fk": {
+          "name": "transport_bookings_pickup_id_pickups_id_fk",
+          "tableFrom": "transport_bookings",
+          "tableTo": "pickups",
+          "columnsFrom": [
+            "pickup_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "transport_bookings_transport_provider_id_transport_providers_id_fk": {
+          "name": "transport_bookings_transport_provider_id_transport_providers_id_fk",
+          "tableFrom": "transport_bookings",
+          "tableTo": "transport_providers",
+          "columnsFrom": [
+            "transport_provider_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transport_bookings_prison_facility_id_prison_facilities_id_fk": {
+          "name": "transport_bookings_prison_facility_id_prison_facilities_id_fk",
+          "tableFrom": "transport_bookings",
+          "tableTo": "prison_facilities",
+          "columnsFrom": [
+            "prison_facility_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transport_bookings_booked_by_users_id_fk": {
+          "name": "transport_bookings_booked_by_users_id_fk",
+          "tableFrom": "transport_bookings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "booked_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "transport_bookings_deny_all": {
+          "name": "transport_bookings_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "transport_bookings_reco_admin_all": {
+          "name": "transport_bookings_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "transport_bookings_reco_read": {
+          "name": "transport_bookings_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "transport_bookings_transport_read": {
+          "name": "transport_bookings_transport_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "transport_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1\n        FROM transport_provider_clients tpc\n        JOIN transport_providers tp ON tp.id = tpc.transport_provider_id\n        WHERE tpc.transport_provider_id = transport_bookings.transport_provider_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )"
+        },
+        "transport_bookings_transport_update": {
+          "name": "transport_bookings_transport_update",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "transport_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1\n        FROM transport_provider_clients tpc\n        JOIN transport_providers tp ON tp.id = tpc.transport_provider_id\n        WHERE tpc.transport_provider_id = transport_bookings.transport_provider_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )",
+          "withCheck": "EXISTS (\n        SELECT 1\n        FROM transport_provider_clients tpc\n        JOIN transport_providers tp ON tp.id = tpc.transport_provider_id\n        WHERE tpc.transport_provider_id = transport_bookings.transport_provider_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.transport_provider_clients": {
+      "name": "transport_provider_clients",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "transport_provider_id": {
+          "name": "transport_provider_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "transport_provider_clients_provider_id_idx": {
+          "name": "transport_provider_clients_provider_id_idx",
+          "columns": [
+            {
+              "expression": "transport_provider_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transport_provider_clients_tenant_id_idx": {
+          "name": "transport_provider_clients_tenant_id_idx",
+          "columns": [
+            {
+              "expression": "tenant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "transport_provider_clients_transport_provider_id_transport_providers_id_fk": {
+          "name": "transport_provider_clients_transport_provider_id_transport_providers_id_fk",
+          "tableFrom": "transport_provider_clients",
+          "tableTo": "transport_providers",
+          "columnsFrom": [
+            "transport_provider_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "transport_provider_clients_tenant_id_tenants_id_fk": {
+          "name": "transport_provider_clients_tenant_id_tenants_id_fk",
+          "tableFrom": "transport_provider_clients",
+          "tableTo": "tenants",
+          "columnsFrom": [
+            "tenant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "transport_provider_clients_deny_all": {
+          "name": "transport_provider_clients_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "transport_provider_clients_reco_admin_all": {
+          "name": "transport_provider_clients_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "transport_provider_clients_transport_read": {
+          "name": "transport_provider_clients_transport_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "transport_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1\n        FROM transport_providers tp\n        WHERE tp.id = transport_provider_id\n          AND tp.user_id::text = current_setting('request.jwt.claim.sub', true)\n      )"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.transport_providers": {
+      "name": "transport_providers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contact_email": {
+          "name": "contact_email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contact_phone": {
+          "name": "contact_phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "service_regions": {
+          "name": "service_regions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider_type": {
+          "name": "provider_type",
+          "type": "transport_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "warehouse_address": {
+          "name": "warehouse_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "has_platform_access": {
+          "name": "has_platform_access",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transport_providers_user_id_users_id_fk": {
+          "name": "transport_providers_user_id_users_id_fk",
+          "tableFrom": "transport_providers",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "transport_providers_deny_all": {
+          "name": "transport_providers_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "transport_providers_reco_admin_all": {
+          "name": "transport_providers_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "transport_providers_reco_read": {
+          "name": "transport_providers_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "transport_providers_transport_read": {
+          "name": "transport_providers_transport_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "transport_role"
+          ],
+          "using": "user_id::text = current_setting('request.jwt.claim.sub', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "entity_type": {
+          "name": "entity_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "entity_id": {
+          "name": "entity_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "read": {
+          "name": "read",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notifications_user_id_users_id_fk": {
+          "name": "notifications_user_id_users_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "notifications_deny_all": {
+          "name": "notifications_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "notifications_reco_admin_read_write": {
+          "name": "notifications_reco_admin_read_write",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true"
+        },
+        "notifications_reco_admin_insert": {
+          "name": "notifications_reco_admin_insert",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "reco_admin"
+          ],
+          "withCheck": "true"
+        },
+        "notifications_reco_admin_update": {
+          "name": "notifications_reco_admin_update",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        },
+        "notifications_transport_read": {
+          "name": "notifications_transport_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "transport_role"
+          ],
+          "using": "user_id::text = current_setting('request.jwt.claim.sub', true)"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.batch_flags": {
+      "name": "batch_flags",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "batch_lot_number": {
+          "name": "batch_lot_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "flagged_by": {
+          "name": "flagged_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "batch_flags_flagged_by_users_id_fk": {
+          "name": "batch_flags_flagged_by_users_id_fk",
+          "tableFrom": "batch_flags",
+          "tableTo": "users",
+          "columnsFrom": [
+            "flagged_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "batch_flags_batch_lot_number_unique": {
+          "name": "batch_flags_batch_lot_number_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "batch_lot_number"
+          ]
+        }
+      },
+      "policies": {
+        "batch_flags_prison_select": {
+          "name": "batch_flags_prison_select",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "prison_role"
+          ],
+          "using": "true"
+        },
+        "batch_flags_reco_read": {
+          "name": "batch_flags_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "batch_flags_reco_admin_all": {
+          "name": "batch_flags_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.intake_lines": {
+      "name": "intake_lines",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "intake_record_id": {
+          "name": "intake_record_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "informed_quantity": {
+          "name": "informed_quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "actual_quantity": {
+          "name": "actual_quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "batch_lot_number": {
+          "name": "batch_lot_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "discrepancy_pct": {
+          "name": "discrepancy_pct",
+          "type": "numeric(8, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quarantine_flagged": {
+          "name": "quarantine_flagged",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "intake_lines_intake_record_id_idx": {
+          "name": "intake_lines_intake_record_id_idx",
+          "columns": [
+            {
+              "expression": "intake_record_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "intake_lines_intake_record_id_intake_records_id_fk": {
+          "name": "intake_lines_intake_record_id_intake_records_id_fk",
+          "tableFrom": "intake_lines",
+          "tableTo": "intake_records",
+          "columnsFrom": [
+            "intake_record_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "intake_lines_product_id_products_id_fk": {
+          "name": "intake_lines_product_id_products_id_fk",
+          "tableFrom": "intake_lines",
+          "tableTo": "products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "intake_lines_deny_all": {
+          "name": "intake_lines_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "intake_lines_prison_select": {
+          "name": "intake_lines_prison_select",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "prison_role"
+          ],
+          "using": "EXISTS (\n        SELECT 1 FROM intake_records ir\n        WHERE ir.id = intake_lines.intake_record_id\n          AND ir.prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true)\n      )"
+        },
+        "intake_lines_prison_insert": {
+          "name": "intake_lines_prison_insert",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "prison_role"
+          ],
+          "withCheck": "EXISTS (\n        SELECT 1 FROM intake_records ir\n        WHERE ir.id = intake_lines.intake_record_id\n          AND ir.prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true)\n      )"
+        },
+        "intake_lines_reco_read": {
+          "name": "intake_lines_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "intake_lines_reco_admin_all": {
+          "name": "intake_lines_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.intake_records": {
+      "name": "intake_records",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "prison_facility_id": {
+          "name": "prison_facility_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pickup_id": {
+          "name": "pickup_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "outbound_shipment_id": {
+          "name": "outbound_shipment_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "staff_name": {
+          "name": "staff_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "delivery_date": {
+          "name": "delivery_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "origin_market": {
+          "name": "origin_market",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_unexpected": {
+          "name": "is_unexpected",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "discrepancy_flagged": {
+          "name": "discrepancy_flagged",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quarantine_flagged": {
+          "name": "quarantine_flagged",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quarantine_overridden": {
+          "name": "quarantine_overridden",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quarantine_override_reason": {
+          "name": "quarantine_override_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quarantine_overridden_by": {
+          "name": "quarantine_overridden_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "quarantine_overridden_at": {
+          "name": "quarantine_overridden_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reference": {
+          "name": "reference",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "delivered_at": {
+          "name": "delivered_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "submitted_by": {
+          "name": "submitted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "intake_records_tenant_id_idx": {
+          "name": "intake_records_tenant_id_idx",
+          "columns": [
+            {
+              "expression": "tenant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "intake_records_prison_facility_id_idx": {
+          "name": "intake_records_prison_facility_id_idx",
+          "columns": [
+            {
+              "expression": "prison_facility_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "intake_records_prison_facility_id_prison_facilities_id_fk": {
+          "name": "intake_records_prison_facility_id_prison_facilities_id_fk",
+          "tableFrom": "intake_records",
+          "tableTo": "prison_facilities",
+          "columnsFrom": [
+            "prison_facility_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "intake_records_pickup_id_pickups_id_fk": {
+          "name": "intake_records_pickup_id_pickups_id_fk",
+          "tableFrom": "intake_records",
+          "tableTo": "pickups",
+          "columnsFrom": [
+            "pickup_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "intake_records_outbound_shipment_id_outbound_shipments_id_fk": {
+          "name": "intake_records_outbound_shipment_id_outbound_shipments_id_fk",
+          "tableFrom": "intake_records",
+          "tableTo": "outbound_shipments",
+          "columnsFrom": [
+            "outbound_shipment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "intake_records_tenant_id_tenants_id_fk": {
+          "name": "intake_records_tenant_id_tenants_id_fk",
+          "tableFrom": "intake_records",
+          "tableTo": "tenants",
+          "columnsFrom": [
+            "tenant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "intake_records_quarantine_overridden_by_users_id_fk": {
+          "name": "intake_records_quarantine_overridden_by_users_id_fk",
+          "tableFrom": "intake_records",
+          "tableTo": "users",
+          "columnsFrom": [
+            "quarantine_overridden_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "intake_records_submitted_by_users_id_fk": {
+          "name": "intake_records_submitted_by_users_id_fk",
+          "tableFrom": "intake_records",
+          "tableTo": "users",
+          "columnsFrom": [
+            "submitted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "intake_records_deny_all": {
+          "name": "intake_records_deny_all",
+          "as": "RESTRICTIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "false"
+        },
+        "intake_records_prison_select": {
+          "name": "intake_records_prison_select",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "prison_role"
+          ],
+          "using": "prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true)"
+        },
+        "intake_records_prison_insert": {
+          "name": "intake_records_prison_insert",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "prison_role"
+          ],
+          "withCheck": "prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true)"
+        },
+        "intake_records_client_select": {
+          "name": "intake_records_client_select",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "client_role"
+          ],
+          "using": "tenant_id = current_setting('request.jwt.claim.tenant_id', true)"
+        },
+        "intake_records_reco_read": {
+          "name": "intake_records_reco_read",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "reco_role"
+          ],
+          "using": "true"
+        },
+        "intake_records_reco_admin_all": {
+          "name": "intake_records_reco_admin_all",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "reco_admin"
+          ],
+          "using": "true",
+          "withCheck": "true"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "reco-admin",
+        "reco",
+        "client",
+        "client-global",
+        "transport",
+        "prison"
+      ]
+    },
+    "public.processing_stream": {
+      "name": "processing_stream",
+      "schema": "public",
+      "values": [
+        "recycling",
+        "reuse"
+      ]
+    },
+    "public.recycling_outcome": {
+      "name": "recycling_outcome",
+      "schema": "public",
+      "values": [
+        "recycled",
+        "reprocessed",
+        "incinerated",
+        "landfill"
+      ]
+    },
+    "public.pickup_status": {
+      "name": "pickup_status",
+      "schema": "public",
+      "values": [
+        "submitted",
+        "confirmed",
+        "transport_booked",
+        "picked_up",
+        "at_warehouse",
+        "in_outbound_shipment",
+        "in_transit",
+        "delivered",
+        "intake_registered",
+        "cancelled"
+      ]
+    },
+    "public.outbound_shipment_status": {
+      "name": "outbound_shipment_status",
+      "schema": "public",
+      "values": [
+        "created",
+        "in_transit",
+        "delivered"
+      ]
+    },
+    "public.transport_type": {
+      "name": "transport_type",
+      "schema": "public",
+      "values": [
+        "direct",
+        "consolidation"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {
+    "client_role": {
+      "name": "client_role",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    },
+    "prison_role": {
+      "name": "prison_role",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    },
+    "reco_admin": {
+      "name": "reco_admin",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    },
+    "reco_role": {
+      "name": "reco_role",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    },
+    "transport_role": {
+      "name": "transport_role",
+      "createDb": false,
+      "createRole": false,
+      "inherit": true
+    }
+  },
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
