@@ -156,7 +156,7 @@ Plans:
 **Depends on**: Phase 6
 **Requirements**: FIN-01, FIN-02, FIN-03, FIN-04, FIN-05, FIN-06
 **Success Criteria** (what must be TRUE):
-  1. Every intake record in delivered status has a corresponding financial record showing transport cost (sum of both legs), estimated invoice amount (quantities × current pricing + transport), and invoice status
+  1. Every intake record in delivered status has a corresponding financial record showing transport cost (sum of both legs), estimated invoice amount (quantities x current pricing + transport), and invoice status
   2. reco-admin can update invoice status (not_invoiced / invoiced / paid), invoice number, invoice date, and notes on any financial record
   3. The dashboard shows a persistent alert listing all deliveries older than 14 days with status not_invoiced, with a monthly uninvoiced revenue estimate
   4. Financial data is completely hidden from client, client-global, transport, and prison roles; visible to reco role only when the can_view_financials toggle is on
@@ -176,7 +176,7 @@ Plans:
   1. The reco ops dashboard loads in under 2 seconds with up to 50,000 records and shows active pickups by status, consolidation warehouse ageing, uninvoiced deliveries, and prison pipeline across all facilities
   2. A client user sees only their own location's data; a client-global user sees aggregated cross-market data with drill-down to individual markets
   3. The transport dashboard shows assigned pickups awaiting collection, active shipments, and completed deliveries; consolidation providers also see warehouse inventory
-  4. ESG output for 1,000 bike bags shows exactly 943kg polypropylene, 386kg PVC, 294kg polyester (and other materials) using intake quantities × material weight from the composition active at delivery date
+  4. ESG output for 1,000 bike bags shows exactly 943kg polypropylene, 386kg PVC, 294kg polyester (and other materials) using intake quantities x material weight from the composition active at delivery date
   5. The ESG summary is exportable as a PDF report and a CSV data file, with the calculation methodology (formula and inputs) shown inline
 **Plans**: 7 plans
 
@@ -199,15 +199,15 @@ Plans:
   3. A client user visiting their portal sees a manual covering packing guide, gear types, booking walkthrough, and FAQs, rendered from markdown with images
   4. Prison staff visiting the prison section see the prison operations manual covering intake flow, counting guide, QC checklists, and processing workflow, with content distinct from the client manual
   5. reco-admin can edit manual content directly in the platform and changes are versioned with an audit trail
-**Plans**: TBD
+**Plans**: 6 plans
 
 Plans:
-- [ ] 09-01: Notification schema and in-app centre — notifications table, Supabase Realtime subscription, per-role notification centre UI
-- [ ] 09-02: Email notification templates — Resend + react-email, transactional templates for all key events per notification matrix
-- [ ] 09-03: Notification mute controls — per-event-type mute for non-critical; unmutable enforcement for critical events
-- [ ] 09-04: Manual content schema — client manual and prison manual tables, markdown storage, version history
-- [ ] 09-05: Manual rendering — markdown-to-HTML with image and embedded PDF support, role-based version serving
-- [ ] 09-06: Manual editor — reco-admin in-platform markdown editor, versioned saves with audit trail
+- [ ] 09-01-PLAN.md — Notification + manual schema: mute_preferences table, expanded notifications RLS, manual_pages + versions tables, notification type helper library
+- [ ] 09-02-PLAN.md — Email notification templates: 6 new React Email templates for all PRD notification matrix gaps
+- [ ] 09-03-PLAN.md — Notification centre UI: bell component with Realtime, dropdown, full list page, mute toggles, layout integration
+- [ ] 09-04-PLAN.md — Manual editor: reco-admin CRUD pages, textarea with preview, version history, publish toggle
+- [ ] 09-05-PLAN.md — Manual rendering: react-markdown install, ManualRenderer component, client + prison manual routes
+- [ ] 09-06-PLAN.md — Notification event wiring: centralized dispatch helper, missing event triggers, facility inactive check
 
 ### Phase 10: Historical Data Import
 **Goal**: All historical operational data (2022-2026) is imported, flagged as imported records, and fully queryable in dashboards and reports from day one of live operations
