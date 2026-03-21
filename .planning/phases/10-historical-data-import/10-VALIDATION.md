@@ -2,8 +2,8 @@
 phase: 10
 slug: historical-data-import
 status: draft
-nyquist_compliant: false
-wave_0_complete: false
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-03-21
 ---
 
@@ -39,25 +39,26 @@ created: 2026-03-21
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
 | 10-01-01 | 01 | 1 | IMPORT-01 | migration | `pnpm db:push && pnpm test --run` | ✅ | ⬜ pending |
-| 10-01-02 | 01 | 1 | IMPORT-01 | unit | `pnpm test --run` | ❌ W0 | ⬜ pending |
-| 10-02-01 | 02 | 2 | IMPORT-01 | integration | `pnpm test --run` | ❌ W0 | ⬜ pending |
-| 10-02-02 | 02 | 2 | IMPORT-02 | unit | `pnpm test --run` | ❌ W0 | ⬜ pending |
-| 10-03-01 | 03 | 2 | IMPORT-02 | unit | `pnpm test --run` | ❌ W0 | ⬜ pending |
-| 10-03-02 | 03 | 2 | IMPORT-02 | integration | `pnpm test --run` | ❌ W0 | ⬜ pending |
-| 10-04-01 | 04 | 3 | IMPORT-03 | integration | `pnpm test --run` | ❌ W0 | ⬜ pending |
-| 10-04-02 | 04 | 3 | IMPORT-04 | unit | `pnpm test --run` | ❌ W0 | ⬜ pending |
-| 10-05-01 | 05 | 3 | IMPORT-03 | unit | `pnpm test --run` | ❌ W0 | ⬜ pending |
+| 10-01-02 | 01 | 1 | IMPORT-01 | unit | `cd apps/web && pnpm vitest run lib/import-parser.test.ts` | ✅ TDD | ⬜ pending |
+| 10-02-01 | 02 | 1 | IMPORT-01 | unit | `pnpm test --run` | ✅ | ⬜ pending |
+| 10-02-02 | 02 | 1 | IMPORT-02 | unit | `cd apps/web && pnpm vitest run lib/import-validators.test.ts` | ✅ TDD | ⬜ pending |
+| 10-03-01 | 03 | 2 | IMPORT-02 | integration | `pnpm test --run` | ✅ | ⬜ pending |
+| 10-03-02 | 03 | 2 | IMPORT-02 | integration | `pnpm test --run` | ✅ | ⬜ pending |
+| 10-03-03 | 03 | 2 | IMPORT-02 | integration | `pnpm test --run` | ✅ | ⬜ pending |
+| 10-04-01 | 04 | 2 | IMPORT-03 | integration | `pnpm test --run` | ✅ | ⬜ pending |
+| 10-04-02 | 04 | 2 | IMPORT-03 | integration | `pnpm test --run` | ✅ | ⬜ pending |
+| 10-05-01 | 05 | 3 | ALL | regression | `pnpm --filter @apps/web vitest run && pnpm --filter @apps/web tsc --noEmit` | ✅ | ⬜ pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: ⬜ pending | ✅ green | ❌ red | ⚠ flaky*
 
 ---
 
 ## Wave 0 Requirements
 
-- [ ] `packages/web/src/app/api/import/__tests__/import.test.ts` — stubs for IMPORT-01, IMPORT-02
-- [ ] `packages/web/src/lib/import/__tests__/parsers.test.ts` — CSV/XLSX parsing unit tests
-- [ ] `packages/web/src/lib/import/__tests__/validators.test.ts` — field validation unit tests
-- [ ] `packages/web/src/lib/import/__tests__/commit.test.ts` — bulk upsert and rollback tests
+No Wave 0 stubs needed. Plans 01 and 02 use inline TDD (test files created alongside implementation within the same task). Test file paths:
+
+- `apps/web/lib/import-parser.test.ts` — created by Plan 01, Task 2 (TDD)
+- `apps/web/lib/import-validators.test.ts` — created by Plan 02, Task 2 (TDD)
 
 ---
 
@@ -65,7 +66,7 @@ created: 2026-03-21
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| Column mapping UI renders correctly | IMPORT-01 | Visual browser interaction | Upload a CSV, verify drag-drop column mapping works |
+| Column mapping UI renders correctly | IMPORT-01 | Visual browser interaction | Upload a CSV, verify dropdown column mapping works |
 | Import source badge visible in list views | IMPORT-03 | Visual browser inspection | After import, verify badge shows in pickup log, intake log list views |
 | ESG totals include historical data | IMPORT-04 | Requires real imported data | Import sample data, check ESG dashboard totals update |
 
@@ -73,11 +74,11 @@ created: 2026-03-21
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or inline TDD
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 not needed (inline TDD covers test creation)
+- [x] No watch-mode flags
+- [x] Feedback latency < 30s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved
