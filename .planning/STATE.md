@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-03-21T08:54:23.969Z"
+stopped_at: Completed 07-02-PLAN.md
+last_updated: "2026-03-21T09:01:26.119Z"
 progress:
   total_phases: 10
   completed_phases: 6
   total_plans: 48
-  completed_plans: 46
+  completed_plans: 47
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 07 (financial-tracking) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -91,6 +91,7 @@ Plan: 2 of 3
 | Phase 06 P08 | 468 | 2 tasks | 11 files |
 | Phase 06 P09 | 5 | 2 tasks | 7 files |
 | Phase 07-financial-tracking P01 | 8 | 2 tasks | 5 files |
+| Phase 07-financial-tracking P02 | 10 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -193,6 +194,8 @@ Recent decisions affecting current work:
 - [Phase 06]: dispatchFallback filters to isNull(intake_record_id) dispatches only — dispatches linked to other specific intakes excluded
 - [Phase 07-financial-tracking]: financial_records uses unique() constraint on intake_record_id — enforces 1:1 relationship at DB level; auto-create trigger uses ON CONFLICT DO NOTHING for idempotency
 - [Phase 07-financial-tracking]: SECURITY DEFINER on create_financial_record trigger — allows trigger to bypass RLS and insert into financial_records even when session role has no INSERT policy
+- [Phase 07-financial-tracking]: Native select element used for invoice_status in InvoiceEditForm — @base-ui/react/select incompatible with react-hook-form Controller; native element styled to match input appearance
+- [Phase 07-financial-tracking]: getUninvoicedAlerts reads systemSettings via raw db (not withRLSContext) — settings are non-sensitive and accessible before tenant context is established
 
 ### Pending Todos
 
@@ -206,6 +209,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T08:54:23.964Z
-Stopped at: Completed 07-01-PLAN.md
+Last session: 2026-03-21T09:01:26.115Z
+Stopped at: Completed 07-02-PLAN.md
 Resume file: None
