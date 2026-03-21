@@ -244,4 +244,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
 | 9. Notifications and Manuals | 7/7 | Complete    | 2026-03-21 |
-| 10. Historical Data Import | 5/5 | Complete   | 2026-03-21 |
+| 10. Historical Data Import | 5/5 | Complete    | 2026-03-21 |
