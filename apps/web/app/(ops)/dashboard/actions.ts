@@ -1,7 +1,9 @@
 'use server'
 
-import { db } from '@repo/db'
-import { sql } from 'drizzle-orm'
+import { db, prisonFacilities, intakeRecords, notifications } from '@repo/db'
+import { sql, eq, and, gt } from 'drizzle-orm'
+import { dispatchNotification, getRecoAdminEmails } from '@/lib/notification-events'
+import FacilityInactiveAlertEmail from '@/emails/facility-inactive-alert'
 
 // --- Types ---
 
@@ -215,4 +217,79 @@ export async function getDashboardTenants(): Promise<DashboardTenant[]> {
     id: r.id,
     name: r.name,
   }))
+}
+
+/**
+ * Check all active prison facilities for inactivity (no intake in last 14 days).
+ * Dispatches a facility_inactive notification + email if the facility has no recent intake
+ * and no alert has been sent in the last 7 days (deduplication guard).
+ * reco-admin cross-tenant query — uses raw db (no RLS context).
+ * Called on ops dashboard page load.
+ */
+export async function checkFacilityInactiveAlerts(): Promise<void> {
+  const facilities = await db
+    .select({ id: prisonFacilities.id, name: prisonFacilities.name })
+    .from(prisonFacilities)
+    .where(eq(prisonFacilities.active, true))
+
+  const thresholdDays = 14
+  const thresholdDate = new Date()
+  thresholdDate.setDate(thresholdDate.getDate() - thresholdDays)
+
+  const adminEmails = await getRecoAdminEmails()
+
+  for (const facility of facilities) {
+    const latestIntake = await db
+      .select({ delivery_date: intakeRecords.delivery_date })
+      .from(intakeRecords)
+      .where(eq(intakeRecords.prison_facility_id, facility.id))
+      .orderBy(sql`delivery_date DESC`)
+      .limit(1)
+
+    const lastIntakeDate = latestIntake[0]?.delivery_date
+    if (lastIntakeDate && lastIntakeDate > thresholdDate) continue
+
+    // Check if alert already created recently (last 7 days) — deduplication guard
+    const existingAlert = await db
+      .select({ id: notifications.id })
+      .from(notifications)
+      .where(
+        and(
+          eq(notifications.type, 'facility_inactive'),
+          eq(notifications.entity_type, 'prison_facility'),
+          eq(notifications.entity_id, facility.id),
+          gt(notifications.created_at, new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+        )
+      )
+      .limit(1)
+
+    if (existingAlert.length > 0) continue
+
+    const daysSince = lastIntakeDate
+      ? Math.floor((Date.now() - lastIntakeDate.getTime()) / (1000 * 60 * 60 * 24))
+      : 999
+
+    try {
+      await dispatchNotification({
+        userId: null,
+        tenantId: null,
+        type: 'facility_inactive',
+        title: `${facility.name} inactive — ${daysSince} days`,
+        body: `${facility.name} has had no intake for ${daysSince} days.`,
+        entityType: 'prison_facility',
+        entityId: facility.id,
+        email: adminEmails.length > 0 ? {
+          to: adminEmails,
+          subject: `Facility Inactive — ${facility.name}`,
+          react: FacilityInactiveAlertEmail({
+            facilityName: facility.name,
+            lastIntakeDate: lastIntakeDate?.toISOString().split('T')[0] ?? 'Never',
+            daysSinceLastIntake: daysSince,
+          }),
+        } : undefined,
+      })
+    } catch (err) {
+      console.error('[notification] Facility inactive alert failed:', err)
+    }
+  }
 }

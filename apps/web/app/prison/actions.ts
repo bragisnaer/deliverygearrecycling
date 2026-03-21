@@ -613,6 +613,21 @@ export async function submitIntake(
         console.error('[email] Discrepancy alert failed:', err)
       }
     }
+
+    // Notify reco-admin of successful prison intake (non-blocking)
+    try {
+      await dispatchNotification({
+        userId: null,
+        tenantId: null,
+        type: 'prison_intake',
+        title: `Prison intake submitted`,
+        body: `Intake submitted at facility ${facilityId} on ${input.delivery_date}.`,
+        entityType: 'intake',
+        entityId: intakeId,
+      })
+    } catch (err) {
+      console.error('[notification] prison_intake failed:', err)
+    }
   } catch (err) {
     console.error('submitIntake error:', err)
     return { error: 'Failed to submit intake' }
@@ -931,6 +946,22 @@ export async function submitProcessingReport(
     })
 
     revalidatePath('/prison')
+
+    // Notify reco-admin that a processing report was submitted (non-blocking)
+    try {
+      await dispatchNotification({
+        userId: null,
+        tenantId: null,
+        type: 'processing_submitted',
+        title: `Processing report submitted`,
+        body: `Processing report (${activityType}) submitted at facility ${facilityId}.`,
+        entityType: 'intake',
+        entityId: intakeRecordId ?? null,
+      })
+    } catch (err) {
+      console.error('[notification] processing_submitted failed:', err)
+    }
+
     return { success: true, id: report.id }
   } catch (err) {
     console.error('submitProcessingReport error:', err)

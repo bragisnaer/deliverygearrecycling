@@ -8,7 +8,9 @@ import {
   getPrisonPipeline,
   getRevenueSummary,
   getDashboardTenants,
+  checkFacilityInactiveAlerts,
 } from './actions'
+import { checkUninvoicedAlerts } from '../financial/actions'
 import ClientContextSwitcher from './components/client-context-switcher'
 import PickupStatusSummary from './components/pickup-status-summary'
 import ConsolidationAgeingTable from './components/consolidation-ageing-table'
@@ -31,6 +33,20 @@ export default async function OpsDashboard(props: {
 
   const searchParams = await props.searchParams
   const clientFilter = searchParams.client || undefined
+
+  // Run background alert checks on page load (non-blocking — failures must not break render)
+  if (role === 'reco-admin') {
+    try {
+      await checkFacilityInactiveAlerts()
+    } catch (err) {
+      console.error('[dashboard] Facility inactive check failed:', err)
+    }
+    try {
+      await checkUninvoicedAlerts()
+    } catch (err) {
+      console.error('[dashboard] Uninvoiced alerts check failed:', err)
+    }
+  }
 
   // Read display currency preference from cookie
   const cookieStore = await cookies()
