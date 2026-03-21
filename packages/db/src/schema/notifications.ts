@@ -4,10 +4,11 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
   uuid,
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
-import { recoAdminRole, transportRole } from './auth'
+import { recoAdminRole, transportRole, clientRole, prisonRole } from './auth'
 import { users } from './auth'
 
 // In-app notification alerts (NOTIFY-01)
@@ -59,6 +60,155 @@ export const notifications = pgTable(
       as: 'permissive',
       to: transportRole,
       for: 'select',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // client_role: SELECT own notifications via user_id = JWT sub
+    pgPolicy('notifications_client_read', {
+      as: 'permissive',
+      to: clientRole,
+      for: 'select',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // client_role: UPDATE own notifications (mark as read)
+    pgPolicy('notifications_client_update_read', {
+      as: 'permissive',
+      to: clientRole,
+      for: 'update',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // prison_role: SELECT own notifications via user_id = JWT sub
+    pgPolicy('notifications_prison_read', {
+      as: 'permissive',
+      to: prisonRole,
+      for: 'select',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // prison_role: UPDATE own notifications (mark as read)
+    pgPolicy('notifications_prison_update_read', {
+      as: 'permissive',
+      to: prisonRole,
+      for: 'update',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+  ]
+)
+
+// Notification mute preferences (NOTIF-02)
+// CHECK constraint enforced at DB layer: critical types cannot be muted
+export const notificationMutePreferences = pgTable(
+  'notification_mute_preferences',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    user_id: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    notification_type: text('notification_type').notNull(),
+    muted: boolean('muted').notNull().default(true),
+    created_at: timestamp('created_at').notNull().defaultNow(),
+  },
+  (t) => [
+    unique('nmp_user_type_unique').on(t.user_id, t.notification_type),
+    // Default deny: restrictive USING(false) — fail-closed base policy
+    pgPolicy('nmp_deny_all', {
+      as: 'restrictive',
+      for: 'all',
+      using: sql`false`,
+    }),
+    // reco-admin: full CRUD
+    pgPolicy('nmp_reco_admin_all', {
+      as: 'permissive',
+      to: recoAdminRole,
+      for: 'all',
+      using: sql`true`,
+      withCheck: sql`true`,
+    }),
+    // client_role: SELECT own
+    pgPolicy('nmp_client_select', {
+      as: 'permissive',
+      to: clientRole,
+      for: 'select',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // client_role: INSERT own
+    pgPolicy('nmp_client_insert', {
+      as: 'permissive',
+      to: clientRole,
+      for: 'insert',
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // client_role: UPDATE own
+    pgPolicy('nmp_client_update', {
+      as: 'permissive',
+      to: clientRole,
+      for: 'update',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // client_role: DELETE own
+    pgPolicy('nmp_client_delete', {
+      as: 'permissive',
+      to: clientRole,
+      for: 'delete',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // transport_role: SELECT own
+    pgPolicy('nmp_transport_select', {
+      as: 'permissive',
+      to: transportRole,
+      for: 'select',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // transport_role: INSERT own
+    pgPolicy('nmp_transport_insert', {
+      as: 'permissive',
+      to: transportRole,
+      for: 'insert',
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // transport_role: UPDATE own
+    pgPolicy('nmp_transport_update', {
+      as: 'permissive',
+      to: transportRole,
+      for: 'update',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // transport_role: DELETE own
+    pgPolicy('nmp_transport_delete', {
+      as: 'permissive',
+      to: transportRole,
+      for: 'delete',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // prison_role: SELECT own
+    pgPolicy('nmp_prison_select', {
+      as: 'permissive',
+      to: prisonRole,
+      for: 'select',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // prison_role: INSERT own
+    pgPolicy('nmp_prison_insert', {
+      as: 'permissive',
+      to: prisonRole,
+      for: 'insert',
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // prison_role: UPDATE own
+    pgPolicy('nmp_prison_update', {
+      as: 'permissive',
+      to: prisonRole,
+      for: 'update',
+      using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+      withCheck: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
+    }),
+    // prison_role: DELETE own
+    pgPolicy('nmp_prison_delete', {
+      as: 'permissive',
+      to: prisonRole,
+      for: 'delete',
       using: sql`user_id::text = current_setting('request.jwt.claim.sub', true)`,
     }),
   ]
