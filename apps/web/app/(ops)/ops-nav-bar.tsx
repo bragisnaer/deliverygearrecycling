@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { label: 'Processing', href: '/processing' },
   { label: 'Dispatch', href: '/dispatch' },
   { label: 'Financial', href: '/financial' },
+  { label: 'ESG', href: '/esg' },
   { label: 'Products', href: '/products' },
   { label: 'Settings', href: '/settings' },
 ]
