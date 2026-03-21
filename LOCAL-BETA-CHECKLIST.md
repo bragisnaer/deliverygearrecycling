@@ -33,6 +33,10 @@ Complete this section before running any module tests.
 
 ### Step 2 — Build the database
 
+**Production deployment:** Use `pnpm db:deploy` for production Supabase databases. This applies Drizzle migrations + all supplement SQL files + verifies audit triggers. It does NOT seed test data.
+
+**Local development:** Use `bash scripts/setup-local-db.sh` (includes Wolt seed data).
+
 - [ ] Run `bash scripts/setup-local-db.sh`
 - [ ] Confirm the script exits 0 with no errors
 - [ ] Spot-check: `psql $DATABASE_URL -c "\dt"` should list 20+ tables including `pickups`, `intake_records`, `processing_reports`, `outbound_dispatches`, `audit_log`, `notifications`, `import_jobs`
@@ -234,7 +238,7 @@ Document these gaps in the beta test report. They are not blockers for the beta,
 | Magic link email delivery not verified (console log only) | Low | Real Resend key required for production; dev mode console log is sufficient for beta |
 | ESG-04 CO2 column intentionally null | Low | Acknowledged formula stub; populate before go-live |
 | Photo upload to Supabase Storage untested if `SUPABASE_URL` not configured | Medium | Configure Supabase credentials to test; does not block other modules |
-| `audit_log` trigger requires manual `psql` application of `0005_phase6_processing_dispatch_audit.sql` to any live DB | High | Include in production deployment runbook; covered by `setup-local-db.sh` locally |
+| `audit_log` trigger requires manual `psql` application of `0005_phase6_processing_dispatch_audit.sql` to any live DB | Closed | Closed: `pnpm db:deploy` applies all supplement SQL including audit triggers automatically |
 
 ---
 
