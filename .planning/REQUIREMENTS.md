@@ -153,7 +153,7 @@
 - [x] **IMPORT-01**: CSV/XLSX import for: pickup request log (2023–2026), prison delivery intake log (2022–2026), GreenLoop form data (2025), invoice binder references, transport cost spreadsheet
 - [x] **IMPORT-02**: Import UI includes: file upload, column-to-field mapping interface, validation preview (flag errors before commit), one-click commit
 - [x] **IMPORT-03**: Imported records marked with `source: 'import'` flag; distinguishable from live data in all views and exports
-- [ ] **IMPORT-04**: Import is one-time per source; no ongoing sync
+- [x] **IMPORT-04**: Import is one-time per source; no ongoing sync
 
 ### System Settings
 
@@ -312,7 +312,7 @@
 | IMPORT-01 | Phase 10: Historical Data Import | Complete |
 | IMPORT-02 | Phase 10: Historical Data Import | Complete |
 | IMPORT-03 | Phase 10: Historical Data Import | Complete |
-| IMPORT-04 | Phase 10: Historical Data Import | Pending |
+| IMPORT-04 | Phase 10: Historical Data Import | Complete |
 
 **Coverage:**
 - v1 requirements: 82 total

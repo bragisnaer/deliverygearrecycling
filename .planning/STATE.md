@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 10-01-PLAN.md
-last_updated: "2026-03-21T12:18:31.811Z"
+stopped_at: Completed 10-04-PLAN.md
+last_updated: "2026-03-21T12:27:34.732Z"
 progress:
   total_phases: 10
   completed_phases: 9
   total_plans: 67
-  completed_plans: 64
+  completed_plans: 66
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 10 (historical-data-import) — EXECUTING
-Plan: 3 of 5
+Plan: 5 of 5
 
 ## Performance Metrics
 
@@ -109,6 +109,8 @@ Plan: 3 of 5
 | Phase 09 P06 | 360 | 3 tasks | 7 files |
 | Phase 10-historical-data-import P02 | 3 | 2 tasks | 3 files |
 | Phase 10 P01 | 293 | 2 tasks | 11 files |
+| Phase 10-historical-data-import P03 | 5 | 3 tasks | 7 files |
+| Phase 10 P04 | 5 | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -244,6 +246,10 @@ Recent decisions affecting current work:
 - [Phase 10-historical-data-import]: resolveForeignKeys uses 1-indexed row numbers from 1 (not 2) — FK resolution operates on already-extracted data rows without a header row; validateRows uses row 2 as first row (spreadsheet convention)
 - [Phase 10]: parseXlsx uses any cast for exceljs load call — @types/node Buffer<ArrayBufferLike> does not match exceljs index.d.ts Buffer (no generic); parameter widened to Buffer | ArrayBuffer
 - [Phase 10]: import_jobs table uses reco_admin_role GRANT in migration SQL — Drizzle schema references recoAdminRole pgRole from auth.ts for RLS policy
+- [Phase 10-historical-data-import]: OpsNavBar receives role prop from layout — keeps nav bar as client component without needing its own auth() call
+- [Phase 10-historical-data-import]: Transport costs uses SELECT-then-UPDATE-or-INSERT — transportBookings has no unique constraint on pickup_id usable with onConflictDoUpdate
+- [Phase 10]: Transport view: badge added to warehouse inventory list in transport/outbound/page.tsx — no transport/page.tsx exists; outbound is the primary pickup list for transport role
+- [Phase 10]: FinancialRecordDetail uses Omit<FinancialRecordListItem, 'is_imported'> intersection to avoid TypeScript duplicate field error when adding is_imported
 
 ### Pending Todos
 
@@ -257,6 +263,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T12:18:31.806Z
-Stopped at: Completed 10-01-PLAN.md
+Last session: 2026-03-21T12:27:34.728Z
+Stopped at: Completed 10-04-PLAN.md
 Resume file: None

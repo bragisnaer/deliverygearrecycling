@@ -224,8 +224,8 @@ Plans:
 Plans:
 - [x] 10-01-PLAN.md — Migration (is_imported columns on 5 tables + import_jobs table) + CSV/XLSX parser library with tests
 - [x] 10-02-PLAN.md — Import source definitions registry + per-source Zod validators + FK resolution helpers with tests
-- [ ] 10-03-PLAN.md — Upload API route, import hub page, multi-step wizard UI (upload, map, preview, commit), commit Server Action
-- [ ] 10-04-PLAN.md — Imported record badge in all list views (intake, pickup, processing, financial, transport) + ESG inclusion verification
+- [x] 10-03-PLAN.md — Upload API route, import hub page, multi-step wizard UI (upload, map, preview, commit), commit Server Action
+- [x] 10-04-PLAN.md — Imported record badge in all list views (intake, pickup, processing, financial, transport) + ESG inclusion verification
 - [ ] 10-05-PLAN.md — Full test suite + type check + manual end-to-end verification checkpoint
 
 ## Progress
@@ -244,4 +244,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
 | 9. Notifications and Manuals | 7/7 | Complete    | 2026-03-21 |
-| 10. Historical Data Import | 2/5 | In Progress|  |
+| 10. Historical Data Import | 4/5 | In Progress|  |
