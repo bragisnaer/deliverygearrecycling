@@ -127,8 +127,8 @@
 
 ### Dashboards
 
-- [ ] **DASH-01**: reco ops dashboard (aggregated): active pickups by status across all clients, pallets at consolidation warehouses with ageing, uninvoiced deliveries, volume by stream/country/product, revenue summary, prison pipeline across all facilities
-- [ ] **DASH-02**: reco ops dashboard supports client context switching: dropdown to scope any view to a single client
+- [x] **DASH-01**: reco ops dashboard (aggregated): active pickups by status across all clients, pallets at consolidation warehouses with ageing, uninvoiced deliveries, volume by stream/country/product, revenue summary, prison pipeline across all facilities
+- [x] **DASH-02**: reco ops dashboard supports client context switching: dropdown to scope any view to a single client
 - [ ] **DASH-03**: Client dashboard (`client` role): active pickup requests from own location, items sent vs received (with discrepancy flag), historical volume by quarter, reuse rate, ESG summary for own location
 - [ ] **DASH-04**: Client dashboard (`client-global` role): all of the above aggregated across all markets in their tenant; cross-market comparison charts; drill-down to individual market
 - [ ] **DASH-05**: Transport dashboard: assigned pickups awaiting collection, active shipments in transit, completed deliveries (last 30 days); consolidation providers also see warehouse inventory and outbound shipment history
@@ -288,8 +288,8 @@
 | FIN-04 | Phase 7: Financial Tracking | Complete |
 | FIN-05 | Phase 7: Financial Tracking | Complete |
 | FIN-06 | Phase 7: Financial Tracking | Complete |
-| DASH-01 | Phase 8: Dashboards and ESG Metrics | Pending |
-| DASH-02 | Phase 8: Dashboards and ESG Metrics | Pending |
+| DASH-01 | Phase 8: Dashboards and ESG Metrics | Complete |
+| DASH-02 | Phase 8: Dashboards and ESG Metrics | Complete |
 | DASH-03 | Phase 8: Dashboards and ESG Metrics | Pending |
 | DASH-04 | Phase 8: Dashboards and ESG Metrics | Pending |
 | DASH-05 | Phase 8: Dashboards and ESG Metrics | Pending |
