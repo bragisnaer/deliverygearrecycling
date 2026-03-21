@@ -96,4 +96,4 @@ Every delivery is tracked from booking to invoice, and every item from pickup to
 | Pricing at product level with effective_from/to dates | Historical deliveries retain the rate active at time of delivery | — Pending |
 
 ---
-*Last updated: 2026-03-21 — Phase 8 complete: Dashboards and ESG Metrics (role-scoped dashboards, ESG engine, PDF/CSV export)
+*Last updated: 2026-03-21 — Phase 12 complete: Production Database Deployment Script (`pnpm db:deploy` applies Drizzle migrations + 7 supplement SQL files in order; all v1.0 phases complete)
