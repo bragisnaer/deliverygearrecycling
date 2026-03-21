@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 10-05-PLAN.md
-last_updated: "2026-03-21T12:44:37.977Z"
+stopped_at: Completed 11-01-PLAN.md
+last_updated: "2026-03-21T13:16:08.956Z"
 progress:
-  total_phases: 10
+  total_phases: 11
   completed_phases: 10
-  total_plans: 67
-  completed_plans: 67
+  total_plans: 70
+  completed_plans: 68
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-20)
 
 **Core value:** Every delivery tracked from booking to invoice; every item from pickup to recycling or redistribution — zero uninvoiced deliveries, zero missing processing data, discrepancy rate below 10%
-**Current focus:** Phase 10 — historical-data-import
+**Current focus:** Phase 11 — phase06-verification-and-ship-blockers
 
 ## Current Position
 
-Phase: 10
-Plan: Not started
+Phase: 11 (phase06-verification-and-ship-blockers) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -112,6 +112,7 @@ Plan: Not started
 | Phase 10-historical-data-import P03 | 5 | 3 tasks | 7 files |
 | Phase 10 P04 | 5 | 2 tasks | 11 files |
 | Phase 10-historical-data-import P05 | 10 | 2 tasks | 4 files |
+| Phase 11-phase06-verification-and-ship-blockers P01 | 2 | 5 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -252,6 +253,8 @@ Recent decisions affecting current work:
 - [Phase 10]: Transport view: badge added to warehouse inventory list in transport/outbound/page.tsx — no transport/page.tsx exists; outbound is the primary pickup list for transport role
 - [Phase 10]: FinancialRecordDetail uses Omit<FinancialRecordListItem, 'is_imported'> intersection to avoid TypeScript duplicate field error when adding is_imported
 - [Phase 10-historical-data-import]: Pre-existing TypeScript errors fixed at tsc-clean milestone — rows as unknown as T[] cast for postgres-js RowList; Session type import for buildUser to avoid next-auth v5 overload ambiguity
+- [Phase 11-phase06-verification-and-ship-blockers]: Manual supplement SQL files apply safely after db:migrate in single pass — all use IF NOT EXISTS/CREATE OR REPLACE guards; no interleaving needed
+- [Phase 11-phase06-verification-and-ship-blockers]: setup-local-db.sh: Step 1=db:migrate, Step 2=psql manual supplements in dependency order, Step 3=seed:wolt; 0007_esg_dashboard_indexes skipped (already in journal at idx 5)
 
 ### Pending Todos
 
@@ -265,6 +268,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T12:37:19.414Z
-Stopped at: Completed 10-05-PLAN.md
+Last session: 2026-03-21T13:16:08.952Z
+Stopped at: Completed 11-01-PLAN.md
 Resume file: None
