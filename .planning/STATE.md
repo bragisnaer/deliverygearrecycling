@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-03-PLAN.md
-last_updated: "2026-03-21T11:12:18.088Z"
+stopped_at: Completed 09-04-PLAN.md
+last_updated: "2026-03-21T11:16:53.086Z"
 progress:
   total_phases: 10
   completed_phases: 8
   total_plans: 62
-  completed_plans: 59
+  completed_plans: 60
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 09 (Notifications and Manuals) — EXECUTING
-Plan: 5 of 7
+Plan: 6 of 7
 
 ## Performance Metrics
 
@@ -104,6 +104,7 @@ Plan: 5 of 7
 | Phase 09 P01 | 149 | 2 tasks | 5 files |
 | Phase 09 P02 | 144 | 2 tasks | 6 files |
 | Phase 09 P03 | 260 | 2 tasks | 8 files |
+| Phase 09 P04 | 148 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -230,6 +231,8 @@ Recent decisions affecting current work:
 - [Phase 09]: Template literal syntax for Preview with numeric props — @react-email Preview expects ReactNode & string; template literals resolve number-to-string coercion at compile time
 - [Phase 09]: Server Actions placed in apps/web/lib/notification-actions.ts (not a route group) so all three portals import from @/lib/notification-actions without cross-portal coupling
 - [Phase 09]: NON_CRITICAL_NOTIFICATION_TYPES only shown in mute preferences — critical types have no mute control per NOTIF-02
+- [Phase 09]: Plain-text pre block used for preview instead of ReactMarkdown — react-markdown not yet installed; Plan 05 replaces with full rendering
+- [Phase 09]: params awaited as Promise<{ id: string }> in [id]/page.tsx — Next.js App Router async params pattern
 
 ### Pending Todos
 
@@ -243,6 +246,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T11:12:18.084Z
-Stopped at: Completed 09-03-PLAN.md
+Last session: 2026-03-21T11:16:53.081Z
+Stopped at: Completed 09-04-PLAN.md
 Resume file: None

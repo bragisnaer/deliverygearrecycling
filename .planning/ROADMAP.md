@@ -206,7 +206,7 @@ Plans:
 - [x] 09-01-PLAN.md — Notification + manual schema: mute_preferences table, expanded notifications RLS, manual_pages + versions tables, notification type helper library
 - [x] 09-02-PLAN.md — Email notification templates: 6 new React Email templates for all PRD notification matrix gaps
 - [x] 09-03-PLAN.md — Notification centre UI: bell component with Realtime, shared Server Actions in lib/, dropdown, full list page, mute toggles, layout integration
-- [ ] 09-04-PLAN.md — Manual editor: reco-admin CRUD pages with separate client components, textarea with preview, version history, publish toggle
+- [x] 09-04-PLAN.md — Manual editor: reco-admin CRUD pages with separate client components, textarea with preview, version history, publish toggle
 - [ ] 09-05-PLAN.md — Manual rendering: ManualRenderer component, client + prison manual routes, custom typography CSS
 - [ ] 09-06-PLAN.md — Notification event wiring: centralized dispatch helper, all missing event triggers, uninvoiced_delivery email, facility inactive check
 
