@@ -24,7 +24,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag
  (completed 2026-03-21)
 - [x] **Phase 11: Phase 06 Verification and Ship Blockers** - Write Phase 06 VERIFICATION.md, fix migration journal gaps, confirm build passes (Gap Closure) (completed 2026-03-21)
-- [ ] **Phase 12: Production Database Deployment Script** - Unified deploy script applying Drizzle migrations + 7 supplement files in order; closes MANUAL-MIGRATIONS deployment gap
+- [x] **Phase 12: Production Database Deployment Script** - Unified deploy script applying Drizzle migrations + 7 supplement files in order; closes MANUAL-MIGRATIONS deployment gap (completed 2026-03-21)
 
 ## Phase Details
 
@@ -242,7 +242,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 12-01-PLAN.md — Create `scripts/deploy-db-production.sh` (Drizzle migrate + 7 supplements in dependency order) + add `db:deploy` to package.json + update LOCAL-BETA-CHECKLIST.md
+- [x] 12-01-PLAN.md — Create `scripts/deploy-db-production.sh` (Drizzle migrate + 7 supplements in dependency order) + add `db:deploy` to package.json + update LOCAL-BETA-CHECKLIST.md
 
 ## Progress
 
