@@ -17,12 +17,23 @@ const NAV_ITEMS = [
   { label: 'Settings', href: '/settings' },
 ]
 
-export function OpsNavBar() {
+const RECO_ADMIN_NAV_ITEMS = [{ label: 'Import', href: '/import' }]
+
+interface OpsNavBarProps {
+  role?: string | null
+}
+
+export function OpsNavBar({ role }: OpsNavBarProps) {
   const pathname = usePathname()
+
+  const items = [
+    ...NAV_ITEMS,
+    ...(role === 'reco-admin' ? RECO_ADMIN_NAV_ITEMS : []),
+  ]
 
   return (
     <nav className="flex items-center gap-6">
-      {NAV_ITEMS.map((item) => {
+      {items.map((item) => {
         const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
         return (
           <Link

@@ -22,7 +22,7 @@ export default async function OpsLayout({ children }: { children: React.ReactNod
             reco ops
           </Link>
           <div className="flex items-center gap-4">
-            <OpsNavBar />
+            <OpsNavBar role={session?.user?.role} />
             <NotificationBell
               userId={session!.user!.id!}
               initialCount={unreadCount}
