@@ -23,7 +23,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 9: Notifications and Manuals** - In-app and email notifications, FAQ/manual system (completed 2026-03-21)
 - [x] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag
  (completed 2026-03-21)
-- [x] **Phase 11: Phase 06 Verification and Ship Blockers** - Write Phase 06 VERIFICATION.md, fix migration journal gaps, confirm build passes (Gap Closure) (completed 2026-03-21)
+- [x] **Phase 11: Phase 06 Verification and Ship Blockers** - Write Phase 06 VERIFICATION.md, fix migration journal gaps, confirm build passes (Gap Closure) (completed 2026-03-21)
+- [ ] **Phase 12: Production Database Deployment Script** - Unified deploy script applying Drizzle migrations + 7 supplement files in order; closes MANUAL-MIGRATIONS deployment gap
 
 ## Phase Details
 
@@ -230,10 +231,23 @@ Plans:
 - [x] 10-04-PLAN.md — Imported record badge in all list views (intake, pickup, processing, financial, transport) + ESG inclusion verification
 - [x] 10-05-PLAN.md — Full test suite + type check + manual end-to-end verification checkpoint
 
+### Phase 12: Production Database Deployment Script
+**Goal**: A single command applies both Drizzle migrations and all 7 supplement SQL files to a production database in dependency order, making production deployment deterministic and human-error-free
+**Depends on**: Phase 11
+**Gap Closure:** Closes MANUAL-MIGRATIONS deployment gap from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. `pnpm db:deploy` applies all Drizzle migrations then all 7 supplement files in dependency order against a fresh Supabase project with zero errors
+  2. After `db:deploy`, the trigger verification query returns 3 rows (audit triggers present): `SELECT trigger_name FROM information_schema.triggers WHERE trigger_name IN ('audit_intake_records','audit_processing_reports','audit_outbound_dispatches')`
+  3. `LOCAL-BETA-CHECKLIST.md` updated to reference `pnpm db:deploy` as the canonical production DB setup command
+**Plans**: 1 plan
+
+Plans:
+- [ ] 12-01-PLAN.md — Create `scripts/deploy-db-production.sh` (Drizzle migrate + 7 supplements in dependency order) + add `db:deploy` to package.json + update LOCAL-BETA-CHECKLIST.md
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
