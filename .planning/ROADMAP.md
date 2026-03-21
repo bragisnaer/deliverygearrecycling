@@ -21,7 +21,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: Financial Tracking** - Per-delivery financial records, invoice status, two-leg cost allocation (completed 2026-03-21)
 - [x] **Phase 8: Dashboards and ESG Metrics** - Role-scoped dashboards, ESG calculation engine, export (completed 2026-03-21)
 - [x] **Phase 9: Notifications and Manuals** - In-app and email notifications, FAQ/manual system (completed 2026-03-21)
-- [x] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag (completed 2026-03-21)
+- [x] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag
+ (completed 2026-03-21)
+- [ ] **Phase 11: Phase 06 Verification and Ship Blockers** - Write Phase 06 VERIFICATION.md, fix migration journal gaps, confirm build passes (Gap Closure)
 
 ## Phase Details
 
@@ -231,7 +233,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -245,3 +247,20 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
 | 9. Notifications and Manuals | 7/7 | Complete    | 2026-03-21 |
 | 10. Historical Data Import | 5/5 | Complete    | 2026-03-21 |
+| 11. Phase 06 Verification and Ship Blockers | 0/3 | Pending | — |
+
+### Phase 11: Phase 06 Verification and Ship Blockers
+**Goal**: All v1.0 gaps closed — Phase 06 has formal VERIFICATION.md, migration journal is complete, and build passes clean
+**Depends on**: Phase 10
+**Requirements**: PROCESS-01, PROCESS-02, PROCESS-03, PROCESS-04, PROCESS-05, DISPATCH-01, DISPATCH-02, DISPATCH-03, DISPATCH-04, AUDIT-01, AUDIT-02, AUDIT-03, AUDIT-04, AUDIT-05, AUDIT-06
+**Gap Closure:** Closes gaps from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. `packages/db/migrations/meta/_journal.json` includes all 10 migration entries (0000–0009); `pnpm drizzle-kit migrate` in a fresh environment applies all tables, triggers, and indexes in order
+  2. `tsc --noEmit` and `pnpm turbo build` both pass with zero errors
+  3. `06-VERIFICATION.md` exists and statically verifies all 15 Phase 06 requirements (PROCESS-01–05, DISPATCH-01–04, AUDIT-01–06) against actual code
+**Plans**: 3 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — Fix migration journal: register 0005, 0006, 0007, 0008, 0009 entries; verify ordering and breakpoints; test `drizzle-kit migrate` on clean schema
+- [ ] 11-02-PLAN.md — Write 06-VERIFICATION.md: static analysis of Phase 06 code verifying all 15 requirements; confirm AUDIT-06 trigger exists in migration; confirm DISPATCH-03 status enum transitions
+- [ ] 11-03-PLAN.md — Local beta test checklist: full lifecycle smoke test (booking → transport → intake → processing → dispatch → financial → ESG export); seed data verification; build + type check pass
