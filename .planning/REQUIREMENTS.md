@@ -144,14 +144,14 @@
 ### FAQ and Manuals
 
 - [x] **MANUAL-01**: Client Office Manual served at `[client].courierrecycling.com` covering: packing guide, gear types, booking walkthrough, cancellation, FAQs, packing best practices with photos
-- [ ] **MANUAL-02**: Prison Operations Manual served at `ops.courierrecycling.com/prison` covering: intake flow, counting guide, unexpected delivery procedure, QC checklists (jackets, rain pants), packing workflow, processing report guide, gear type reference
+- [x] **MANUAL-02**: Prison Operations Manual served at `ops.courierrecycling.com/prison` covering: intake flow, counting guide, unexpected delivery procedure, QC checklists (jackets, rain pants), packing workflow, processing report guide, gear type reference
 - [x] **MANUAL-03**: Manual content is markdown-rendered with image and embedded PDF support; reco-admin can edit content directly in the platform; edits are versioned with audit trail
 - [x] **MANUAL-04**: Role-appropriate manual version is served based on user role and domain; prison staff see the prison version, client users see the client version
 
 ### Data Import
 
-- [ ] **IMPORT-01**: CSV/XLSX import for: pickup request log (2023–2026), prison delivery intake log (2022–2026), GreenLoop form data (2025), invoice binder references, transport cost spreadsheet
-- [ ] **IMPORT-02**: Import UI includes: file upload, column-to-field mapping interface, validation preview (flag errors before commit), one-click commit
+- [x] **IMPORT-01**: CSV/XLSX import for: pickup request log (2023–2026), prison delivery intake log (2022–2026), GreenLoop form data (2025), invoice binder references, transport cost spreadsheet
+- [x] **IMPORT-02**: Import UI includes: file upload, column-to-field mapping interface, validation preview (flag errors before commit), one-click commit
 - [ ] **IMPORT-03**: Imported records marked with `source: 'import'` flag; distinguishable from live data in all views and exports
 - [ ] **IMPORT-04**: Import is one-time per source; no ongoing sync
 
@@ -306,11 +306,11 @@
 | NOTIF-03 | Phase 9: Notifications and Manuals | Complete |
 | NOTIF-04 | Phase 9: Notifications and Manuals | Complete |
 | MANUAL-01 | Phase 9: Notifications and Manuals | Complete |
-| MANUAL-02 | Phase 9: Notifications and Manuals | Pending |
+| MANUAL-02 | Phase 9: Notifications and Manuals | Complete |
 | MANUAL-03 | Phase 9: Notifications and Manuals | Complete |
 | MANUAL-04 | Phase 9: Notifications and Manuals | Complete |
-| IMPORT-01 | Phase 10: Historical Data Import | Pending |
-| IMPORT-02 | Phase 10: Historical Data Import | Pending |
+| IMPORT-01 | Phase 10: Historical Data Import | Complete |
+| IMPORT-02 | Phase 10: Historical Data Import | Complete |
 | IMPORT-03 | Phase 10: Historical Data Import | Pending |
 | IMPORT-04 | Phase 10: Historical Data Import | Pending |
 
