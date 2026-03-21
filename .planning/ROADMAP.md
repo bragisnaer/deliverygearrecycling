@@ -23,7 +23,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 9: Notifications and Manuals** - In-app and email notifications, FAQ/manual system (completed 2026-03-21)
 - [x] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag
  (completed 2026-03-21)
-- [ ] **Phase 11: Phase 06 Verification and Ship Blockers** - Write Phase 06 VERIFICATION.md, fix migration journal gaps, confirm build passes (Gap Closure)
+- [x] **Phase 11: Phase 06 Verification and Ship Blockers** - Write Phase 06 VERIFICATION.md, fix migration journal gaps, confirm build passes (Gap Closure) (completed 2026-03-21)
 
 ## Phase Details
 
@@ -247,7 +247,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
 | 9. Notifications and Manuals | 7/7 | Complete    | 2026-03-21 |
 | 10. Historical Data Import | 5/5 | Complete    | 2026-03-21 |
-| 11. Phase 06 Verification and Ship Blockers | 2/3 | In Progress|  |
+| 11. Phase 06 Verification and Ship Blockers | 3/3 | Complete   | 2026-03-21 |
 
 ### Phase 11: Phase 06 Verification and Ship Blockers
 **Goal**: All v1.0 gaps closed — Phase 06 has formal VERIFICATION.md, migration journal is complete, and build passes clean
@@ -262,5 +262,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 Plans:
 - [x] 11-01-PLAN.md — Fix migration journal: register 0005, 0006, 0007, 0008, 0009 entries; verify ordering and breakpoints; test `drizzle-kit migrate` on clean schema
-- [ ] 11-02-PLAN.md — Write 06-VERIFICATION.md: static analysis of Phase 06 code verifying all 15 requirements; confirm AUDIT-06 trigger exists in migration; confirm DISPATCH-03 status enum transitions
+- [x] 11-02-PLAN.md — Write 06-VERIFICATION.md: static analysis of Phase 06 code verifying all 15 requirements; confirm AUDIT-06 trigger exists in migration; confirm DISPATCH-03 status enum transitions
 - [x] 11-03-PLAN.md — Local beta test checklist: full lifecycle smoke test (booking → transport → intake → processing → dispatch → financial → ESG export); seed data verification; build + type check pass
