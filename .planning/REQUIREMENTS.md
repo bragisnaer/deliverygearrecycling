@@ -136,17 +136,17 @@
 
 ### Notifications
 
-- [ ] **NOTIF-01**: In-app notification centre for all roles; email notifications for key events per the notification matrix in PRD §4.8
-- [ ] **NOTIF-02**: Critical event emails (discrepancy >15%, uninvoiced >14 days, defective batch match, prison facility inactive >14 days) cannot be muted by users
-- [ ] **NOTIF-03**: Users can mute non-critical in-app notifications per event type
-- [ ] **NOTIF-04**: Emails sent via Resend (or Postmark); transactional email templates built with React Email
+- [x] **NOTIF-01**: In-app notification centre for all roles; email notifications for key events per the notification matrix in PRD §4.8
+- [x] **NOTIF-02**: Critical event emails (discrepancy >15%, uninvoiced >14 days, defective batch match, prison facility inactive >14 days) cannot be muted by users
+- [x] **NOTIF-03**: Users can mute non-critical in-app notifications per event type
+- [x] **NOTIF-04**: Emails sent via Resend (or Postmark); transactional email templates built with React Email
 
 ### FAQ and Manuals
 
-- [ ] **MANUAL-01**: Client Office Manual served at `[client].courierrecycling.com` covering: packing guide, gear types, booking walkthrough, cancellation, FAQs, packing best practices with photos
+- [x] **MANUAL-01**: Client Office Manual served at `[client].courierrecycling.com` covering: packing guide, gear types, booking walkthrough, cancellation, FAQs, packing best practices with photos
 - [ ] **MANUAL-02**: Prison Operations Manual served at `ops.courierrecycling.com/prison` covering: intake flow, counting guide, unexpected delivery procedure, QC checklists (jackets, rain pants), packing workflow, processing report guide, gear type reference
-- [ ] **MANUAL-03**: Manual content is markdown-rendered with image and embedded PDF support; reco-admin can edit content directly in the platform; edits are versioned with audit trail
-- [ ] **MANUAL-04**: Role-appropriate manual version is served based on user role and domain; prison staff see the prison version, client users see the client version
+- [x] **MANUAL-03**: Manual content is markdown-rendered with image and embedded PDF support; reco-admin can edit content directly in the platform; edits are versioned with audit trail
+- [x] **MANUAL-04**: Role-appropriate manual version is served based on user role and domain; prison staff see the prison version, client users see the client version
 
 ### Data Import
 
@@ -301,14 +301,14 @@
 | ESG-05 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-06 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-07 | Phase 8: Dashboards and ESG Metrics | Complete |
-| NOTIF-01 | Phase 9: Notifications and Manuals | Pending |
-| NOTIF-02 | Phase 9: Notifications and Manuals | Pending |
-| NOTIF-03 | Phase 9: Notifications and Manuals | Pending |
-| NOTIF-04 | Phase 9: Notifications and Manuals | Pending |
-| MANUAL-01 | Phase 9: Notifications and Manuals | Pending |
+| NOTIF-01 | Phase 9: Notifications and Manuals | Complete |
+| NOTIF-02 | Phase 9: Notifications and Manuals | Complete |
+| NOTIF-03 | Phase 9: Notifications and Manuals | Complete |
+| NOTIF-04 | Phase 9: Notifications and Manuals | Complete |
+| MANUAL-01 | Phase 9: Notifications and Manuals | Complete |
 | MANUAL-02 | Phase 9: Notifications and Manuals | Pending |
-| MANUAL-03 | Phase 9: Notifications and Manuals | Pending |
-| MANUAL-04 | Phase 9: Notifications and Manuals | Pending |
+| MANUAL-03 | Phase 9: Notifications and Manuals | Complete |
+| MANUAL-04 | Phase 9: Notifications and Manuals | Complete |
 | IMPORT-01 | Phase 10: Historical Data Import | Pending |
 | IMPORT-02 | Phase 10: Historical Data Import | Pending |
 | IMPORT-03 | Phase 10: Historical Data Import | Pending |
