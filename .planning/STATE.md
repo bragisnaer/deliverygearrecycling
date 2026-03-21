@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-06-PLAN.md
-last_updated: "2026-03-21T09:52:49.620Z"
+stopped_at: Completed 08-07-PLAN.md
+last_updated: "2026-03-21T09:57:00.476Z"
 progress:
   total_phases: 10
   completed_phases: 7
   total_plans: 55
-  completed_plans: 52
+  completed_plans: 53
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 8 (Dashboards and ESG Metrics) — EXECUTING
-Plan: 5 of 7
+Plan: 6 of 7
 
 ## Performance Metrics
 
@@ -97,6 +97,7 @@ Plan: 5 of 7
 | Phase 08 P04 | 265 | 2 tasks | 7 files |
 | Phase 08-dashboards-and-esg-metrics P05 | 435 | 2 tasks | 6 files |
 | Phase 08-dashboards-and-esg-metrics P06 | 8 | 1 tasks | 4 files |
+| Phase 08-dashboards-and-esg-metrics P07 | 5 | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -209,6 +210,8 @@ Recent decisions affecting current work:
 - [Phase 08-dashboards-and-esg-metrics]: Raw SQL via drizzle sql template with (await tx.execute(sql`...`)) as unknown as T[] — matches ops pattern; rows.rows variant fails TypeScript since RowList is directly array-like in postgres-js driver
 - [Phase 08-dashboards-and-esg-metrics]: client-global drill-down uses searchParams.location to filter to single market; isGlobal AND !searchParams.location determines true cross-market aggregation mode in client dashboard
 - [Phase 08-dashboards-and-esg-metrics]: Promise.all used for parallel conditional fetches when provider is consolidation; warehouse section placed after tabs
+- [Phase 08-dashboards-and-esg-metrics]: financial_records_invoice_status_idx uses IF NOT EXISTS — already created in 0006_financial_records.sql; idempotent
+- [Phase 08-dashboards-and-esg-metrics]: Journal entry at idx 5 for 0007_esg_dashboard_indexes — follows last registered idx 4 since manual migrations 0005/0006 were not journaled
 
 ### Pending Todos
 
@@ -222,6 +225,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T09:52:49.616Z
-Stopped at: Completed 08-06-PLAN.md
+Last session: 2026-03-21T09:57:00.472Z
+Stopped at: Completed 08-07-PLAN.md
 Resume file: None

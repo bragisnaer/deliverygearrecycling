@@ -132,7 +132,7 @@
 - [x] **DASH-03**: Client dashboard (`client` role): active pickup requests from own location, items sent vs received (with discrepancy flag), historical volume by quarter, reuse rate, ESG summary for own location
 - [x] **DASH-04**: Client dashboard (`client-global` role): all of the above aggregated across all markets in their tenant; cross-market comparison charts; drill-down to individual market
 - [x] **DASH-05**: Transport dashboard: assigned pickups awaiting collection, active shipments in transit, completed deliveries (last 30 days); consolidation providers also see warehouse inventory and outbound shipment history
-- [ ] **DASH-06**: Dashboard loads in under 2 seconds for up to 50,000 records; search and filter results return in under 500ms
+- [x] **DASH-06**: Dashboard loads in under 2 seconds for up to 50,000 records; search and filter results return in under 500ms
 
 ### Notifications
 
@@ -293,7 +293,7 @@
 | DASH-03 | Phase 8: Dashboards and ESG Metrics | Complete |
 | DASH-04 | Phase 8: Dashboards and ESG Metrics | Complete |
 | DASH-05 | Phase 8: Dashboards and ESG Metrics | Complete |
-| DASH-06 | Phase 8: Dashboards and ESG Metrics | Pending |
+| DASH-06 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-01 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-02 | Phase 8: Dashboards and ESG Metrics | Complete |
 | ESG-03 | Phase 8: Dashboards and ESG Metrics | Complete |
