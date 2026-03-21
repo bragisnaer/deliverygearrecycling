@@ -103,7 +103,7 @@ describe('sumMaterialWeights', () => {
     expect(result[2].material_name).toBe('Light')
   })
 
-  it('item_count tracks number of lines aggregated per material', () => {
+  it('item_count tracks total quantity of items processed per material', () => {
     const lines = [
       { actual_quantity: 50, weight_grams: 100, material_name: 'Polyester' },
       { actual_quantity: 50, weight_grams: 200, material_name: 'Polyester' },
@@ -111,7 +111,8 @@ describe('sumMaterialWeights', () => {
 
     const result = sumMaterialWeights(lines)
 
-    expect(result[0].item_count).toBe(2)
+    // item_count is the sum of actual_quantity across all lines for the material
+    expect(result[0].item_count).toBe(100)
   })
 })
 
