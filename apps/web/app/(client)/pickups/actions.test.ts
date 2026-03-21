@@ -398,7 +398,7 @@ describe('submitPickupRequest (PICKUP-01, PICKUP-03, PICKUP-04)', () => {
 
     // 500*5 + 300*3 + 2*25000 = 2500 + 900 + 50000 = 53400
     expect(capturedInsertValues).not.toBeNull()
-    expect(capturedInsertValues?.estimated_weight_grams).toBe('53400.00')
+    expect((capturedInsertValues as unknown as Record<string, unknown>)?.['estimated_weight_grams']).toBe('53400.00')
     expect(result).toEqual({ success: true, reference: 'PU-2026-0001', pickupId: 'pickup-uuid-1' })
   })
 })

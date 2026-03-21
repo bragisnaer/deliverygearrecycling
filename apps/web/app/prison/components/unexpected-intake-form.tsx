@@ -61,8 +61,8 @@ export function UnexpectedIntakeForm({
   const [notes, setNotes] = useState('')
   const [lines, setLines] = useState<LineState[]>([])
 
-  const handleClientChange = (clientId: string) => {
-    setSelectedClientId(clientId)
+  const handleClientChange = (clientId: string | null) => {
+    setSelectedClientId(clientId ?? '')
     setLines([])
     setProducts([])
     setProductsError(false)

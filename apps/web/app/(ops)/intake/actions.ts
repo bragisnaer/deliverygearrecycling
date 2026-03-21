@@ -57,8 +57,8 @@ export type IntakeQueueItem = {
 export type QuarantinedIntake = {
   id: string
   reference: string
-  facility_name: string
-  client_name: string
+  facility_name: string | null
+  client_name: string | null
   staff_name: string
   delivery_date: Date
   origin_market: string | null
@@ -76,7 +76,20 @@ export async function getIntakeQueue(
   const user = await requireRecoAdmin()
 
   return withRLSContext(user, async (tx) => {
-    const baseQuery = tx
+    const whereCondition =
+      filter === 'discrepancy'
+        ? and(eq(intakeRecords.voided, false), eq(intakeRecords.discrepancy_flagged, true))
+        : filter === 'quarantine'
+          ? and(
+              eq(intakeRecords.voided, false),
+              eq(intakeRecords.quarantine_flagged, true),
+              eq(intakeRecords.quarantine_overridden, false)
+            )
+          : filter === 'unexpected'
+            ? and(eq(intakeRecords.voided, false), eq(intakeRecords.is_unexpected, true))
+            : eq(intakeRecords.voided, false)
+
+    return tx
       .select({
         id: intakeRecords.id,
         reference: intakeRecords.reference,
@@ -95,33 +108,8 @@ export async function getIntakeQueue(
       .from(intakeRecords)
       .leftJoin(prisonFacilities, eq(prisonFacilities.id, intakeRecords.prison_facility_id))
       .leftJoin(tenants, eq(tenants.id, intakeRecords.tenant_id))
-      .where(eq(intakeRecords.voided, false))
-      .orderBy(intakeRecords.created_at)
-
-    if (filter === 'discrepancy') {
-      return baseQuery.where(
-        and(eq(intakeRecords.voided, false), eq(intakeRecords.discrepancy_flagged, true))
-      )
-    }
-
-    if (filter === 'quarantine') {
-      return baseQuery.where(
-        and(
-          eq(intakeRecords.voided, false),
-          eq(intakeRecords.quarantine_flagged, true),
-          eq(intakeRecords.quarantine_overridden, false)
-        )
-      )
-    }
-
-    if (filter === 'unexpected') {
-      return baseQuery.where(
-        and(eq(intakeRecords.voided, false), eq(intakeRecords.is_unexpected, true))
-      )
-    }
-
-    // 'all' or undefined — voided=false filter already applied in baseQuery
-    return baseQuery
+      .where(whereCondition)
+      .orderBy(intakeRecords.created_at) as unknown as Promise<IntakeQueueItem[]>
   })
 }
 
@@ -268,7 +256,7 @@ export async function getDiscrepancyByCountry(): Promise<DiscrepancyByCountry[]>
       ORDER BY discrepancy_rate_pct DESC
     `)
 
-    return (rows.rows ?? rows) as unknown as DiscrepancyByCountry[]
+    return rows as unknown as DiscrepancyByCountry[]
   })
 }
 
@@ -298,7 +286,7 @@ export async function getDiscrepancyByProduct(): Promise<DiscrepancyByProduct[]>
       ORDER BY discrepancy_rate_pct DESC
     `)
 
-    return (rows.rows ?? rows) as unknown as DiscrepancyByProduct[]
+    return rows as unknown as DiscrepancyByProduct[]
   })
 }
 
@@ -327,7 +315,7 @@ export async function getDiscrepancyByFacility(): Promise<DiscrepancyByFacility[
       ORDER BY discrepancy_rate_pct DESC
     `)
 
-    return (rows.rows ?? rows) as unknown as DiscrepancyByFacility[]
+    return rows as unknown as DiscrepancyByFacility[]
   })
 }
 
@@ -359,7 +347,7 @@ export async function getMonthlyDiscrepancyByCountry(
     `)
   })
 
-  const months = ((rows.rows ?? rows) as { month: string; rate: number }[]).map(
+  const months = (rows as unknown as { month: string; rate: number }[]).map(
     (r) => ({ month: r.month, rate: Number(r.rate) })
   )
 
@@ -501,7 +489,8 @@ export async function getTraceabilityChain(intakeRecordId: string): Promise<Trac
   const intake = intakeRows[0]
   if (!intake) throw new Error('Intake record not found')
 
-  const { pickup_id, prison_facility_id, tenant_id, ...intakeData } = intake
+  const { pickup_id, ...intakeData } = intake
+  const { prison_facility_id, tenant_id } = intake
 
   // 2. Fetch pickup + transport_booking if pickup_id is set
   let pickupData: TraceabilityChain['pickup'] = null

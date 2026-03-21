@@ -1,12 +1,13 @@
 'use server'
 
 import { auth } from '@/auth'
+import type { Session } from 'next-auth'
 import { db, withRLSContext, notifications, notificationMutePreferences } from '@repo/db'
 import { eq, and, desc, count } from 'drizzle-orm'
 import { isCritical } from '@/lib/notifications'
 import { revalidatePath } from 'next/cache'
 
-function buildUser(session: NonNullable<Awaited<ReturnType<typeof auth>>>) {
+function buildUser(session: Session) {
   return { ...session.user, sub: session.user.id! }
 }
 
