@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-04-PLAN.md
-last_updated: "2026-03-21T09:46:42.907Z"
+stopped_at: Completed 08-05-PLAN.md
+last_updated: "2026-03-21T09:49:45.624Z"
 progress:
   total_phases: 10
   completed_phases: 7
   total_plans: 55
-  completed_plans: 50
+  completed_plans: 51
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 ## Current Position
 
 Phase: 8 (Dashboards and ESG Metrics) — EXECUTING
-Plan: 3 of 7
+Plan: 4 of 7
 
 ## Performance Metrics
 
@@ -95,6 +95,7 @@ Plan: 3 of 7
 | Phase 07-financial-tracking P03 | 5 | 2 tasks | 5 files |
 | Phase 08-dashboards-and-esg-metrics P01 | 3 | 2 tasks | 2 files |
 | Phase 08 P04 | 265 | 2 tasks | 7 files |
+| Phase 08-dashboards-and-esg-metrics P05 | 435 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -204,6 +205,8 @@ Recent decisions affecting current work:
 - [Phase 08-dashboards-and-esg-metrics]: calculateCO2Avoided stubbed with formula_pending: true until reco/Wolt define per-material CO2 factors (ESG-04 blocker acknowledged)
 - [Phase 08]: raw db (no RLS context) for all dashboard actions — reco-admin cross-tenant queries run as service role
 - [Phase 08]: (rows as unknown as Type[]) cast for postgres-js RowList — db.execute returns directly-iterable RowList with no .rows property
+- [Phase 08-dashboards-and-esg-metrics]: Raw SQL via drizzle sql template with (await tx.execute(sql`...`)) as unknown as T[] — matches ops pattern; rows.rows variant fails TypeScript since RowList is directly array-like in postgres-js driver
+- [Phase 08-dashboards-and-esg-metrics]: client-global drill-down uses searchParams.location to filter to single market; isGlobal AND !searchParams.location determines true cross-market aggregation mode in client dashboard
 
 ### Pending Todos
 
@@ -217,6 +220,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T09:46:42.904Z
-Stopped at: Completed 08-04-PLAN.md
+Last session: 2026-03-21T09:49:45.620Z
+Stopped at: Completed 08-05-PLAN.md
 Resume file: None
