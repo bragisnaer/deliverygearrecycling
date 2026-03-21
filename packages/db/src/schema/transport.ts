@@ -151,6 +151,7 @@ export const transportBookings = pgTable(
     booked_by: uuid('booked_by').references(() => users.id), // nullable
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
+    is_imported: boolean('is_imported').notNull().default(false),
   },
   (t) => [
     index('transport_bookings_pickup_id_idx').on(t.pickup_id),

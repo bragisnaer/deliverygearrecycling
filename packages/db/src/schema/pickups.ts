@@ -1,4 +1,5 @@
 import {
+  boolean,
   index,
   integer,
   numeric,
@@ -61,6 +62,7 @@ export const pickups = pgTable(
       .references(() => users.id),
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
+    is_imported: boolean('is_imported').notNull().default(false),
   },
   (t) => [
     index('pickups_tenant_id_idx').on(t.tenant_id),

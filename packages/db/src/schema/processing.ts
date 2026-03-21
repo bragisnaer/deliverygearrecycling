@@ -59,6 +59,7 @@ export const processingReports = pgTable(
     submitted_by: uuid('submitted_by').references(() => users.id), // nullable
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
+    is_imported: boolean('is_imported').notNull().default(false),
   },
   (t) => [
     index('processing_reports_tenant_id_idx').on(t.tenant_id),

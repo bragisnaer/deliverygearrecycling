@@ -1,4 +1,5 @@
 import {
+  boolean,
   index,
   numeric,
   pgEnum,
@@ -49,6 +50,7 @@ export const financialRecords = pgTable(
     notes: text('notes'), // nullable
     created_at: timestamp('created_at').notNull().defaultNow(),
     updated_at: timestamp('updated_at').notNull().defaultNow(),
+    is_imported: boolean('is_imported').notNull().default(false),
   },
   (t) => [
     index('financial_records_intake_record_id_idx').on(t.intake_record_id),
