@@ -12,6 +12,10 @@ export default defineConfig({
       { find: 'next-auth', replacement: path.resolve(webRoot, '__mocks__/next-auth.ts') },
       // Mock @/auth — proxy.test.ts only tests getTenantFromHost (pure function)
       { find: '@/auth', replacement: path.resolve(webRoot, '__mocks__/auth.ts') },
+      // Mock react-markdown and plugins — ESM-only packages cannot run in Vitest Node env
+      { find: 'react-markdown', replacement: path.resolve(webRoot, '__mocks__/react-markdown.ts') },
+      { find: 'remark-gfm', replacement: path.resolve(webRoot, '__mocks__/remark-gfm.ts') },
+      { find: 'rehype-raw', replacement: path.resolve(webRoot, '__mocks__/rehype-raw.ts') },
       // Generic @ alias for everything else
       { find: '@', replacement: webRoot },
     ],
