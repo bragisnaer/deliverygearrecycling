@@ -114,6 +114,11 @@ export function IntakeQueueTable({ intakes }: IntakeQueueTableProps) {
                     {intake.quarantine_overridden && (
                       <Badge variant="secondary">Overridden</Badge>
                     )}
+                    {intake.is_imported && (
+                      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[12px] font-medium bg-blue-100 text-blue-800 border-blue-200">
+                        Imported
+                      </span>
+                    )}
                     {!intake.is_unexpected &&
                       !intake.discrepancy_flagged &&
                       !intake.quarantine_flagged && (

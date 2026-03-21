@@ -118,14 +118,21 @@ export default async function OpsPickupsPage({ searchParams }: PickupsPageProps)
                   )}
                 </TableCell>
                 <TableCell>
-                  <span
-                    className={[
-                      'inline-flex items-center rounded-full px-2 py-0.5 font-mono text-[11px] font-medium capitalize',
-                      STATUS_BADGE[pickup.status] ?? 'bg-gray-100 text-gray-600',
-                    ].join(' ')}
-                  >
-                    {pickup.status.replace(/_/g, ' ')}
-                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    <span
+                      className={[
+                        'inline-flex items-center rounded-full px-2 py-0.5 font-mono text-[11px] font-medium capitalize',
+                        STATUS_BADGE[pickup.status] ?? 'bg-gray-100 text-gray-600',
+                      ].join(' ')}
+                    >
+                      {pickup.status.replace(/_/g, ' ')}
+                    </span>
+                    {pickup.is_imported && (
+                      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[12px] font-medium bg-blue-100 text-blue-800 border-blue-200">
+                        Imported
+                      </span>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell className="text-[13px] text-muted-foreground">
                   {pickup.pallet_count}

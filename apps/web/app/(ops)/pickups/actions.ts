@@ -284,6 +284,7 @@ export async function getPickupQueue(status?: string) {
         preferred_date: pickups.preferred_date,
         confirmed_date: pickups.confirmed_date,
         created_at: pickups.created_at,
+        is_imported: pickups.is_imported,
         location_name: locations.name,
         location_address: locations.address,
       })

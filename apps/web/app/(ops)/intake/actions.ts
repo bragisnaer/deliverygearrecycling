@@ -50,6 +50,7 @@ export type IntakeQueueItem = {
   discrepancy_flagged: boolean
   quarantine_flagged: boolean
   quarantine_overridden: boolean
+  is_imported: boolean
   created_at: Date
 }
 
@@ -88,6 +89,7 @@ export async function getIntakeQueue(
         discrepancy_flagged: intakeRecords.discrepancy_flagged,
         quarantine_flagged: intakeRecords.quarantine_flagged,
         quarantine_overridden: intakeRecords.quarantine_overridden,
+        is_imported: intakeRecords.is_imported,
         created_at: intakeRecords.created_at,
       })
       .from(intakeRecords)
