@@ -389,6 +389,20 @@ export async function updateInvoiceFields(
 }
 
 /**
+ * Set the user's preferred display currency via cookie.
+ * Cookie persists for 1 year and triggers Server Component re-render via router.refresh() on client.
+ */
+export async function setCurrencyPreference(currency: 'EUR' | 'DKK'): Promise<void> {
+  const { cookies } = await import('next/headers')
+  const cookieStore = await cookies()
+  cookieStore.set('display_currency', currency, {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    sameSite: 'lax',
+  })
+}
+
+/**
  * Get uninvoiced alert statistics.
  * Counts overdue not_invoiced records and monthly uninvoiced total.
  * Requires reco role with can_view_financials or reco-admin.
