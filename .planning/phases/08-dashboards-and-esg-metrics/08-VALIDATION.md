@@ -58,13 +58,9 @@ created: 2026-03-21
 
 ## Wave 0 Requirements
 
-- [ ] `packages/app/src/lib/__tests__/esg-calculator.test.ts` — unit test stubs for ESG-01, ESG-02, ESG-03 (temporal join, material aggregation, anchor values)
-- [ ] `packages/app/src/app/__tests__/esg-metrics.test.ts` — integration stubs for ESG-04, ESG-05 (metrics UI, CO2 stub)
-- [ ] `packages/app/src/app/__tests__/esg-export.test.ts` — integration stubs for ESG-06, ESG-07 (PDF + CSV export)
-- [ ] `packages/app/src/app/__tests__/reco-dashboard.test.ts` — integration stubs for DASH-01
-- [ ] `packages/app/src/app/__tests__/client-dashboard.test.ts` — integration stubs for DASH-02
-- [ ] `packages/app/src/app/__tests__/transport-dashboard.test.ts` — integration stubs for DASH-03
-- [ ] `packages/app/src/app/__tests__/dashboard-perf.test.ts` — performance stubs for DASH-04, DASH-05, DASH-06
+- [ ] `apps/web/lib/esg-calculator.test.ts` — unit test stubs for ESG-01, ESG-02, ESG-03 (temporal join, material aggregation, anchor values with exact kg values: 943 polypropylene, 386 PVC, 294 polyester per 1,000 bike bags)
+
+*Note: DASH-01 through DASH-05 and ESG-04/ESG-06/ESG-07 integration tests are manual-only (confirmed in RESEARCH.md). No additional Wave 0 stubs required. The esg-calculator.test.ts file is created in plan 08-01 Task 1 (TDD RED phase).*
 
 ---
 
