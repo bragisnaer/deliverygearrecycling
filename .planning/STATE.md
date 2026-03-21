@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 10-04-PLAN.md
-last_updated: "2026-03-21T12:27:34.732Z"
+stopped_at: Completed 10-05-PLAN.md
+last_updated: "2026-03-21T12:37:19.418Z"
 progress:
   total_phases: 10
-  completed_phases: 9
+  completed_phases: 10
   total_plans: 67
-  completed_plans: 66
+  completed_plans: 67
 ---
 
 # Project State
@@ -111,6 +111,7 @@ Plan: 5 of 5
 | Phase 10 P01 | 293 | 2 tasks | 11 files |
 | Phase 10-historical-data-import P03 | 5 | 3 tasks | 7 files |
 | Phase 10 P04 | 5 | 2 tasks | 11 files |
+| Phase 10-historical-data-import P05 | 10 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -250,6 +251,7 @@ Recent decisions affecting current work:
 - [Phase 10-historical-data-import]: Transport costs uses SELECT-then-UPDATE-or-INSERT — transportBookings has no unique constraint on pickup_id usable with onConflictDoUpdate
 - [Phase 10]: Transport view: badge added to warehouse inventory list in transport/outbound/page.tsx — no transport/page.tsx exists; outbound is the primary pickup list for transport role
 - [Phase 10]: FinancialRecordDetail uses Omit<FinancialRecordListItem, 'is_imported'> intersection to avoid TypeScript duplicate field error when adding is_imported
+- [Phase 10-historical-data-import]: Pre-existing TypeScript errors fixed at tsc-clean milestone — rows as unknown as T[] cast for postgres-js RowList; Session type import for buildUser to avoid next-auth v5 overload ambiguity
 
 ### Pending Todos
 
@@ -263,6 +265,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T12:27:34.728Z
-Stopped at: Completed 10-04-PLAN.md
+Last session: 2026-03-21T12:37:19.414Z
+Stopped at: Completed 10-05-PLAN.md
 Resume file: None

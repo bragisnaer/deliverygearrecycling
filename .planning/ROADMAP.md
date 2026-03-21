@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: Financial Tracking** - Per-delivery financial records, invoice status, two-leg cost allocation (completed 2026-03-21)
 - [x] **Phase 8: Dashboards and ESG Metrics** - Role-scoped dashboards, ESG calculation engine, export (completed 2026-03-21)
 - [x] **Phase 9: Notifications and Manuals** - In-app and email notifications, FAQ/manual system (completed 2026-03-21)
-- [ ] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag
+- [x] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag (completed 2026-03-21)
 
 ## Phase Details
 
@@ -226,7 +226,7 @@ Plans:
 - [x] 10-02-PLAN.md — Import source definitions registry + per-source Zod validators + FK resolution helpers with tests
 - [x] 10-03-PLAN.md — Upload API route, import hub page, multi-step wizard UI (upload, map, preview, commit), commit Server Action
 - [x] 10-04-PLAN.md — Imported record badge in all list views (intake, pickup, processing, financial, transport) + ESG inclusion verification
-- [ ] 10-05-PLAN.md — Full test suite + type check + manual end-to-end verification checkpoint
+- [x] 10-05-PLAN.md — Full test suite + type check + manual end-to-end verification checkpoint
 
 ## Progress
 
@@ -244,4 +244,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
 | 9. Notifications and Manuals | 7/7 | Complete    | 2026-03-21 |
-| 10. Historical Data Import | 4/5 | In Progress|  |
+| 10. Historical Data Import | 5/5 | Complete   | 2026-03-21 |
