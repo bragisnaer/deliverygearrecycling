@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Prison Processing, Dispatch, and Audit Trail** - Wash/Pack reports, outbound dispatch, edit-in-place with audit (completed 2026-03-20)
 - [x] **Phase 7: Financial Tracking** - Per-delivery financial records, invoice status, two-leg cost allocation (completed 2026-03-21)
 - [x] **Phase 8: Dashboards and ESG Metrics** - Role-scoped dashboards, ESG calculation engine, export (completed 2026-03-21)
-- [ ] **Phase 9: Notifications and Manuals** - In-app and email notifications, FAQ/manual system
+- [x] **Phase 9: Notifications and Manuals** - In-app and email notifications, FAQ/manual system (completed 2026-03-21)
 - [ ] **Phase 10: Historical Data Import** - CSV/XLSX import with field mapping, validation, and import flag
 
 ## Phase Details
@@ -208,7 +208,7 @@ Plans:
 - [x] 09-03-PLAN.md — Notification centre UI: bell component with Realtime, shared Server Actions in lib/, dropdown, full list page, mute toggles, layout integration
 - [x] 09-04-PLAN.md — Manual editor: reco-admin CRUD pages with separate client components, textarea with preview, version history, publish toggle
 - [x] 09-05-PLAN.md — Manual rendering: ManualRenderer component, client + prison manual routes, custom typography CSS
-- [ ] 09-06-PLAN.md — Notification event wiring: centralized dispatch helper, all missing event triggers, uninvoiced_delivery email, facility inactive check
+- [x] 09-06-PLAN.md — Notification event wiring: centralized dispatch helper, all missing event triggers, uninvoiced_delivery email, facility inactive check
 
 ### Phase 10: Historical Data Import
 **Goal**: All historical operational data (2022-2026) is imported, flagged as imported records, and fully queryable in dashboards and reports from day one of live operations
@@ -243,5 +243,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Prison Processing, Dispatch, and Audit Trail | 9/9 | Complete   | 2026-03-20 |
 | 7. Financial Tracking | 3/3 | Complete   | 2026-03-21 |
 | 8. Dashboards and ESG Metrics | 7/7 | Complete    | 2026-03-21 |
-| 9. Notifications and Manuals | 6/7 | In Progress|  |
+| 9. Notifications and Manuals | 7/7 | Complete   | 2026-03-21 |
 | 10. Historical Data Import | 0/5 | Not started | - |

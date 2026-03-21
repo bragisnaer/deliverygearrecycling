@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-05-PLAN.md
-last_updated: "2026-03-21T11:22:05.878Z"
+stopped_at: Completed 09-06-PLAN.md
+last_updated: "2026-03-21T11:32:47.767Z"
 progress:
   total_phases: 10
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 62
-  completed_plans: 61
+  completed_plans: 62
 ---
 
 # Project State
@@ -106,6 +106,7 @@ Plan: 7 of 7
 | Phase 09 P03 | 260 | 2 tasks | 8 files |
 | Phase 09 P04 | 148 | 2 tasks | 6 files |
 | Phase 09 P05 | 15 | 2 tasks | 8 files |
+| Phase 09 P06 | 360 | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -236,6 +237,8 @@ Recent decisions affecting current work:
 - [Phase 09]: params awaited as Promise<{ id: string }> in [id]/page.tsx — Next.js App Router async params pattern
 - [Phase 09]: withRLSContext requires full JWTClaims (sub + role + optional tenant/location/facility) — plan showed only { sub } which caused TS2345; fixed to spread all session user claims
 - [Phase 09]: Prison manual uses auth() + manual role check (not requireAuth) matching existing prison layout pattern — requireAuth redirects to /access-denied which is wrong for tablet users
+- [Phase 09]: dispatchNotification uses raw db (not withRLSContext) — prison_role and other non-admin roles cannot INSERT notifications; raw db matches Phase 5 pattern
+- [Phase 09]: checkFacilityInactiveAlerts uses 7-day deduplication window to prevent alert spam on persistently inactive facilities
 
 ### Pending Todos
 
@@ -249,6 +252,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-21T11:22:05.874Z
-Stopped at: Completed 09-05-PLAN.md
+Last session: 2026-03-21T11:32:47.763Z
+Stopped at: Completed 09-06-PLAN.md
 Resume file: None
