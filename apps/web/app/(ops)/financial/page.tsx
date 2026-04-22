@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { auth } from '@/auth'
 import { db, systemSettings } from '@repo/db'
-import { getFinancialRecords, formatCurrency } from './actions'
+import { getFinancialRecords } from './actions'
+import { formatCurrency } from './utils'
 import CurrencyToggle from './components/currency-toggle'
 import {
   Table,

@@ -3,7 +3,8 @@
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { createOutboundShipment, calculateProRataAllocation } from '../actions'
+import { createOutboundShipment } from '../actions'
+import { calculateProRataAllocation } from '../utils'
 import { Button } from '@/components/ui/button'
 import {
   Table,

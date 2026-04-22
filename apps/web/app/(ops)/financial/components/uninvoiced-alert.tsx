@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { db, systemSettings } from '@repo/db'
-import { getUninvoicedAlerts, formatCurrency } from '../actions'
+import { getUninvoicedAlerts } from '../actions'
+import { formatCurrency } from '../utils'
 
 export default async function UninvoicedAlert() {
   const cookieStore = await cookies()

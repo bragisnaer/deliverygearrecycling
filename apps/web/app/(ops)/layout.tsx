@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import { auth } from '@/auth'
+import { auth, signOut } from '@/auth'
 import { requireAuth } from '@/lib/auth-guard'
 import { OpsNavBar } from './ops-nav-bar'
 import { NotificationBell } from '@/components/notification-bell'
 import { getUnreadCount, getRecentNotifications } from '@/lib/notification-actions'
+import { SignOutButton } from '@/components/sign-out-button'
 
 export default async function OpsLayout({ children }: { children: React.ReactNode }) {
   await requireAuth(['reco-admin', 'reco', 'transport', 'prison'])
@@ -28,6 +29,7 @@ export default async function OpsLayout({ children }: { children: React.ReactNod
               initialCount={unreadCount}
               initialNotifications={recentNotifications}
             />
+            <SignOutButton action={async () => { 'use server'; await signOut({ redirectTo: '/sign-in' }) }} />
           </div>
         </div>
       </header>

@@ -299,7 +299,12 @@ CREATE INDEX IF NOT EXISTS outbound_shipment_pickups_shipment_id_idx ON outbound
 
 -- ============================================================
 -- 9. Seed Wolt Copenhagen HQ location for development
+--    Only inserted if the 'wolt' tenant already exists.
 -- ============================================================
-INSERT INTO locations (id, tenant_id, name, address, country, active)
-VALUES (gen_random_uuid(), 'wolt', 'Wolt Copenhagen HQ', 'Copenhagen, Denmark', 'DK', true)
-ON CONFLICT DO NOTHING;
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM tenants WHERE id = 'wolt') THEN
+    INSERT INTO locations (id, tenant_id, name, address, country, active)
+    VALUES (gen_random_uuid(), 'wolt', 'Wolt Copenhagen HQ', 'Copenhagen, Denmark', 'DK', true)
+    ON CONFLICT DO NOTHING;
+  END IF;
+END $$;

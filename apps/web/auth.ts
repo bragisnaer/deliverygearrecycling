@@ -48,10 +48,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
       },
     }),
-    Resend({
-      apiKey: process.env.AUTH_RESEND_KEY!,
-      from: process.env.AUTH_EMAIL_FROM ?? 'no-reply@courierrecycling.com',
-    }),
+    // Only enable magic link when a real Resend API key is configured.
+    // Placeholder keys (re_test_xxx) cause Resend to throw "API key is invalid"
+    // which would propagate as an uncaught error visible to users.
+    ...(process.env.AUTH_RESEND_KEY && !process.env.AUTH_RESEND_KEY.includes('_test_')
+      ? [Resend({
+          apiKey: process.env.AUTH_RESEND_KEY,
+          from: process.env.AUTH_EMAIL_FROM ?? 'no-reply@courierrecycling.com',
+        })]
+      : []),
   ],
 
   session: {

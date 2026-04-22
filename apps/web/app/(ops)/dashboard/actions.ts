@@ -57,7 +57,7 @@ export async function getPickupStatusSummary(
   const rows = (await db.execute(sql`
     SELECT status, COUNT(*)::int AS count
     FROM pickups
-    WHERE voided = false ${tenantClause}
+    WHERE true ${tenantClause}
     GROUP BY status
     ORDER BY CASE status
       WHEN 'submitted' THEN 1
@@ -102,7 +102,7 @@ export async function getConsolidationAgeing(
     FROM pickups p
     JOIN tenants t ON t.id = p.tenant_id
     WHERE p.status = 'at_warehouse'
-      AND p.voided = false ${tenantClause}
+      ${tenantClause}
     ORDER BY days_held DESC
   `)) as unknown as ConsolidationAgeingRow[]
 

@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { auth } from '@/auth'
+import { auth, signOut } from '@/auth'
+import { SignOutButton } from '@/components/sign-out-button'
 import { requireAuth } from '@/lib/auth-guard'
 import { getBrandingForTenant, buildBrandingStyle, getGoogleFontUrls } from '@/lib/branding'
 import { NotificationBell } from '@/components/notification-bell'
@@ -58,6 +59,7 @@ export default async function ClientLayout({ children }: { children: React.React
                 initialCount={unreadCount}
                 initialNotifications={recentNotifications}
               />
+              <SignOutButton action={async () => { 'use server'; await signOut({ redirectTo: '/sign-in' }) }} />
             </nav>
           </div>
         </header>

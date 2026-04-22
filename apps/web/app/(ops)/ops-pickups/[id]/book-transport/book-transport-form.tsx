@@ -52,7 +52,7 @@ export function BookTransportForm({
       if ('error' in result) {
         setError(result.error ?? 'An error occurred')
       } else {
-        router.push(`/pickups/${pickupId}`)
+        router.push(`/ops-pickups/${pickupId}`)
         router.refresh()
       }
     })
@@ -202,7 +202,7 @@ export function BookTransportForm({
           {isPending ? 'Booking...' : 'Book Transport'}
         </button>
         <a
-          href={`/pickups/${pickupId}`}
+          href={`/ops-pickups/${pickupId}`}
           className="inline-flex h-9 items-center rounded-md border border-border bg-background px-5 font-mono text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
         >
           Cancel

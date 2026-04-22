@@ -1,3 +1,12 @@
+-- Create DB roles safely (idempotent — skips if already exists)
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'client_role')  THEN CREATE ROLE client_role;  END IF;
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'prison_role')  THEN CREATE ROLE prison_role;  END IF;
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'reco_admin')   THEN CREATE ROLE reco_admin;   END IF;
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'reco_role')    THEN CREATE ROLE reco_role;    END IF;
+  IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'transport_role') THEN CREATE ROLE transport_role; END IF;
+END $$;
+
 -- Manual migration: RLS FORCE, audit trigger, seed system_settings
 -- This migration augments the Drizzle-generated 0000 migration with:
 -- 1. FORCE ROW LEVEL SECURITY (ensures table owner is also subject to RLS)
@@ -27,7 +36,7 @@ BEGIN
     COALESCE(NEW.id::text, OLD.id::text),
     CASE
       WHEN TG_TABLE_NAME = 'system_settings' THEN NULL
-      WHEN TG_TABLE_NAME = 'tenants' THEN COALESCE(NEW.id, OLD.id)
+      WHEN TG_TABLE_NAME = 'tenants' THEN COALESCE(NEW.id::text, OLD.id::text)
       ELSE COALESCE(
         CASE WHEN NEW IS NOT NULL THEN (to_jsonb(NEW))->>'tenant_id' END,
         CASE WHEN OLD IS NOT NULL THEN (to_jsonb(OLD))->>'tenant_id' END

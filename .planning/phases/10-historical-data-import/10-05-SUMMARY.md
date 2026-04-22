@@ -166,3 +166,13 @@ Phase 10 is complete. The historical data import system is fully built and verif
 ---
 *Phase: 10-historical-data-import*
 *Completed: 2026-03-21*
+
+## Self-Check: PASSED
+
+- FOUND: apps/web/app/(ops)/intake/actions.ts
+- FOUND: apps/web/app/prison/components/unexpected-intake-form.tsx
+- FOUND: apps/web/lib/notification-actions.ts
+- FOUND: apps/web/app/(client)/pickups/actions.test.ts
+- FOUND: .planning/phases/10-historical-data-import/10-05-SUMMARY.md
+- FOUND commit: 97cd714 (fix)
+- FOUND commit: e068f87 (docs)

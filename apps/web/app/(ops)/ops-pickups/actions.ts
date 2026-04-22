@@ -146,7 +146,7 @@ export async function confirmPickup(pickupId: string) {
     }
   }
 
-  revalidatePath('/pickups')
+  revalidatePath('/ops-pickups')
   return { success: true }
 }
 
@@ -191,7 +191,7 @@ export async function cancelPickup(pickupId: string, reason: string) {
       .where(eq(pickups.id, validatedId))
   })
 
-  revalidatePath('/pickups')
+  revalidatePath('/ops-pickups')
   return { success: true }
 }
 
@@ -265,7 +265,7 @@ export async function updatePickupStatus(pickupId: string, newStatus: string) {
     }
   }
 
-  revalidatePath('/pickups')
+  revalidatePath('/ops-pickups')
   return { success: true }
 }
 
@@ -385,7 +385,7 @@ export async function bookDirectTransport(formData: FormData) {
       .where(eq(pickups.id, data.pickup_id))
   })
 
-  revalidatePath('/pickups')
+  revalidatePath('/ops-pickups')
   return { success: true }
 }
 
@@ -452,7 +452,7 @@ export async function bookConsolidationTransport(formData: FormData) {
       .where(eq(pickups.id, data.pickup_id))
   })
 
-  revalidatePath('/pickups')
+  revalidatePath('/ops-pickups')
   return { success: true }
 }
 

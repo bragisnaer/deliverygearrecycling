@@ -39,7 +39,7 @@ export default async function BookTransportPage({ params }: BookTransportPagePro
   }
 
   if (pickup.status !== 'confirmed') {
-    redirect(`/pickups/${id}`)
+    redirect(`/ops-pickups/${id}`)
   }
 
   // Fetch all active transport providers
@@ -70,12 +70,12 @@ export default async function BookTransportPage({ params }: BookTransportPagePro
     <div className="max-w-2xl space-y-8">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
-        <Link href="/pickups" className="hover:text-foreground hover:underline">
+        <Link href="/ops-pickups" className="hover:text-foreground hover:underline">
           Pickups
         </Link>
         <span>/</span>
         <Link
-          href={`/pickups/${id}`}
+          href={`/ops-pickups/${id}`}
           className="hover:text-foreground hover:underline font-mono"
         >
           {pickup.reference || id}

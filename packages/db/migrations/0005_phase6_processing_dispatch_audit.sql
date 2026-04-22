@@ -9,12 +9,12 @@
 -- 7. Prison role UPDATE RLS policy on intake_records
 
 -- ============================================================
--- 1. New enums
+-- 1. New enums (idempotent via DO blocks)
 -- ============================================================
-CREATE TYPE activity_type AS ENUM ('wash', 'pack');
-CREATE TYPE size_bucket AS ENUM ('XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL');
-CREATE TYPE dispatch_status AS ENUM ('created', 'picked_up', 'delivered');
-CREATE TYPE product_category AS ENUM ('clothing', 'bag', 'equipment', 'other');
+DO $$ BEGIN CREATE TYPE activity_type AS ENUM ('wash', 'pack'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE size_bucket AS ENUM ('XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE dispatch_status AS ENUM ('created', 'picked_up', 'delivered'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE product_category AS ENUM ('clothing', 'bag', 'equipment', 'other'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 -- ============================================================
 -- 2. ALTER existing tables
@@ -35,7 +35,7 @@ UPDATE products SET product_category = 'equipment' WHERE name ILIKE '%Heating Pl
 -- ============================================================
 -- 3. CREATE processing_reports table
 -- ============================================================
-CREATE TABLE processing_reports (
+CREATE TABLE IF NOT EXISTS processing_reports (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   prison_facility_id uuid NOT NULL REFERENCES prison_facilities(id),
   intake_record_id uuid REFERENCES intake_records(id),
@@ -51,26 +51,26 @@ CREATE TABLE processing_reports (
   created_at timestamp NOT NULL DEFAULT now(),
   updated_at timestamp NOT NULL DEFAULT now()
 );
-CREATE INDEX processing_reports_tenant_id_idx ON processing_reports(tenant_id);
-CREATE INDEX processing_reports_prison_facility_id_idx ON processing_reports(prison_facility_id);
-CREATE INDEX processing_reports_intake_record_id_idx ON processing_reports(intake_record_id);
+CREATE INDEX IF NOT EXISTS processing_reports_tenant_id_idx ON processing_reports(tenant_id);
+CREATE INDEX IF NOT EXISTS processing_reports_prison_facility_id_idx ON processing_reports(prison_facility_id);
+CREATE INDEX IF NOT EXISTS processing_reports_intake_record_id_idx ON processing_reports(intake_record_id);
 
 -- ============================================================
 -- 4. CREATE processing_report_lines table
 -- ============================================================
-CREATE TABLE processing_report_lines (
+CREATE TABLE IF NOT EXISTS processing_report_lines (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   processing_report_id uuid NOT NULL REFERENCES processing_reports(id) ON DELETE CASCADE,
   size_bucket size_bucket,
   quantity integer NOT NULL,
   created_at timestamp NOT NULL DEFAULT now()
 );
-CREATE INDEX processing_report_lines_report_id_idx ON processing_report_lines(processing_report_id);
+CREATE INDEX IF NOT EXISTS processing_report_lines_report_id_idx ON processing_report_lines(processing_report_id);
 
 -- ============================================================
 -- 5. CREATE outbound_dispatches table
 -- ============================================================
-CREATE TABLE outbound_dispatches (
+CREATE TABLE IF NOT EXISTS outbound_dispatches (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   prison_facility_id uuid NOT NULL REFERENCES prison_facilities(id),
   tenant_id text NOT NULL REFERENCES tenants(id),
@@ -85,13 +85,13 @@ CREATE TABLE outbound_dispatches (
   created_at timestamp NOT NULL DEFAULT now(),
   updated_at timestamp NOT NULL DEFAULT now()
 );
-CREATE INDEX outbound_dispatches_tenant_id_idx ON outbound_dispatches(tenant_id);
-CREATE INDEX outbound_dispatches_prison_facility_id_idx ON outbound_dispatches(prison_facility_id);
+CREATE INDEX IF NOT EXISTS outbound_dispatches_tenant_id_idx ON outbound_dispatches(tenant_id);
+CREATE INDEX IF NOT EXISTS outbound_dispatches_prison_facility_id_idx ON outbound_dispatches(prison_facility_id);
 
 -- ============================================================
 -- 6. CREATE outbound_dispatch_lines table
 -- ============================================================
-CREATE TABLE outbound_dispatch_lines (
+CREATE TABLE IF NOT EXISTS outbound_dispatch_lines (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   outbound_dispatch_id uuid NOT NULL REFERENCES outbound_dispatches(id) ON DELETE CASCADE,
   product_id uuid NOT NULL REFERENCES products(id),
@@ -100,7 +100,11 @@ CREATE TABLE outbound_dispatch_lines (
   quantity integer NOT NULL,
   created_at timestamp NOT NULL DEFAULT now()
 );
-CREATE INDEX outbound_dispatch_lines_dispatch_id_idx ON outbound_dispatch_lines(outbound_dispatch_id);
+CREATE INDEX IF NOT EXISTS outbound_dispatch_lines_dispatch_id_idx ON outbound_dispatch_lines(outbound_dispatch_id);
+
+-- Add intake_record_id FK to outbound_dispatches (schema-migration alignment fix)
+ALTER TABLE outbound_dispatches ADD COLUMN IF NOT EXISTS intake_record_id uuid REFERENCES intake_records(id);
+CREATE INDEX IF NOT EXISTS outbound_dispatches_intake_record_id_idx ON outbound_dispatches(intake_record_id);
 
 -- ============================================================
 -- 7. ENABLE + FORCE RLS on all new tables
@@ -118,6 +122,7 @@ ALTER TABLE outbound_dispatch_lines FORCE ROW LEVEL SECURITY;
 
 -- ============================================================
 -- 8. GRANT permissions to DB roles
+--    Role is "reco_admin" (not "reco_admin_role")
 -- ============================================================
 
 -- processing_reports
@@ -137,24 +142,25 @@ GRANT SELECT ON processing_report_lines TO reco_role;
 GRANT SELECT ON outbound_dispatches TO reco_role;
 GRANT SELECT ON outbound_dispatch_lines TO reco_role;
 
-GRANT ALL ON processing_reports TO reco_admin_role;
-GRANT ALL ON processing_report_lines TO reco_admin_role;
-GRANT ALL ON outbound_dispatches TO reco_admin_role;
-GRANT ALL ON outbound_dispatch_lines TO reco_admin_role;
+GRANT ALL ON processing_reports TO reco_admin;
+GRANT ALL ON processing_report_lines TO reco_admin;
+GRANT ALL ON outbound_dispatches TO reco_admin;
+GRANT ALL ON outbound_dispatch_lines TO reco_admin;
 
 -- ============================================================
 -- 9. Audit triggers (AUDIT-01, AUDIT-06)
 --    References existing audit_log_trigger() from 0001_rls_and_triggers.sql
+--    CREATE OR REPLACE TRIGGER for idempotency (PG14+)
 -- ============================================================
-CREATE TRIGGER audit_intake_records
+CREATE OR REPLACE TRIGGER audit_intake_records
   AFTER INSERT OR UPDATE OR DELETE ON intake_records
   FOR EACH ROW EXECUTE FUNCTION audit_log_trigger();
 
-CREATE TRIGGER audit_processing_reports
+CREATE OR REPLACE TRIGGER audit_processing_reports
   AFTER INSERT OR UPDATE OR DELETE ON processing_reports
   FOR EACH ROW EXECUTE FUNCTION audit_log_trigger();
 
-CREATE TRIGGER audit_outbound_dispatches
+CREATE OR REPLACE TRIGGER audit_outbound_dispatches
   AFTER INSERT OR UPDATE OR DELETE ON outbound_dispatches
   FOR EACH ROW EXECUTE FUNCTION audit_log_trigger();
 
@@ -162,7 +168,10 @@ CREATE TRIGGER audit_outbound_dispatches
 -- 10. Prison role UPDATE RLS policy on intake_records (AUDIT-04)
 --     Enables prison staff to void (update voided/void_reason) their own facility's records
 -- ============================================================
-CREATE POLICY intake_records_prison_update ON intake_records
-  AS PERMISSIVE FOR UPDATE TO prison_role
-  USING (prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true))
-  WITH CHECK (prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true));
+DO $$ BEGIN
+  CREATE POLICY intake_records_prison_update ON intake_records
+    AS PERMISSIVE FOR UPDATE TO prison_role
+    USING (prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true))
+    WITH CHECK (prison_facility_id::text = current_setting('request.jwt.claim.facility_id', true));
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;

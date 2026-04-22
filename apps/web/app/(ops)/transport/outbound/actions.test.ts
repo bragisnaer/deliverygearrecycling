@@ -58,7 +58,7 @@ const PICKUP_ID_3 = '33333333-3333-3333-3333-333333333333'
 
 describe('calculateProRataAllocation', () => {
   it('Test 1 (pro-rata default): 3 and 2 pallets with $1000 total', async () => {
-    const { calculateProRataAllocation } = await import('./actions')
+    const { calculateProRataAllocation } = await import('./utils')
     const result = calculateProRataAllocation('1000.0000', [
       { pickupId: PICKUP_ID_1, palletCount: 3 },
       { pickupId: PICKUP_ID_2, palletCount: 2 },
@@ -69,7 +69,7 @@ describe('calculateProRataAllocation', () => {
   })
 
   it('Test 2 (pro-rata rounding): 3 equal pickups with $100 total sum to exactly 100', async () => {
-    const { calculateProRataAllocation } = await import('./actions')
+    const { calculateProRataAllocation } = await import('./utils')
     const result = calculateProRataAllocation('100.0000', [
       { pickupId: PICKUP_ID_1, palletCount: 1 },
       { pickupId: PICKUP_ID_2, palletCount: 1 },
@@ -139,7 +139,7 @@ describe('markOutboundDelivered', () => {
       return undefined
     })
 
-    const { markOutboundDelivered } = await import('./actions')
+    const { markOutboundDelivered } = await import('./utils')
     const result = await markOutboundDelivered(SHIPMENT_ID)
 
     expect(result).toEqual({ success: true })

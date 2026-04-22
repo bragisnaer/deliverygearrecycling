@@ -5,6 +5,8 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 const FROM_ADDRESS = process.env.RESEND_FROM_ADDRESS ?? 'onboarding@resend.dev'
 
+const isRealKey = process.env.RESEND_API_KEY && !process.env.RESEND_API_KEY.includes('_test_')
+
 export async function sendEmail({
   to,
   subject,
@@ -14,6 +16,10 @@ export async function sendEmail({
   subject: string
   react: React.ReactElement
 }) {
+  if (!isRealKey) {
+    console.log('[email] Skipping send — no real RESEND_API_KEY configured')
+    return { success: false, error: 'Email not configured' }
+  }
   try {
     const { data, error } = await resend.emails.send({
       from: FROM_ADDRESS,

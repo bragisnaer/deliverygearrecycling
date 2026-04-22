@@ -70,7 +70,17 @@ apply "0009_historical_import.sql"
 echo "==> Step 3: Running Wolt seed data..."
 pnpm --filter @repo/db seed:wolt
 
+echo "==> Step 4: Running demo seed data (user testing)..."
+pnpm --filter @repo/db seed:demo
+
 echo ""
 echo "Database setup complete."
 echo "Tables, triggers, RLS policies, GRANTs, and indexes are all applied."
-echo "Wolt seed data is present."
+echo "Wolt product data and demo test data are present."
+echo ""
+echo "Demo accounts (password: Demo1234!):"
+echo "  reco-admin  →  admin@reco.demo"
+echo "  reco        →  ops@reco.demo"
+echo "  client      →  client@wolt.demo"
+echo "  prison      →  prison@vejle.demo"
+echo "  transport   →  transport@direct.demo"

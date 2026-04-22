@@ -29,9 +29,12 @@ CREATE TABLE IF NOT EXISTS import_jobs (
 ALTER TABLE import_jobs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE import_jobs FORCE ROW LEVEL SECURITY;
 
--- RLS: reco-admin only
-CREATE POLICY import_jobs_reco_admin_all ON import_jobs
-  AS PERMISSIVE FOR ALL TO reco_admin_role
-  USING (true) WITH CHECK (true);
+-- RLS: reco-admin only (role is "reco_admin", not "reco_admin_role")
+DO $$ BEGIN
+  CREATE POLICY import_jobs_reco_admin_all ON import_jobs
+    AS PERMISSIVE FOR ALL TO reco_admin
+    USING (true) WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-GRANT SELECT, INSERT, UPDATE ON import_jobs TO reco_admin_role;
+GRANT SELECT, INSERT, UPDATE ON import_jobs TO reco_admin;

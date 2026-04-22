@@ -1,20 +1,10 @@
 import { db, tenantBranding } from '@repo/db'
 import { eq } from 'drizzle-orm'
 import type React from 'react'
+import { HEX_REGEX, ALLOWED_FONTS } from './branding-constants'
 
-export const HEX_REGEX = /^#[0-9A-Fa-f]{6}$/
-
-export const ALLOWED_FONTS = [
-  'system-ui',
-  'Inter',
-  'DM Sans',
-  'Lato',
-  'Nunito',
-  'Roboto',
-  'Source Sans 3',
-] as const
-
-export type AllowedFont = (typeof ALLOWED_FONTS)[number]
+export { HEX_REGEX, ALLOWED_FONTS }
+export type { AllowedFont } from './branding-constants'
 
 /**
  * Fetch branding for a tenant. Returns null if no record exists.

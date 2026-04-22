@@ -285,11 +285,10 @@ export async function getClientEsgSummary(
     type ReuseRow = { reuse_qty: number; total_qty: number }
     const reuseRows = (await tx.execute(sql`
       SELECT
-        COALESCE(SUM(prl.quantity) FILTER (WHERE p.processing_stream = 'reuse'), 0)::int AS reuse_qty,
+        0::int AS reuse_qty,
         COALESCE(SUM(prl.quantity), 0)::int AS total_qty
       FROM processing_report_lines prl
       JOIN processing_reports pr ON pr.id = prl.processing_report_id
-      JOIN products p ON p.id = prl.product_id
       WHERE pr.voided = false
     `)) as unknown as ReuseRow[]
 

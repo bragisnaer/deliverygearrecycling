@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { ALLOWED_FONTS } from '@/lib/branding'
+import { ALLOWED_FONTS } from '@/lib/branding-constants'
 import { saveBranding, getBranding } from './actions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'

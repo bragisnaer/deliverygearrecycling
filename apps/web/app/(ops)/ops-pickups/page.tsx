@@ -66,7 +66,7 @@ export default async function OpsPickupsPage({ searchParams }: PickupsPageProps)
       <div className="flex items-center gap-1 border-b border-border">
         {STATUS_TABS.map((tab) => {
           const isActive = tab.value === status || (tab.value === undefined && !status)
-          const href = tab.value ? `/pickups?status=${tab.value}` : '/pickups'
+          const href = tab.value ? `/ops-pickups?status=${tab.value}` : '/ops-pickups'
           return (
             <Link
               key={tab.label}
@@ -105,7 +105,7 @@ export default async function OpsPickupsPage({ searchParams }: PickupsPageProps)
               <TableRow key={pickup.id}>
                 <TableCell>
                   <Link
-                    href={`/pickups/${pickup.id}`}
+                    href={`/ops-pickups/${pickup.id}`}
                     className="font-mono text-[13px] font-medium text-foreground hover:underline"
                   >
                     {pickup.reference || '—'}

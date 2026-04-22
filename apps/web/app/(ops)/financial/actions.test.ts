@@ -3,7 +3,7 @@ import {
   calculateInvoiceAmount,
   assembleTransportCost,
   formatCurrency,
-} from './actions'
+} from './utils'
 
 describe('calculateInvoiceAmount', () => {
   it('returns sum of (quantity * price) + transport cost', () => {

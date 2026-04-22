@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@/auth'
-import { getFinancialRecord, calculateAndStoreInvoiceAmount, formatCurrency } from '../actions'
+import { getFinancialRecord, calculateAndStoreInvoiceAmount } from '../actions'
+import { formatCurrency } from '../utils'
 import { InvoiceEditForm } from '../components/invoice-edit-form'
 
 function InvoiceStatusBadge({ status }: { status: 'not_invoiced' | 'invoiced' | 'paid' }) {

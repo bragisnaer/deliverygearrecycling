@@ -1,9 +1,4 @@
 CREATE TYPE "public"."user_role" AS ENUM('reco-admin', 'reco', 'client', 'client-global', 'transport', 'prison');--> statement-breakpoint
-CREATE ROLE "client_role";--> statement-breakpoint
-CREATE ROLE "prison_role";--> statement-breakpoint
-CREATE ROLE "reco_admin";--> statement-breakpoint
-CREATE ROLE "reco_role";--> statement-breakpoint
-CREATE ROLE "transport_role";--> statement-breakpoint
 CREATE TABLE "audit_log" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"table_name" text NOT NULL,
